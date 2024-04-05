@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-hub-adapter-deployment
+spec:
+  selector:
+    matchLabels:
+      component: hub-adapter-service
+      version: {{ .Chart.AppVersion }}
+      deployment-id:  {{ .Release.Name }}
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: hub-adapter-service
+        version: {{ .Chart.AppVersion }}
+        deployment-id:  {{ .Release.Name }}
+    spec:
+      containers:
+        - name: api-gateway
+          image: ghcr.io/privateaim/node-hub-api-adapter:latest
+          imagePullPolicy: IfNotPresent  # Maybe "Always" during debug
+          ports:
+            - containerPort: 5000
+              name: http-result-srv
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http-result-srv
+          env:
+            - name: API_CLIENT_ID
+              value: {{ .Values.env.API_CLIENT_ID | default "hub-adapter" | quote }}
+            - name: IDP_URL
+              value: {{ .Values.env.IDP_URL | default "http://keycloak-service:8080" | quote }}  # To be replaced
+            - name: IDP_REALM
+              value: {{ .Values.env.IDP_REALM | default "flame" | quote }}  # To be replaced
+            - name: RESULTS_SERVICE_URL
+              value: {{ .Values.env.RESULTS_SERVICE_URL | default "http://node-result-service:5000" | quote }}  # To be properly filled in
+            - name: PODORC_SERVICE_URL
+              value: {{ .Values.env.PODORC_SERVICE_URL | default "http://po-service:8000" | quote }}  # To be properly filled in
+            - name: KONG_ADMIN_SERVICE_URL
+              value: {{ .Values.env.KONG_ADMIN_SERVICE_URL | default "http://kong-service:8000" | quote }}  # To be properly filled in
+            - name: HUB_SERVICE_URL
+              value: {{ .Values.env.HUB_SERVICE_URL | default "https://api.privateaim.net" | quote }}
+            - name: HUB_AUTH_SERVICE_URL
+              value: {{ .Values.env.HUB_AUTH_SERVICE_URL | default "https://auth.privateaim.net" | quote }}
+            - name: HUB_USERNAME
+              value: {{ .Values.env.HUB_USERNAME | default "thehubusername" | quote }}  # To be properly filled in
+            - name: HUB_PASSWORD
+              value: {{ .Values.env.HUB_PASSWORD | default "thehubpassword" | quote }}
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: http-result-srv
+            failureThreshold: 5
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http-result-srv
+            failureThreshold: 3
+            periodSeconds: 10

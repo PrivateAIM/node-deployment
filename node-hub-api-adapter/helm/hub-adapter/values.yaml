@@ -1,0 +1,14 @@
+api:
+  version: 0.1.0
+  domain: localhost
+env:
+    API_CLIENT_ID: api-client
+    IDP_REALM: flame
+    IDP_URL: http://keycloak-service:8080
+    RESULTS_SERVICE_URL: http://results-service:5000
+    KONG_ADMIN_SERVICE_URL: http://kong-service:8000
+    PODORC_SERVICE_URL: http://po-service:8000
+    HUB_SERVICE_URL: https://api.privateaim.net
+    HUB_AUTH_SERVICE_URL: https://auth.privateaim.net
+    HUB_USERNAME: thehubusername
+    HUB_PASSWORD: thehubpassword
