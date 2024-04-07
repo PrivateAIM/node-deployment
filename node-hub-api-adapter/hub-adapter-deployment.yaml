@@ -1,31 +1,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hub-adaptor-gateway-deployment
+  name: hub-adapter-gateway-deployment
 spec:
   selector:
     matchLabels:
-      component: gateway-service
+      component: hub-adapter-service
       version: 0.1.0
-      deployment-id:  hub-adaptor
+      deployment-id:  hub-adapter
   replicas: 1
   template:
     metadata:
       labels:
-        component: gateway-service
+        component: hub-adapter-service
         version: 0.1.0
-        deployment-id:  hub-adaptor
+        deployment-id:  hub-adapter
     spec:
       containers:
         - name: api-gateway
           image: ghcr.io/privateaim/node-hub-api-adapter:latest
           imagePullPolicy: IfNotPresent  # Maybe "Always" during debug
+          ports:
+            - containerPort: 5000
+              name: http-result-srv
           readinessProbe:
             httpGet:
               path: /healthz
-              port: 5000
-          ports:
-            - containerPort: 5000
+              port: http-result-srv
           env:
             - name: API_CLIENT_ID
               value: "hub-adapter"
@@ -37,6 +38,8 @@ spec:
               value: "http://node-result-service:8080"  # To be properly filled in
             - name: PODORC_SERVICE_URL
               value: "http://po-service:8000"  # To be properly filled in
+            - name: KONG_ADMIN_SERVICE_URL
+              value: "http://kong-service:8000"  # To be properly filled in
             - name: HUB_SERVICE_URL
               value: "https://api.privateaim.net"
             - name: HUB_AUTH_SERVICE_URL
