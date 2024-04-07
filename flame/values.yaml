@@ -1,0 +1,68 @@
+# kong values
+kong:
+  image:
+    repository: kong
+    tag: "3.6"
+
+  env:
+    prefix: /kong_prefix/
+    database: postgres
+    # The default values for admin_listen include both ipv4 and ipv6 - if cluster does not support ipv6, it should be defined (minikube does not support ipv6)
+    # admin_listen: "127.0.0.1:8001"
+
+  admin:
+    enabled: true
+    type: ClusterIP
+    http:
+      enabled: true
+      servicePort: 80
+    tls:
+      enabled: false
+      servicePort: 443
+
+  manager:
+    enabled: false
+
+  portal:
+    enabled: false
+
+  portalapi:
+    enabled: false
+
+  proxy:
+    enabled: true
+    type: ClusterIP  
+    http:
+      enabled: true
+      servicePort: 80
+    tls:
+      enabled: false
+      servicePort: 443   
+
+  ingressController:
+    enabled: false
+
+  # Sub-chart
+  postgresql:
+    enabled: true
+    auth:
+      username: kong
+      database: kong
+      password: kong
+      postgresPassword: supersecretpassword
+
+# hub-api-adapter Values
+flame-gateway:
+  api:
+    version: 0.1.0
+    domain: localhost
+  env:
+      API_CLIENT_ID: api-client
+      IDP_REALM: flame
+      IDP_URL: http://keycloak-service:8080
+      RESULTS_SERVICE_URL: http://results-service:5000
+      PODORC_SERVICE_URL: http://po-service:8000
+      HUB_SERVICE_URL: https://api.privateaim.net
+      HUB_AUTH_SERVICE_URL: https://auth.privateaim.net
+      HUB_USERNAME: thehubusername
+      HUB_PASSWORD: thehubpassword
