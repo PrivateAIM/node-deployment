@@ -27,3 +27,12 @@ dependencies:
   - name: kong
     repository: https://charts.konghq.com
     version: 2.38.0
+  - name: minio
+    repository: https://charts.bitnami.com/bitnami
+    version: 14.1.7
+  - name: keycloak
+    repository: https://charts.bitnami.com/bitnami    
+    version: 21.0.0    
+  - name: flame-hub-adapter
+    repository: file://../node-hub-api-adapter/helm/hub-adapter
+    version: 0.1.0

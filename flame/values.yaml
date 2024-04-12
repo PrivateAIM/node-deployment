@@ -18,7 +18,6 @@ kong:
       servicePort: 80
     tls:
       enabled: false
-      servicePort: 443
 
   manager:
     enabled: false
@@ -37,7 +36,6 @@ kong:
       servicePort: 80
     tls:
       enabled: false
-      servicePort: 443   
 
   ingressController:
     enabled: false
@@ -45,14 +43,37 @@ kong:
   # Sub-chart
   postgresql:
     enabled: true
+    nameOverride: kong-postgresql
     auth:
-      username: kong
       database: kong
+      username: kong
       password: kong
       postgresPassword: supersecretpassword
 
+# minio values
+minio:
+  mode: standalone
+  accessKey: minio
+  secretKey: minio123
+  persistence:
+    enabled: true
+  
+# keycloak values
+keycloak:
+  auth:
+    adminUser: admin
+    adminPassword: admin
+  postgresql:
+    enabled: true
+    nameOverride: keycloak-postgresql
+    auth:
+      database: keycloak
+      username: keycloak
+      password: keycloak
+      postgresPassword: supersecretpassword
+
 # hub-api-adapter Values
-flame-gateway:
+flame-hub-adapter:
   api:
     version: 0.1.0
     domain: localhost
@@ -61,6 +82,7 @@ flame-gateway:
       IDP_REALM: flame
       IDP_URL: http://keycloak-service:8080
       RESULTS_SERVICE_URL: http://results-service:5000
+      KONG_ADMIN_SERVICE_URL: http://flame-node-kong-admin:80
       PODORC_SERVICE_URL: http://po-service:8000
       HUB_SERVICE_URL: https://api.privateaim.net
       HUB_AUTH_SERVICE_URL: https://auth.privateaim.net
