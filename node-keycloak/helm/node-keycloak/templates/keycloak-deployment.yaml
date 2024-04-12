@@ -1,0 +1,108 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ .Release.Name }}-kc-admin-secret
+stringData:
+  kc-admin-password: "admin"
+  kc-admin-username: "admin"
+  kc-init-realm: "flame"
+  kc-init-clients: |
+    service1:9dd01665c2f3f02f93c32d03bd854569f03cd62f439ccf9f0861c141b9d6330e
+    service2:40e4abf259cffe49527ed7cbaca3c9c4ed4f77cc100372789d6679969802b4fe
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keycloak
+  template:
+    metadata:
+      labels:
+        app: keycloak
+    spec:
+      containers:
+        - name: keycloak-service
+          image: quay.io/keycloak/keycloak:23.0.4
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              name: http-kc-srv
+          env:
+            - name: KC_HEALTH_ENABLED
+              value: "true"
+            - name: KEYCLOAK_ADMIN
+              valueFrom:
+                secretKeyRef:
+                  key: kc-admin-username
+                  name: kc-admin-secret
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: kc-admin-password
+                  name: kc-admin-secret
+            - name: KC_PROXY
+              value: "edge"
+          args: ["start-dev", "--import-realm"]
+          volumeMounts:
+            - mountPath: "/opt/keycloak/data/import"
+              name: kc-realm-init-volume
+      initContainers:
+        - name: keycloak-service-init
+          image: quay.io/keycloak/keycloak:23.0.4
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: KEYCLOAK_ADMIN
+              valueFrom:
+                secretKeyRef:
+                  key: kc-admin-username
+                  name: kc-admin-secret
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: kc-admin-password
+                  name: kc-admin-secret
+            - name: KEYCLOAK_INIT_REALM
+              valueFrom:
+                secretKeyRef:
+                  key: kc-init-realm
+                  name: kc-admin-secret
+          volumeMounts:
+            - mountPath: "/etc/kc-init"
+              name: kc-init-volume
+              readOnly: true
+            - mountPath: "/etc/kc-realm-init"
+              name: kc-realm-init-volume
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -eu;
+              export PATH="$PATH:/opt/keycloak/bin";
+              kc.sh start-dev &
+              echo "==> Waiting for Keycloak to start...";
+              until kcadm.sh config credentials --server http://localhost:8080 --realm master --user "$KEYCLOAK_ADMIN" --password "$KEYCLOAK_ADMIN_PASSWORD";
+              do
+                sleep 1;
+              done;
+              echo "==> Initializing realm \`$KEYCLOAK_INIT_REALM\`...";
+              kcadm.sh create realms -s realm="$KEYCLOAK_INIT_REALM" -s accessTokenLifespan=1800 -s enabled=true;
+              while IFS="" read -r line || [ -n "$line" ];
+              do
+                IFS=: read client_id client_secret <<< "$line";
+                echo "==> Creating client \`$client_id\`...";
+                kcadm.sh create clients -r "$KEYCLOAK_INIT_REALM" -s enabled=true -s clientId="$client_id" -s secret="$client_secret" -s directAccessGrantsEnabled=true -s serviceAccountsEnabled=true;
+              done < /etc/kc-init/kc-init-clients;
+              echo "==> Exporting...";
+              kc.sh export --dir /etc/kc-realm-init --realm "$KEYCLOAK_INIT_REALM";
+              echo "==> Done!"
+      volumes:
+        - name: kc-init-volume
+          secret:
+            secretName: kc-admin-secret
+        - name: kc-realm-init-volume
+          emptyDir: {}

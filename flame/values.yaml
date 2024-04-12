@@ -88,3 +88,32 @@ flame-hub-adapter:
       HUB_AUTH_SERVICE_URL: https://auth.privateaim.net
       HUB_USERNAME: thehubusername
       HUB_PASSWORD: thehubpassword
+
+node-pod-orchestration:
+  api:
+    version: 0.1.0
+    domain: localhost
+  env:
+    NODE_NAME: flame_test
+    NODE_KEY: /home/david/PycharmProjects/node-pod-orchestration/k8/helm/node-pod-orchestration/values.template.yaml
+    NODE_KEY_PW:
+
+    HARBOR_URL: dev-harbor.personalhealthtrain.de
+    HARBOR_PW: test
+    HARBOR_USER: test
+
+    KEYCLOAK_URL: http://keycloak-service
+    KEYCLOAK_REALM: flame
+
+    RESULT_CLIENT_ID: service1
+    RESULT_CLIENT_SECRET: abc
+
+    DB_HOST: postgresql-service
+    DB_PORT: 5432
+    DB_USER: admin
+    DB_PASSWORD: admin
+
+
+    POSTGRES_DB: postgres_db
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: postgres
