@@ -5,3 +5,10 @@ download the minio subchart using:
 ```bash
 helm dependency update
 ```
+
+A number of important values should be set for Minio including:
+* rootUser and rootPassword (they can be set directly, but a secret should be used)
+* `HUB__AUTH_USERNAME` and `HUB__AUTH_PASSWORD`
+* replicas (currently set to 2)
+* Requested memory (default is 1Gi)
+* Size of reserved hard disk space (default is 1Gi)

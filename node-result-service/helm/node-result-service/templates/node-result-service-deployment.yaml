@@ -33,7 +33,7 @@ spec:
         - name: HUB__AUTH_PASSWORD
           value: {{ .Values.results.HUB__AUTH_PASSWORD}}
         - name: MINIO__ENDPOINT
-          value: localhost:9000
+          value: {{ .Release.Name }}-minio-svc:9000
         - name: MINIO__ACCESS_KEY
           value: {{ .Values.minio.rootUser}}
         - name: MINIO__SECRET_KEY
@@ -43,7 +43,7 @@ spec:
         - name: MINIO__REGION
           value: {{ .Values.results.MINIO__REGION}}
         - name: MINIO__USE_SSL
-          value: {{ .Values.results.MINIO__USE_SSL}}
+          value: {{ quote .Values.results.MINIO__USE_SSL}}
         - name: OIDC__CERTS_URL
           value: {{ .Values.results.OIDC__CERTS_URL}}
         - name: OIDC__CLIENT_ID_CLAIM_NAME
@@ -56,4 +56,4 @@ spec:
           periodSeconds: 20
           failureThreshold: 1
           timeoutSeconds: 5
----
+

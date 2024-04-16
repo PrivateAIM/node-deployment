@@ -2,8 +2,8 @@ results:
 
     HUB__API_BASE_URL: https://privateaim.net/core
     HUB__AUTH_BASE_URL: https://privateaim.net/auth
-    HUB__AUTH_USERNAME: #TODO
-    HUB__AUTH_PASSWORD: dev-harbor.personalhealthtrain.de
+    HUB__AUTH_USERNAME: ""
+    HUB__AUTH_PASSWORD: ""
 
     MINIO__BUCKET: flame
     MINIO__REGION: us-east-1
@@ -50,7 +50,7 @@ minio:
     ## Set default image, imageTag, and imagePullPolicy. mode is used to indicate the
     image:
       repository: quay.io/minio/minio
-      tag: RELEASE.2024-01-16T16-07-38Z
+      tag: RELEASE.2024-03-03T17-50-39Z
       pullPolicy: IfNotPresent
 
     imagePullSecrets: []
@@ -59,6 +59,17 @@ minio:
       type: RollingUpdate
       maxUnavailable: 0
       maxSurge: 100%
+
+    # Number of drives attached to a node
+    drivesPerNode: 1
+    # Number of MinIO containers running
+    replicas: 2
+    # Number of expanded MinIO clusters
+    pools: 1
+
+    resources:
+      requests:
+        memory: 16Gi
 
     ## Update strategy for StatefulSets
     statefulSetUpdate:
@@ -85,4 +96,4 @@ minio:
       storageClass: ""
       volumeName: ""
       accessMode: ReadWriteOnce
-      size: 500Gi
+      size: 10Gi
