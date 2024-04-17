@@ -8,5 +8,5 @@ subjects:
   namespace: default
 roleRef:
   kind: Role
-  name: po-sa
+  name: {{ .Release.Name }}-po-sa
   apiGroup: rbac.authorization.k8s.io

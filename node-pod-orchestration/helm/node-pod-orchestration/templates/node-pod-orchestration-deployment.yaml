@@ -23,8 +23,10 @@ spec:
       #      type: File
       containers:
       - name: po
-        image: po:latest
-        imagePullPolicy: IfNotPresent
+        image: ghcr.io/privateaim/node-pod-orchestration:latest
+        imagePullPolicy: Always
+        #image: po:latest
+        #imagePullPolicy: IfNotPresent
         #VolumeMounts:
         #  - mountPath: /config/keys
         #    name: keys
