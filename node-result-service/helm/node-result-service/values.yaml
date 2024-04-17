@@ -47,6 +47,32 @@ minio:
     ## Path where PV would be mounted on the MinIO Pod
     mountPath: "/mnt/data"
 
+    ## List of buckets to be created after minio install
+    ##
+    buckets: [
+        # Name of the bucket
+      - name: flame
+        # Policy to be set on the
+        # bucket [none|download|upload|public]
+        policy: none
+        # Purge if bucket exists already
+        purge: false
+        # set versioning for
+        # bucket [true|false]
+        versioning: false # remove this key if you do not want versioning feature
+        # set objectlocking for
+        # bucket [true|false] NOTE: versioning is enabled by default if you use locking
+        objectlocking: false
+      # - name: bucket2
+      #   policy: none
+      #   purge: false
+      #   versioning: true
+      #   # set objectlocking for
+      #   # bucket [true|false] NOTE: versioning is enabled by default if you use locking
+      #   objectlocking: false
+    ]
+
+
     ## Set default image, imageTag, and imagePullPolicy. mode is used to indicate the
     image:
       repository: quay.io/minio/minio
