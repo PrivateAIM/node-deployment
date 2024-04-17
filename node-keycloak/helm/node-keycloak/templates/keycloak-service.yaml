@@ -5,7 +5,9 @@ metadata:
 spec:
   type: NodePort
   selector:
-    app: keycloak
+    component: keycloak
+    version: {{ .Chart.AppVersion }}
+    deployment-id: {{ .Release.Name }}
   ports:
     - protocol: TCP
       port: 8080
