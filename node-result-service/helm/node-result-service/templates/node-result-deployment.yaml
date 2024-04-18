@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-node-result-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-node-result
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-node-result
+    spec:
+      containers:
+        - name: results-service
+          image: ghcr.io/privateaim/node-result-service:sha-7740b53
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              name: http-result-srv
+          env:
+            - name: MINIO__ENDPOINT
+              value: {{ .Release.Name }}-local-minio-service
+            - name: MINIO__ACCESS_KEY
+              value: {{ required "MinIO user must be set." .Values.env.MINIO_ACCESS_KEY | quote }}
+            - name: MINIO__SECRET_KEY
+              value: {{ required "MinIO password must be set." .Values.env.MINIO_SECRET_KEY | quote }}
+            - name: MINIO__USE_SSL
+              value: {{ .Values.env.MINIO_USE_SSL | default false | quote }}
+            - name: MINIO__BUCKET
+              value: {{ required "MinIO bucket must be set." .Values.env.MINIO_BUCKET | quote }}
+            - name: HUB__AUTH_USERNAME
+              value: {{ required "Hub username must be set." .Values.env.HUB_USERNAME | quote }}
+            - name: HUB__AUTH_PASSWORD
+              value: {{ required "Hub password must be set." .Values.env.HUB_PASSWORD | quote }}
+            - name: OIDC__CERTS_URL
+              value: {{ required "OIDC endpoint must be set." .Values.env.OIDC_CERTS_URL | quote }}
+            # Change this to "1" for testing purposes. This will cause the value of OIDC__CERTS_URL to be
+            # ignored. You will still need to set this variable for the service to start up correctly.
+            - name: OIDC__SKIP_JWT_VALIDATION
+              value: "0"
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: http-result-srv
+            failureThreshold: 5
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http-result-srv
+            failureThreshold: 3
+            periodSeconds: 10

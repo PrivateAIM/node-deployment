@@ -1,0 +1,6 @@
+apiVersion: v2
+name: flame-result-service
+description: A Helm Chart for the FLAME Node Result Service
+type: application
+version: 0.1.0
+appVersion: latest
