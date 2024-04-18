@@ -9,7 +9,7 @@ spec:
       initContainers:
         - name: {{ include "blaze.fullname" . }}-node-fhir-test-data-populator-init-wait
           image: busybox
-          command: ["sh", "-c", "sleep 60"]    
+          command: ["/bin/sh", "-c", "for i in $(seq 1 5); do curl -f {{ .Values.dataPopulatorJob.env.FHIR_BASE_URL }} && break || sleep 60; done"]
       containers:
         - name: {{ include "blaze.fullname" . }}-node-fhir-test-data-populator
           image: ghcr.io/privateaim/node-fhir-test-data-populator:latest
