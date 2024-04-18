@@ -3,6 +3,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: {{ .Release.Name }}-kc-admin-secret
+  namespace: {{ .Release.Namespace }}
 stringData:
   kc-admin-password: "admin"
   kc-admin-username: "admin"
