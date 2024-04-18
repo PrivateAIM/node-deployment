@@ -14,16 +14,20 @@ stringData:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: keycloak-deployment
+  name: {{ .Release.Name }}-keycloak-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: keycloak
+      component: keycloak
+      version: {{ .Chart.AppVersion }}
+      deployment-id: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: keycloak
+        component: keycloak
+        version: {{ .Chart.AppVersion }}
+        deployment-id: {{ .Release.Name }}
     spec:
       containers:
         - name: keycloak-service
@@ -39,18 +43,18 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: kc-admin-username
-                  name: kc-admin-secret
+                  name: {{ .Release.Name }}-kc-admin-secret
             - name: KEYCLOAK_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
                   key: kc-admin-password
-                  name: kc-admin-secret
+                  name: {{ .Release.Name }}-kc-admin-secret
             - name: KC_PROXY
               value: "edge"
           args: ["start-dev", "--import-realm"]
           volumeMounts:
             - mountPath: "/opt/keycloak/data/import"
-              name: kc-realm-init-volume
+              name: {{ .Release.Name }}-kc-realm-init-volume
       initContainers:
         - name: keycloak-service-init
           image: quay.io/keycloak/keycloak:23.0.4
@@ -60,23 +64,23 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: kc-admin-username
-                  name: kc-admin-secret
+                  name: {{ .Release.Name }}-kc-admin-secret
             - name: KEYCLOAK_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
                   key: kc-admin-password
-                  name: kc-admin-secret
+                  name: {{ .Release.Name }}-kc-admin-secret
             - name: KEYCLOAK_INIT_REALM
               valueFrom:
                 secretKeyRef:
                   key: kc-init-realm
-                  name: kc-admin-secret
+                  name: {{ .Release.Name }}-kc-admin-secret
           volumeMounts:
             - mountPath: "/etc/kc-init"
-              name: kc-init-volume
+              name: {{ .Release.Name }}-kc-init-volume
               readOnly: true
             - mountPath: "/etc/kc-realm-init"
-              name: kc-realm-init-volume
+              name: {{ .Release.Name }}-kc-realm-init-volume
           command:
             - /bin/sh
             - -c
@@ -101,8 +105,8 @@ spec:
               kc.sh export --dir /etc/kc-realm-init --realm "$KEYCLOAK_INIT_REALM";
               echo "==> Done!"
       volumes:
-        - name: kc-init-volume
+        - name: {{ .Release.Name }}-kc-init-volume
           secret:
-            secretName: kc-admin-secret
-        - name: kc-realm-init-volume
+            secretName: {{ .Release.Name }}-kc-admin-secret
+        - name: {{ .Release.Name }}-kc-realm-init-volume
           emptyDir: {}
