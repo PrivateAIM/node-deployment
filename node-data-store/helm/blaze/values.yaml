@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: nginx
+  repository: samply/blaze
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
@@ -71,14 +71,14 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
-livenessProbe:
-  httpGet:
-    path: /
-    port: http
-readinessProbe:
-  httpGet:
-    path: /
-    port: http
+# livenessProbe:
+#   httpGet:
+#     path: /health
+#     port: http
+# readinessProbe:
+#   httpGet:
+#     path: /fhir
+#     port: http
 
 autoscaling:
   enabled: false
@@ -105,3 +105,12 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+# The following values are used to configure the data-populator-job
+dataPopulatorJob:
+  # Enable the data-populator-job
+  enabled: true
+  env:
+    SYNTHEA_N_PATIENTS: 10
+    FHIR_BASE_URL: http://blaze:80/fhir
+
