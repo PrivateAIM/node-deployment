@@ -89,7 +89,7 @@ flame-hub-adapter:
       HUB_USERNAME: thehubusername
       HUB_PASSWORD: thehubpassword
 
-node-pod-orchestration:
+flame-node-pod-orchestration:
   api:
     version: 0.1.0
     domain: localhost
