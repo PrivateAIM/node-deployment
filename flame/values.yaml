@@ -117,3 +117,15 @@ node-pod-orchestration:
     POSTGRES_DB: postgres_db
     POSTGRES_USER: postgres
     POSTGRES_PASSWORD: postgres
+
+# blaze values
+blaze:
+  service:
+    type: ClusterIP
+    port: 80
+  dataPopulatorJob:
+    enabled: true
+    env:
+      SYNTHEA_N_PATIENTS: 10
+      FHIR_BASE_URL: http://flame-node-blaze:80/fhir
+

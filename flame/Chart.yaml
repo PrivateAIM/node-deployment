@@ -39,3 +39,6 @@ dependencies:
   - name: flame-node-pod-orchestration
     repository: file://../node-pod-orchestration/helm/node-pod-orchestration
     version: 0.1.0
+  - name: blaze
+    repository: file://../node-data-store/helm/blaze
+    version: 0.1.0
