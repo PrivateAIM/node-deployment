@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-node-result-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: node-result
+      version: {{ .Chart.AppVersion }}
+      deployment-id:  {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        component: node-result
+        version: {{ .Chart.AppVersion }}
+        deployment-id: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: node-result
+        image: ghcr.io/privateaim/node-result-service:sha-7740b53
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 8080
+            name: http-result-srv
+        env:
+        - name: HUB__API_BASE_URL
+          value: {{ .Values.results.HUB__API_BASE_URL}}
+        - name: HUB__AUTH_BASE_URL
+          value: {{ .Values.results.HUB__AUTH_BASE_URL}}
+        - name: HUB__AUTH_USERNAME
+          value: {{ .Values.results.HUB__AUTH_USERNAME}}
+        - name: HUB__AUTH_PASSWORD
+          value: {{ .Values.results.HUB__AUTH_PASSWORD}}
+        - name: MINIO__ENDPOINT
+          value: {{ .Release.Name }}-minio-svc:9000
+        - name: MINIO__ACCESS_KEY
+          value: {{ .Values.minio.rootUser}}
+        - name: MINIO__SECRET_KEY
+          value: {{ .Values.minio.rootPassword}}
+        - name: MINIO__BUCKET
+          value: {{ .Values.results.MINIO__BUCKET}}
+        - name: MINIO__REGION
+          value: {{ .Values.results.MINIO__REGION}}
+        - name: MINIO__USE_SSL
+          value: {{ quote .Values.results.MINIO__USE_SSL}}
+        - name: OIDC__CERTS_URL
+          value: {{ .Values.results.OIDC__CERTS_URL}}
+        - name: OIDC__CLIENT_ID_CLAIM_NAME
+          value: {{ .Values.results.OIDC__CLIENT_ID_CLAIM_NAME}}
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: http-result-srv
+          initialDelaySeconds: 15
+          periodSeconds: 20
+          failureThreshold: 1
+          timeoutSeconds: 5
+
