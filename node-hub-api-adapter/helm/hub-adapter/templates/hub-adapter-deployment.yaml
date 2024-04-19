@@ -34,7 +34,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: hub-adapter-keycloak-secret
-                  key: kcsecret
+                  key: keycloak
             - name: IDP_URL
               value: {{ .Values.env.IDP_URL | default "http://keycloak-service:8080" | quote }}  # To be replaced
             - name: IDP_REALM
