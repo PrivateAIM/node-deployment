@@ -36,11 +36,12 @@ spec:
         - name: POSTGRES_HOST
           value: {{ .Values.env.POSTGRES_HOST}}
         - name: POSTGRES_DB
-          value: {{ .Values.env.POSTGRES_DB}}
+          value: {{ .Values.postgresql.database}}
+          ## TODO: add _helpers.tpl in case we want to use secret instead for postgres user/pwd
         - name: POSTGRES_USER
-          value: {{ .Values.env.POSTGRES_USER}}
+          value: {{ .Values.postgresql.username}}
         - name: POSTGRES_PASSWORD
-          value: {{ .Values.env.POSTGRES_USER}}
+          value: {{ .Values.postgresql.password}}
         - name: RESULT_CLIENT_ID
           value: {{ .Values.env.RESULT_CLIENT_ID}}
         - name: RESULT_CLIENT_SECRET
