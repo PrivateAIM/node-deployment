@@ -50,7 +50,7 @@ kong:
       password: kong
       postgresPassword: supersecretpassword
 
-flame-result-adapter:
+flame-result-service:
   env:
     HUB_USERNAME: foobar
     HUB_PASSWORD: sup3r_s3cr3t
@@ -258,6 +258,22 @@ keycloak:
 
 # hub-api-adapter Values
 flame-hub-adapter:
+  api:
+    version: 0.1.0
+    domain: localhost
+  env:
+      API_CLIENT_ID: api-client
+      IDP_REALM: flame
+      IDP_URL: http://keycloak-service:8080
+      RESULTS_SERVICE_URL: http://results-service:5000
+      KONG_ADMIN_SERVICE_URL: http://flame-node-kong-admin:80
+      PODORC_SERVICE_URL: http://po-service:8000
+      HUB_SERVICE_URL: https://api.privateaim.net
+      HUB_AUTH_SERVICE_URL: https://auth.privateaim.net
+      HUB_USERNAME: ""
+      HUB_PASSWORD: ""
+
+flame-node-pod-orchestration:
   api:
     version: 0.1.0
     domain: localhost
