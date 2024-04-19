@@ -5,4 +5,4 @@ env:
   MINIO_SECRET_KEY: s3cr3t_p4ssw0rd
   MINIO_USE_SSL: false
   MINIO_BUCKET: flame
-  OIDC_CERTS_URL: http://keycloak-service:8080/realms/flame/protocol/openid-connect/certs
+  OIDC_CERTS_URL: http://flame-node-keycloak-service:8080/realms/flame/protocol/openid-connect/certs
