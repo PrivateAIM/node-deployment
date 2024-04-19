@@ -61,16 +61,82 @@ minio:
 # keycloak values
 keycloak:
   auth:
+    ## @param auth.adminUser Keycloak administrator user
+    ##
     adminUser: admin
-    adminPassword: admin
+    ## @param auth.adminPassword Keycloak administrator password for the new user
+    ##
+    adminPassword: ""
+    ## @param auth.existingSecret Existing secret containing Keycloak admin password
+    ##
+    existingSecret: "kc-password-secret"
+    ## @param auth.passwordSecretKey Key where the Keycloak admin password is being stored inside the existing secret.
+    ##
+    passwordSecretKey: "kc-admin-password"
+
+  ## The existingSecret must have both "postgres-password" and "password" as a key
+  ## An issue is open for this and should be fixed soon: https://github.com/bitnami/charts/issues/25232
+  ## Current bitnami/keycloak helm chart used is 24.0.2
   postgresql:
     enabled: true
-    nameOverride: keycloak-postgresql
     auth:
+      postgresPassword: ""  # Not needed since secret is provided
+      username: keycloak  # custom user
+      password: keycloak  # custom user pwd
       database: keycloak
-      username: keycloak
-      password: keycloak
-      postgresPassword: supersecretpassword
+      existingSecret: "kc-password-secret"  # admin password, requires "password" key in secret
+    architecture: standalone
+
+  keycloakConfigCli:
+    ## @param keycloakConfigCli.enabled Whether to enable keycloak-config-cli job
+    ## Must be set to true to apply settings below
+    enabled: true
+    ## @param keycloakConfigCli.configuration keycloak-config-cli realms configuration
+    ## NOTE: nil keys will be considered files to import locally
+    ## Example:
+    ## configuration:
+    ##   realm1.json: |
+    ##     {
+    ##       "realm": "realm1",
+    ##       "clients": []
+    ##     }
+    ##   files/realm2.yaml:
+    ##   realm3.yaml: |
+    ##     realm: realm3
+    ##     clients: []
+    ##
+    configuration:
+      flame.json: |
+        {
+          "realm": "flame",
+          "clients": [ {
+              "clientId": "hub-adapter",
+              "name": "Node Hub Adapter Gateway API",
+              "clientAuthenticatorType": "client-secret",
+              "secret" : "pTvLrBKuy0vxruvUprwsXpEtw84dDN9C",
+              "standardFlowEnabled" : true,
+              "implicitFlowEnabled" : false,
+              "directAccessGrantsEnabled" : true,
+              "serviceAccountsEnabled" : true,
+              "authorizationServicesEnabled" : true,
+              "publicClient" : false,
+              "enabled": true
+            } ],
+          "users": [ {
+            "username" : "flameuser",
+            "firstName" : "Johnny",
+            "lastName" : "Storm",
+            "email" : "foobar@gmail.com",
+            "emailVerified" : true,
+            "enabled" : true,
+            "credentials" : [ {
+              "type" : "password",
+              "userLabel" : "My password",
+              "secretData" : "{\"value\":\"AcmFvt1RyPVxJXASu8d66p6nsCV5uwuvPAQ5Qdo1aqJoFaxc7vxPoJpwDCT8xCRR/SANHsyRRpUGfJGZhBKI0w==\",\"salt\":\"K06PBP69IiB0QWWsiaqSxQ==\",\"additionalParameters\":{}}",
+              "credentialData" : "{\"hashIterations\":210000,\"algorithm\":\"pbkdf2-sha512\",\"additionalParameters\":{}}"
+              } ]
+            } ]
+        }
 
 # hub-api-adapter Values
 flame-hub-adapter:
