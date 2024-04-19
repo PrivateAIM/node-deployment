@@ -139,4 +139,5 @@ blaze:
     enabled: true
     env:
       SYNTHEA_N_PATIENTS: 10
+      TIMEOUT: 1
       FHIR_BASE_URL: http://flame-node-blaze:80/fhir

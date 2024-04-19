@@ -22,7 +22,7 @@ spec:
             - name: N_PATIENTS
               value: "{{ .Values.dataPopulatorJob.env.SYNTHEA_N_PATIENTS | default "10" }}"
             - name: TIMEOUT
-              value: "1"
+              value: "{{ .Values.dataPopulatorJob.env.TIMEOUT | default "1" }}"
             - name: ENABLE_PROCESS_TESTDATA
               value: "true"
             - name: GZIP_PROCESSED_OUTPUT_FILES
@@ -38,7 +38,7 @@ spec:
             - name: REMOVE_INPUTFILES_FHIR_SENDING
               value: "true"
             - name: FHIR_URL
-              value: "{{ .Values.dataPopulatorJob.env.FHIR_BASE_URL | default "" }}"
+              value: "{{ .Values.dataPopulatorJob.env.FHIR_BASE_URL }}"
             - name: FHIR_USER
               value: "''"
             - name: FHIR_PW
