@@ -117,7 +117,19 @@ flame-node-pod-orchestration:
     POSTGRES_DB: postgres_db
     POSTGRES_USER: postgres
     POSTGRES_PASSWORD: postgres
-
+    
+flame-node-message-broker:
+  # Uncomment, if you want to use a specific storage class.
+  # Otherwise, the default one will be used.
+  # common:
+  #   storageClassName: yourStorageClassToBeUsed
+  broker:
+    AUTH_JWKS_URL: http://keycloak-service:8080/realms/flame/protocol/openid-connect/certs
+    HUB_BASE_URL: https://api.privateaim.net/
+    HUB_AUTH_BASE_URL: https://auth.privateaim.net/
+    HUB_AUTH_ROBOT_ID: yourRobotId
+    HUB_AUTH_ROBOT_SECRET: yourRobotSecret
+    
 # blaze values
 blaze:
   service:
@@ -128,4 +140,3 @@ blaze:
     env:
       SYNTHEA_N_PATIENTS: 10
       FHIR_BASE_URL: http://flame-node-blaze:80/fhir
-
