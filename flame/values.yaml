@@ -89,7 +89,7 @@ flame-hub-adapter:
       HUB_USERNAME: thehubusername
       HUB_PASSWORD: thehubpassword
 
-node-pod-orchestration:
+flame-node-pod-orchestration:
   api:
     version: 0.1.0
     domain: localhost
@@ -117,7 +117,7 @@ node-pod-orchestration:
     POSTGRES_DB: postgres_db
     POSTGRES_USER: postgres
     POSTGRES_PASSWORD: postgres
-
+    
 flame-node-message-broker:
   # Uncomment, if you want to use a specific storage class.
   # Otherwise, the default one will be used.
@@ -129,3 +129,14 @@ flame-node-message-broker:
     HUB_AUTH_BASE_URL: https://auth.privateaim.net/
     HUB_AUTH_ROBOT_ID: yourRobotId
     HUB_AUTH_ROBOT_SECRET: yourRobotSecret
+    
+# blaze values
+blaze:
+  service:
+    type: ClusterIP
+    port: 80
+  dataPopulatorJob:
+    enabled: true
+    env:
+      SYNTHEA_N_PATIENTS: 10
+      FHIR_BASE_URL: http://flame-node-blaze:80/fhir

@@ -1,6 +1,6 @@
 apiVersion: v2
-name: flame-node
-description: A Helm chart for deploying the Flame Node
+name: blaze
+description: A Helm chart for Kubernetes
 
 # A chart can be either an 'application' or a 'library' chart.
 #
@@ -21,27 +21,4 @@ version: 0.1.0
 # incremented each time you make changes to the application. Versions are not expected to
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
-appVersion: 0.9.0
-
-dependencies:
-  - name: kong
-    repository: https://charts.konghq.com
-    version: 2.38.0
-  - name: minio
-    repository: https://charts.bitnami.com/bitnami
-    version: 14.1.7
-  - name: flame-keycloak
-    repository: file://../node-keycloak/helm/node-keycloak
-    version: 0.1.0
-  - name: flame-hub-adapter
-    repository: file://../node-hub-api-adapter/helm/hub-adapter
-    version: 0.1.0
-  - name: flame-node-pod-orchestration
-    repository: file://../node-pod-orchestration/helm/node-pod-orchestration
-    version: 0.1.0
-  - name: flame-node-message-broker
-    repository: file://../node-message-broker/helm
-    version: 0.1.0
-  - name: blaze
-    repository: file://../node-data-store/helm/blaze
-    version: 0.1.0
+appVersion: "0.25.0"

@@ -1,0 +1,47 @@
+{{- if and .Values.dataPopulatorJob.enabled (not (empty .Values.dataPopulatorJob.env.FHIR_BASE_URL)) -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "blaze.fullname" . }}-node-fhir-test-data-populator
+spec:
+  template:
+    spec:
+      initContainers:
+        - name: {{ include "blaze.fullname" . }}-node-fhir-test-data-populator-init-wait
+          image: busybox
+          command: ["/bin/sh", "-c", "for i in $(seq 1 5); do curl -f {{ .Values.dataPopulatorJob.env.FHIR_BASE_URL }} && break || sleep 60; done"]
+      containers:
+        - name: {{ include "blaze.fullname" . }}-node-fhir-test-data-populator
+          image: ghcr.io/privateaim/node-fhir-test-data-populator:latest
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: CLEAR_TESTDATA_DIRS
+              value: "true"
+            - name: ENABLE_GENERATE_SYNTHEA_DATA
+              value: "true"
+            - name: N_PATIENTS
+              value: "{{ .Values.dataPopulatorJob.env.SYNTHEA_N_PATIENTS | default "10" }}"
+            - name: TIMEOUT
+              value: "1"
+            - name: ENABLE_PROCESS_TESTDATA
+              value: "true"
+            - name: GZIP_PROCESSED_OUTPUT_FILES
+              value: "true"
+            - name: REMOVE_INPUTFILES_PROCESSING
+              value: "true"
+            - name: RELEVANT_RESOURCES
+              value: "Patient,Encounter,Observation,Condition,DiagnosticReport,Medication,MedicationAdministration,Procedure"
+            - name: ENABLE_SENT_DATA_TO_FHIR
+              value: "true"
+            - name: GZIPPED_FHIR_SEND_INPUT_FILES
+              value: "true"
+            - name: REMOVE_INPUTFILES_FHIR_SENDING
+              value: "true"
+            - name: FHIR_URL
+              value: "{{ .Values.dataPopulatorJob.env.FHIR_BASE_URL | default "" }}"
+            - name: FHIR_USER
+              value: "''"
+            - name: FHIR_PW
+              value: "''"
+      restartPolicy: Never
+{{- end }}    

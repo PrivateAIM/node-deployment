@@ -45,9 +45,9 @@ spec:
             - name: HUB_AUTH_SERVICE_URL
               value: {{ .Values.env.HUB_AUTH_SERVICE_URL | default "https://auth.privateaim.net" | quote }}
             - name: HUB_USERNAME
-              value: {{ .Values.env.HUB_USERNAME | default "thehubusername" | quote }}  # To be properly filled in
+              value: {{ required "Hub username must be set." .Values.env.HUB_USERNAME | quote }}  # To be properly filled in
             - name: HUB_PASSWORD
-              value: {{ .Values.env.HUB_PASSWORD | default "thehubpassword" | quote }}
+              value: {{ required "Hub password must be set." .Values.env.HUB_PASSWORD | quote }}
           startupProbe:
             httpGet:
               path: /healthz

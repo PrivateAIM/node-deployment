@@ -2,7 +2,7 @@ api:
   version: 0.1.0
   domain: localhost
 env:
-    API_CLIENT_ID: api-client
+    API_CLIENT_ID: hub-adapter
     IDP_REALM: flame
     IDP_URL: http://keycloak-service:8080
     RESULTS_SERVICE_URL: http://results-service:5000

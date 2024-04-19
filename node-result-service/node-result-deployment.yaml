@@ -79,5 +79,3 @@ spec:
               port: http-result-srv
             failureThreshold: 3
             periodSeconds: 10
-      imagePullSecrets:
-        - name: dockerconfigjson-github-com
