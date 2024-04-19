@@ -21,11 +21,12 @@ spec:
               name: http-result-srv
           env:
             - name: MINIO__ENDPOINT
-              value: {{ .Release.Name }}-local-minio-service
+              value: {{ .Release.Name }}-minio-svc:9000
+              ## TODO: add _helpers.tpl in case we want to use secret instead for minio user/pwd
             - name: MINIO__ACCESS_KEY
-              value: {{ required "MinIO user must be set." .Values.env.MINIO_ACCESS_KEY | quote }}
+              value: {{ required "MinIO user must be set." .Values.minio.rootUser | quote }}
             - name: MINIO__SECRET_KEY
-              value: {{ required "MinIO password must be set." .Values.env.MINIO_SECRET_KEY | quote }}
+              value: {{ required "MinIO password must be set." .Values.minio.rootPassword | quote }}
             - name: MINIO__USE_SSL
               value: {{ .Values.env.MINIO_USE_SSL | default false | quote }}
             - name: MINIO__BUCKET

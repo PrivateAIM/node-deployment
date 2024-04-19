@@ -36,6 +36,9 @@ dependencies:
   - name: flame-hub-adapter
     repository: file://../node-hub-api-adapter/helm/hub-adapter
     version: 0.1.0
+  - name: flame-result-adapter
+    repository: file://../node-result-service/helm/node-result-service
+    version: 0.1.0
   - name: flame-node-pod-orchestration
     repository: file://../node-pod-orchestration/helm/node-pod-orchestration
     version: 0.1.0

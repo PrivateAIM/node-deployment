@@ -1,25 +1,9 @@
 env:
   HUB_USERNAME: foobar
   HUB_PASSWORD: sup3r_s3cr3t
-  MINIO_ACCESS_KEY: admin
-  MINIO_SECRET_KEY: s3cr3t_p4ssw0rd
   MINIO_USE_SSL: false
   MINIO_BUCKET: flame
   OIDC_CERTS_URL: http://keycloak-service:8080/realms/flame/protocol/openid-connect/certs
-results:
-
-    HUB__API_BASE_URL: https://privateaim.net/core
-    HUB__AUTH_BASE_URL: https://privateaim.net/auth
-    HUB__AUTH_USERNAME: ""
-    HUB__AUTH_PASSWORD: ""
-
-    MINIO__BUCKET: flame
-    MINIO__REGION: us-east-1
-    MINIO__USE_SSL: false
-
-    OIDC__CERTS_URL: http://keycloak-service:8080/realms/flame/protocol/openid-connect/certs
-    OIDC__CLIENT_ID_CLAIM_NAME: azp
-
 
 minio:
     # All possible values can be found at https://github.com/minio/minio/blob/master/helm/minio/values.yaml
@@ -37,8 +21,8 @@ minio:
     ## rootUser and rootPassword is generated when not set
     ## Distributed MinIO ref: https://min.io/docs/minio/linux/operations/install-deploy-manage/deploy-minio-multi-node-multi-drive.html
     ##
-    rootUser: ""
-    rootPassword: ""
+    rootUser: "admin"
+    rootPassword: "s3cr3t_p4ssw0rd"
 
     ## Use existing Secret that store following variables:
     ##

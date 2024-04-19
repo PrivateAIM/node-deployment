@@ -1,6 +1,6 @@
 apiVersion: v2
-name: flame-node-result-service
-description: A Helm chart for the FLAME Node Pod Orchestration
+name: flame-result-service
+description: A Helm Chart for the FLAME Node Result Service
 
 # A chart can be either an 'application' or a 'library' chart.
 #
