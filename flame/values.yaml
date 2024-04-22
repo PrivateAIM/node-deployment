@@ -179,24 +179,11 @@ flame-result-service:
 # keycloak values
 keycloak:
   auth:
-    ## @param auth.adminUser Keycloak administrator user
-    ##
     adminUser: admin
-    ## @param auth.adminPassword Keycloak administrator password for the new user
-    ##
-    adminPassword: ""
-    ## @param auth.existingSecret Existing secret containing Keycloak admin password
-    ##
-    existingSecret: "kc-password-secret"
-    ## @param auth.passwordSecretKey Key where the Keycloak admin password is being stored inside the existing secret.
-    ##
-    passwordSecretKey: "kc-admin-password"
-
-  ## The existingSecret must have both "postgres-password" and "password" as a key
-  ## An issue is open for this and should be fixed soon: https://github.com/bitnami/charts/issues/25232
-  ## Current bitnami/keycloak helm chart used is 24.0.2
+    adminPassword: admin
   postgresql:
     enabled: true
+    nameOverride: keycloak-postgresql
     auth:
       postgresPassword: ""  # Not needed since secret is provided
       username: keycloak  # custom user
@@ -270,30 +257,29 @@ flame-hub-adapter:
       PODORC_SERVICE_URL: http://po-service:8000
       HUB_SERVICE_URL: https://api.privateaim.net
       HUB_AUTH_SERVICE_URL: https://auth.privateaim.net
-      HUB_USERNAME: ""
-      HUB_PASSWORD: ""
+      HUB_USERNAME: thehubusername
+      HUB_PASSWORD: thehubpassword
 
 flame-node-pod-orchestration:
   api:
     version: 0.1.0
     domain: localhost
   env:
+    NODE_NAME: flame_test
+    NODE_KEY: /home/david/PycharmProjects/node-pod-orchestration/k8/helm/node-pod-orchestration/values.template.yaml
+    NODE_KEY_PW:
 
-      NODE_NAME: #TODO
-      NODE_KEY: #TODO
-      NODE_KEY_PW: #TODO
+    HARBOR_URL: dev-harbor.personalhealthtrain.de
+    HARBOR_PW: test
+    HARBOR_USER: test
 
-      HARBOR_URL: dev-harbor.personalhealthtrain.de
-      HARBOR_PW: test
-      HARBOR_USER: test
+    KEYCLOAK_URL: http://keycloak-service
+    KEYCLOAK_REALM: flame
 
-      KEYCLOAK_URL: http://keycloak-service
-      KEYCLOAK_REALM: flame
+    RESULT_CLIENT_ID: service1
+    RESULT_CLIENT_SECRET: abc
 
-      RESULT_CLIENT_ID: service1
-      RESULT_CLIENT_SECRET: abc
-
-      POSTGRES_HOST: postgresql-service
+    POSTGRES_HOST: postgresql-service
   postgresql:
     auth:
       ## @param auth.enablePostgresUser Assign a password to the "postgres" admin user. Otherwise, remote access will be blocked for this user
@@ -318,6 +304,28 @@ flame-node-pod-orchestration:
       ##
       usePasswordFiles: false
 
+    DB_HOST: postgresql-service
+    DB_PORT: 5432
+    DB_USER: admin
+    DB_PASSWORD: admin
+
+
+    POSTGRES_DB: postgres_db
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: postgres
+
+flame-node-message-broker:
+  # Uncomment, if you want to use a specific storage class.
+  # Otherwise, the default one will be used.
+  # common:
+  #   storageClassName: yourStorageClassToBeUsed
+  broker:
+    AUTH_JWKS_URL: http://keycloak-service:8080/realms/flame/protocol/openid-connect/certs
+    HUB_BASE_URL: https://api.privateaim.net/
+    HUB_AUTH_BASE_URL: https://auth.privateaim.net/
+    HUB_AUTH_ROBOT_ID: yourRobotId
+    HUB_AUTH_ROBOT_SECRET: yourRobotSecret
+
 # blaze values
 blaze:
   service:
@@ -327,5 +335,5 @@ blaze:
     enabled: true
     env:
       SYNTHEA_N_PATIENTS: 10
+      TIMEOUT: 1
       FHIR_BASE_URL: http://flame-node-blaze:80/fhir
-

@@ -112,5 +112,6 @@ dataPopulatorJob:
   enabled: true
   env:
     SYNTHEA_N_PATIENTS: 10
-    FHIR_BASE_URL: http://blaze:80/fhir
+    TIMEOUT: 1
+    # FHIR_BASE_URL: http://blaze:80/fhir
 
