@@ -45,3 +45,6 @@ dependencies:
   - name: blaze
     repository: file://../node-data-store/helm/blaze
     version: 0.1.0
+  - name: flame-node-result-service
+    repository: file://../node-result-service/helm/node-result-service
+    version: 0.1.0
