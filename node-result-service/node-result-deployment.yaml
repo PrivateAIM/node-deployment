@@ -67,15 +67,3 @@ spec:
                 configMapKeyRef:
                   name: result-service-env
                   key: OIDC__SKIP_JWT_VALIDATION
-          startupProbe:
-            httpGet:
-              path: /healthz
-              port: http-result-srv
-            failureThreshold: 5
-            periodSeconds: 5
-          livenessProbe:
-            httpGet:
-              path: /healthz
-              port: http-result-srv
-            failureThreshold: 3
-            periodSeconds: 10

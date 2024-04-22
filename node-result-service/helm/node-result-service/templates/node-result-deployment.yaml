@@ -40,15 +40,3 @@ spec:
             # ignored. You will still need to set this variable for the service to start up correctly.
             - name: OIDC__SKIP_JWT_VALIDATION
               value: "0"
-          startupProbe:
-            httpGet:
-              path: /healthz
-              port: http-result-srv
-            failureThreshold: 5
-            periodSeconds: 5
-          livenessProbe:
-            httpGet:
-              path: /healthz
-              port: http-result-srv
-            failureThreshold: 3
-            periodSeconds: 10
