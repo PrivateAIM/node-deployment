@@ -21,7 +21,7 @@ spec:
               name: http-result-srv
           env:
             - name: MINIO__ENDPOINT
-              value: {{ .Release.Name }}-local-minio-service
+              value: {{ .Release.Name }}-local-minio-service:9000
             - name: MINIO__ACCESS_KEY
               value: {{ required "MinIO user must be set." .Values.env.MINIO_ACCESS_KEY | quote }}
             - name: MINIO__SECRET_KEY
