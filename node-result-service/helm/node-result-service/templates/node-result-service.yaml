@@ -4,7 +4,7 @@ metadata:
   name: {{ .Release.Name }}-node-result-service
 spec:
   selector:
-    app: node-result
+    app: {{ .Release.Name }}-node-result
   ports:
     - protocol: TCP
       port: 8080
