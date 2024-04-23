@@ -340,3 +340,12 @@ blaze:
       SYNTHEA_N_PATIENTS: 10
       TIMEOUT: 1
       FHIR_BASE_URL: http://flame-node-blaze:80/fhir
+results-service:
+  env:
+    HUB_USERNAME: foobar
+    HUB_PASSWORD: sup3r_s3cr3t
+    MINIO_ACCESS_KEY: admin
+    MINIO_SECRET_KEY: s3cr3t_p4ssw0rd
+    MINIO_USE_SSL: false
+    MINIO_BUCKET: flame
+    OIDC_CERTS_URL: http://flame-node-keycloak-service:8080/realms/flame/protocol/openid-connect/certs
