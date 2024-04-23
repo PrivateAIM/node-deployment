@@ -4,6 +4,7 @@ env:
   MINIO_USE_SSL: false
   MINIO_BUCKET: flame
   OIDC_CERTS_URL: http://flame-node-keycloak-service:8080/realms/flame/protocol/openid-connect/certs
+  OIDC_CLIENT_ID_CLAIM_NAME: azp
 
 minio:
   # All possible values can be found at https://github.com/minio/minio/blob/master/helm/minio/values.yaml
@@ -94,7 +95,7 @@ minio:
 
   resources:
     requests:
-      memory: 16Gi
+      memory: 1Gi
 
   ## Update strategy for StatefulSets
   statefulSetUpdate:

@@ -27,12 +27,6 @@ dependencies:
   - name: kong
     repository: https://charts.konghq.com
     version: 2.38.0
-  - name: minio
-    repository: https://charts.bitnami.com/bitnami
-    version: 14.1.7
-  - name: postgresql
-    repository: https://charts.bitnami.com/bitnami
-    version: 15.2.5
   - name: keycloak
     repository: https://charts.bitnami.com/bitnami
     version: 21.0.2

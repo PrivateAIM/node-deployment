@@ -36,15 +36,15 @@ spec:
                   name: hub-adapter-keycloak-secret
                   key: keycloak
             - name: IDP_URL
-              value: {{ .Values.env.IDP_URL | default "http://keycloak-service:8080" | quote }}  # To be replaced
+              value: {{ include "adapter.keycloak.endpoint" . }}
             - name: IDP_REALM
               value: {{ .Values.env.IDP_REALM | default "flame" | quote }}  # To be replaced
             - name: RESULTS_SERVICE_URL
-              value: {{ .Values.env.RESULTS_SERVICE_URL | default "http://node-result-service:8080" | quote }}  # To be properly filled in
+              value: {{ include "adapter.results.endpoint" . }}
             - name: PODORC_SERVICE_URL
-              value: {{ .Values.env.PODORC_SERVICE_URL | default "http://po-service:8000" | quote }}  # To be properly filled in
+              value: {{ include "adapter.po.endpoint" . }}
             - name: KONG_ADMIN_SERVICE_URL
-              value: {{ .Values.env.KONG_ADMIN_SERVICE_URL | default "http://kong-service:8000" | quote }}  # To be properly filled in
+              value: {{ include "adapter.kong.endpoint" . }}
             - name: HUB_SERVICE_URL
               value: {{ .Values.env.HUB_SERVICE_URL | default "https://privateaim.net/core" | quote }}
             - name: HUB_AUTH_SERVICE_URL
@@ -59,4 +59,4 @@ spec:
               port: healthcp
             failureThreshold: 3
             periodSeconds: 10
-            initialDelaySeconds: 30
+            initialDelaySeconds: 60

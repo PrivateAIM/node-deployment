@@ -21,7 +21,7 @@ spec:
               name: http-result-srv
           env:
             - name: MINIO__ENDPOINT
-              value: {{ .Release.Name }}-minio-svc:9000
+              value: {{ .Release.Name }}-minio:9000
               ## TODO: add _helpers.tpl in case we want to use secret instead for minio user/pwd
             - name: MINIO__ACCESS_KEY
               value: {{ required "MinIO user must be set." .Values.minio.rootUser | quote }}
@@ -36,7 +36,9 @@ spec:
             - name: HUB__AUTH_PASSWORD
               value: {{ required "Hub password must be set." .Values.env.HUB_PASSWORD | quote }}
             - name: OIDC__CERTS_URL
-              value: {{ required "OIDC endpoint must be set." .Values.env.OIDC_CERTS_URL | quote }}
+              value: {{ include "results.keycloak.endpoint" . }}
+            - name: OIDC__CLIENT_ID_CLAIM_NAME
+              value: {{ .Values.env.OIDC_CLIENT_ID_CLAIM_NAME }}
             # Change this to "1" for testing purposes. This will cause the value of OIDC__CERTS_URL to be
             # ignored. You will still need to set this variable for the service to start up correctly.
             - name: OIDC__SKIP_JWT_VALIDATION

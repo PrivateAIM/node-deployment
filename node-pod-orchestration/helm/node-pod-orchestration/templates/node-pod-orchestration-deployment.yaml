@@ -47,7 +47,7 @@ spec:
         - name: RESULT_CLIENT_SECRET
           value: {{ .Values.env.RESULT_CLIENT_SECRET}}
         - name: KEYCLOAK_URL
-          value: {{ .Values.env.KEYCLOAK_URL}}
+          value: {{ include "po.keycloak.endpoint" . }}
         - name: KEYCLOAK_REALM
           value: {{ .Values.env.KEYCLOAK_REALM}}
         - name: HARBOR_URL

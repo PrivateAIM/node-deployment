@@ -56,7 +56,8 @@ flame-result-service:
     HUB_PASSWORD: sup3r_s3cr3t
     MINIO_USE_SSL: false
     MINIO_BUCKET: flame
-    OIDC_CERTS_URL: http://keycloak-service:8080/realms/flame/protocol/openid-connect/certs
+    OIDC_CERTS_URL: ""
+    OIDC_CLIENT_ID_CLAIM_NAME: azp
 
   minio:
     # All possible values can be found at https://github.com/minio/minio/blob/master/helm/minio/values.yaml
@@ -147,7 +148,7 @@ flame-result-service:
 
     resources:
       requests:
-        memory: 16Gi
+        memory: 1Gi
 
     ## Update strategy for StatefulSets
     statefulSetUpdate:
@@ -214,6 +215,8 @@ keycloak:
       flame.json: |
         {
           "realm": "flame",
+          "enabled": true,
+          "defaultSignatureAlgorithm": "RS256",
           "clients": [ {
               "clientId": "hub-adapter",
               "name": "Node Hub Adapter Gateway API",
@@ -249,12 +252,12 @@ flame-hub-adapter:
     version: 0.1.0
     domain: localhost
   env:
-      API_CLIENT_ID: api-client
+      API_CLIENT_ID: hub-adapter
       IDP_REALM: flame
-      IDP_URL: http://keycloak-service:8080
-      RESULTS_SERVICE_URL: http://results-service:5000
-      KONG_ADMIN_SERVICE_URL: http://flame-node-kong-admin:80
-      PODORC_SERVICE_URL: http://po-service:8000
+      IDP_URL: ""
+      RESULTS_SERVICE_URL: ""
+      KONG_ADMIN_SERVICE_URL: ""
+      PODORC_SERVICE_URL: ""
       HUB_SERVICE_URL: https://api.privateaim.net
       HUB_AUTH_SERVICE_URL: https://auth.privateaim.net
       HUB_USERNAME: thehubusername
@@ -265,15 +268,15 @@ flame-node-pod-orchestration:
     version: 0.1.0
     domain: localhost
   env:
-    NODE_NAME: flame_test
-    NODE_KEY: /home/david/PycharmProjects/node-pod-orchestration/k8/helm/node-pod-orchestration/values.template.yaml
-    NODE_KEY_PW:
+    NODE_NAME: flame
+    NODE_KEY: ""
+    NODE_KEY_PW: ""
 
     HARBOR_URL: dev-harbor.personalhealthtrain.de
     HARBOR_PW: test
     HARBOR_USER: test
 
-    KEYCLOAK_URL: http://keycloak-service
+    KEYCLOAK_URL: ""
     KEYCLOAK_REALM: flame
 
     RESULT_CLIENT_ID: service1
