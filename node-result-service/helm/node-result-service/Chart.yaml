@@ -1,5 +1,5 @@
 apiVersion: v2
-name: flame-result-service
+name: flame-node-result-service
 description: A Helm Chart for the FLAME Node Result Service
 
 # A chart can be either an 'application' or a 'library' chart.

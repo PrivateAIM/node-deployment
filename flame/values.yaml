@@ -50,7 +50,7 @@ kong:
       password: kong
       postgresPassword: supersecretpassword
 
-flame-result-service:
+flame-node-result-service:
   env:
     HUB_USERNAME: foobar
     HUB_PASSWORD: sup3r_s3cr3t
@@ -247,7 +247,7 @@ keycloak:
         }
 
 # hub-api-adapter Values
-flame-hub-adapter:
+flame-node-hub-adapter:
   api:
     version: 0.1.0
     domain: localhost
