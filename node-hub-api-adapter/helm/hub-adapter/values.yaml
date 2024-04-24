@@ -4,10 +4,10 @@ api:
 env:
     API_CLIENT_ID: hub-adapter
     IDP_REALM: flame
-    IDP_URL: http://keycloak-service:8080
-    RESULTS_SERVICE_URL: http://node-result-service:8080
-    KONG_ADMIN_SERVICE_URL: http://kong-service:8000
-    PODORC_SERVICE_URL: http://po-service:8000
+    IDP_URL: ""  # _helpers.tpl will auto fill these using the Release.Name
+    RESULTS_SERVICE_URL: ""
+    KONG_ADMIN_SERVICE_URL: ""
+    PODORC_SERVICE_URL: ""
     HUB_SERVICE_URL: https://privateaim.net/core
     HUB_AUTH_SERVICE_URL: https://privateaim.net/auth
     HUB_USERNAME: ""
