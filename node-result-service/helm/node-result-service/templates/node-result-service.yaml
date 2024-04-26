@@ -3,10 +3,10 @@ kind: Service
 metadata:
   name: {{ .Release.Name }}-node-result-service
 spec:
-  type: NodePort  # setting nodePort later is optional
   selector:
-    app: node-result
+    app: {{ .Release.Name }}-node-result
   ports:
     - protocol: TCP
-      port: 8080  # port of this service
-      targetPort: http-result-srv  # port on the pod
+      port: 8080
+      targetPort: http-result-srv
+  type: ClusterIP

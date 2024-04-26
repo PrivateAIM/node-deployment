@@ -30,18 +30,18 @@ dependencies:
   - name: blaze
     repository: file://../node-data-store/helm/blaze
     version: 0.1.0
-  - name: flame-keycloak
-    repository: file://../node-keycloak/helm/node-keycloak
-    version: 0.1.0
-  - name: flame-hub-adapter
+  - name: keycloak
+    repository: https://charts.bitnami.com/bitnami
+    version: 21.0.2
+  - name: flame-node-hub-adapter
     repository: file://../node-hub-api-adapter/helm/hub-adapter
+    version: 0.1.0
+  - name: flame-node-result-service
+    repository: file://../node-result-service/helm/node-result-service
     version: 0.1.0
   - name: flame-node-pod-orchestration
     repository: file://../node-pod-orchestration/helm/node-pod-orchestration
     version: 0.1.0
   - name: flame-node-message-broker
     repository: file://../node-message-broker/helm
-    version: 0.1.0
-  - name: flame-node-result-service
-    repository: file://../node-result-service/helm/node-result-service
     version: 0.1.0

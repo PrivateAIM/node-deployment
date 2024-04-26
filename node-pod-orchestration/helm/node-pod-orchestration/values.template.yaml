@@ -17,12 +17,27 @@ env:
     RESULT_CLIENT_ID: service1
     RESULT_CLIENT_SECRET: abc
 
-    DB_HOST: postgresql-service
-    DB_PORT: 5432
-    DB_USER: #TODO
-    DB_PASSWORD: #TODO
-
-
-    POSTGRES_DB: postgres_db
-    POSTGRES_USER: #TODO
-    POSTGRES_PASSWORD: #TODO
+    POSTGRES_HOST: postgresql-service
+postgresql:
+  auth:
+    ## @param auth.enablePostgresUser Assign a password to the "postgres" admin user. Otherwise, remote access will be blocked for this user
+    ##
+    enablePostgresUser: true
+    ## @param auth.postgresPassword Password for the "postgres" admin user. Ignored if `auth.existingSecret` is provided
+    ##
+    postgresPassword: ""
+    username: ""
+    password: ""
+    database: ""
+    existingSecret: ""
+    ## @param auth.secretKeys.adminPasswordKey Name of key in existing secret to use for PostgreSQL credentials. Only used when `auth.existingSecret` is set.
+    ## @param auth.secretKeys.userPasswordKey Name of key in existing secret to use for PostgreSQL credentials. Only used when `auth.existingSecret` is set.
+    ## @param auth.secretKeys.replicationPasswordKey Name of key in existing secret to use for PostgreSQL credentials. Only used when `auth.existingSecret` is set.
+    ##
+    secretKeys:
+      adminPasswordKey: postgres-password
+      userPasswordKey: password
+      replicationPasswordKey: replication-password
+    ## @param auth.usePasswordFiles Mount credentials as a files instead of using an environment variable
+    ##
+    usePasswordFiles: false

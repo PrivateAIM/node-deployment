@@ -186,7 +186,7 @@ keycloak:
     enabled: true
     nameOverride: keycloak-postgresql
     auth:
-      postgresPassword: ""
+      postgresPassword: ""  # Not needed since secret is provided
       username: keycloak  # custom user
       password: keycloak  # custom user pwd
       database: keycloak
