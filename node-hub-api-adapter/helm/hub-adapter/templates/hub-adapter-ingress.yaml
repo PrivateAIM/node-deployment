@@ -8,7 +8,7 @@ metadata:
     deployment-id:  {{ .Release.Name }}
 spec:
   rules:
-    - host: {{ .Values.api.domain }}
+    - host: {{ .Values.ingress.domain }}
       http:
         paths:
           - path: /

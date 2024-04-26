@@ -22,41 +22,42 @@ spec:
           imagePullPolicy: IfNotPresent  # Maybe "Always" during debug
           ports:
             - containerPort: 5000
-              name: http-result-srv
+              name: healthcp
           readinessProbe:
+            initialDelaySeconds: 15
             httpGet:
               path: /healthz
-              port: http-result-srv
+              port: healthcp
           env:
             - name: API_CLIENT_ID
-              value: {{ .Values.env.API_CLIENT_ID | default "hub-adapter" | quote }}
+              value: {{ .Values.idp.clientId | default "hub-adapter" | quote }}
+            - name: API_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "adapter.keycloak.secretName" . }}
+                  key: {{ include "adapter.keycloak.secretKey" . }}
             - name: IDP_URL
-              value: {{ .Values.env.IDP_URL | default "http://keycloak-service:8080" | quote }}  # To be replaced
+              value: {{ include "adapter.keycloak.endpoint" . }}
             - name: IDP_REALM
-              value: {{ .Values.env.IDP_REALM | default "flame" | quote }}  # To be replaced
+              value: {{ .Values.idp.realm | default "flame" | quote }}  # To be replaced
             - name: RESULTS_SERVICE_URL
-              value: {{ .Values.env.RESULTS_SERVICE_URL | default "http://node-result-service:5000" | quote }}  # To be properly filled in
+              value: {{ include "adapter.results.endpoint" . }}
             - name: PODORC_SERVICE_URL
-              value: {{ .Values.env.PODORC_SERVICE_URL | default "http://po-service:8000" | quote }}  # To be properly filled in
+              value: {{ include "adapter.po.endpoint" . }}
             - name: KONG_ADMIN_SERVICE_URL
-              value: {{ .Values.env.KONG_ADMIN_SERVICE_URL | default "http://kong-service:8000" | quote }}  # To be properly filled in
+              value: {{ include "adapter.kong.endpoint" . }}
             - name: HUB_SERVICE_URL
-              value: {{ .Values.env.HUB_SERVICE_URL | default "https://api.privateaim.net" | quote }}
+              value: {{ .Values.hub.coreApi | default "https://privateaim.net/core" | quote }}
             - name: HUB_AUTH_SERVICE_URL
-              value: {{ .Values.env.HUB_AUTH_SERVICE_URL | default "https://auth.privateaim.net" | quote }}
+              value: {{ .Values.hub.authApi | default "https://privateaim.net/auth" | quote }}
             - name: HUB_USERNAME
-              value: {{ required "Hub username must be set." .Values.env.HUB_USERNAME | quote }}  # To be properly filled in
+              value: {{ .Values.hub.auth.username | default "" | quote }}  # To be properly filled in
             - name: HUB_PASSWORD
-              value: {{ required "Hub password must be set." .Values.env.HUB_PASSWORD | quote }}
-          startupProbe:
-            httpGet:
-              path: /healthz
-              port: http-result-srv
-            failureThreshold: 5
-            periodSeconds: 5
+              value: {{ .Values.hub.auth.password | default "" | quote }}
           livenessProbe:
             httpGet:
               path: /healthz
-              port: http-result-srv
+              port: healthcp
             failureThreshold: 3
-            periodSeconds: 10
+            periodSeconds: 60
+            initialDelaySeconds: 60

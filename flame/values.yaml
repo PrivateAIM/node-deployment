@@ -50,13 +50,132 @@ kong:
       password: kong
       postgresPassword: supersecretpassword
 
-# minio values
-minio:
-  mode: standalone
-  accessKey: minio
-  secretKey: minio123
-  persistence:
-    enabled: true
+flame-node-result-service:
+  env:
+    HUB_USERNAME: foobar
+    HUB_PASSWORD: sup3r_s3cr3t
+    MINIO_USE_SSL: false
+    MINIO_BUCKET: flame
+    OIDC_CERTS_URL: ""
+    OIDC_CLIENT_ID_CLAIM_NAME: azp
+
+  minio:
+    # All possible values can be found at https://github.com/minio/minio/blob/master/helm/minio/values.yaml
+
+    ## Provide a name in place of minio for `app:` labels
+    nameOverride: ""
+
+    ## Provide a name to substitute for the full names of resources
+    fullnameOverride: ""
+
+    ## set kubernetes cluster domain where minio is running
+    clusterDomain: cluster.local
+
+    ## Set default rootUser, rootPassword
+    ## rootUser and rootPassword is generated when not set
+    ## Distributed MinIO ref: https://min.io/docs/minio/linux/operations/install-deploy-manage/deploy-minio-multi-node-multi-drive.html
+    ##
+    rootUser: "admin"
+    rootPassword: "s3cr3t_p4ssw0rd"
+
+    ## Use existing Secret that store following variables:
+    ##
+    ## | Chart var             | .data.<key> in Secret    |
+    ## |:----------------------|:-------------------------|
+    ## | rootUser              | rootUser                 |
+    ## | rootPassword          | rootPassword             |
+    ##
+    ## All mentioned variables will be ignored in values file.
+    ## .data.rootUser and .data.rootPassword are mandatory,
+    ## others depend on enabled status of corresponding sections.
+    existingSecret: ""
+
+    ## Path where PV would be mounted on the MinIO Pod
+    mountPath: "/mnt/data"
+
+    ## List of buckets to be created after minio install
+    ##
+    buckets: [
+      {
+        name: flame,
+        policy: none,
+        purge: false,
+        versioning: false,
+        objectlocking: false
+      }
+    ]
+      #   # Name of the bucket
+      # - name: bucket1
+      #   # Policy to be set on the
+      #   # bucket [none|download|upload|public]
+      #   policy: none
+      #   # Purge if bucket exists already
+      #   purge: false
+      #   # set versioning for
+      #   # bucket [true|false]
+      #   versioning: false # remove this key if you do not want versioning feature
+      #   # set objectlocking for
+      #   # bucket [true|false] NOTE: versioning is enabled by default if you use locking
+      #   objectlocking: false
+      # - name: bucket2
+      #   policy: none
+      #   purge: false
+      #   versioning: true
+      #   # set objectlocking for
+      #   # bucket [true|false] NOTE: versioning is enabled by default if you use locking
+      #   objectlocking: false
+
+
+    ## Set default image, imageTag, and imagePullPolicy. mode is used to indicate the
+    image:
+      repository: quay.io/minio/minio
+      tag: RELEASE.2024-03-03T17-50-39Z
+      pullPolicy: IfNotPresent
+
+    imagePullSecrets: []
+    ## Update strategy for Deployments
+    deploymentUpdate:
+      type: RollingUpdate
+      maxUnavailable: 0
+      maxSurge: 100%
+
+    # Number of drives attached to a node
+    drivesPerNode: 1
+    # Number of MinIO containers running
+    replicas: 2
+    # Number of expanded MinIO clusters
+    pools: 1
+
+    resources:
+      requests:
+        memory: 1Gi
+
+    ## Update strategy for StatefulSets
+    statefulSetUpdate:
+      updateStrategy: RollingUpdate
+
+    persistence:
+      enabled: true
+      annotations: {}
+
+      ## A manually managed Persistent Volume and Claim
+      ## Requires persistence.enabled: true
+      ## If defined, PVC must be created manually before volume will be bound
+      existingClaim: ""
+
+      ## minio data Persistent Volume Storage Class
+      ## If defined, storageClassName: <storageClass>
+      ## If set to "-", storageClassName: "", which disables dynamic provisioning
+      ## If undefined (the default) or set to null, no storageClassName spec is
+      ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+      ##   GKE, AWS & OpenStack)
+      ##
+      ## Storage class of PV to bind. By default it looks for standard storage class.
+      ## If the PV uses a different storage class, specify that here.
+      storageClass: ""
+      volumeName: ""
+      accessMode: ReadWriteOnce
+      size: 10Gi
   
 # keycloak values
 keycloak:
@@ -67,46 +186,110 @@ keycloak:
     enabled: true
     nameOverride: keycloak-postgresql
     auth:
+      postgresPassword: ""
+      username: keycloak  # custom user
+      password: keycloak  # custom user pwd
       database: keycloak
-      username: keycloak
-      password: keycloak
-      postgresPassword: supersecretpassword
+      existingSecret: "kc-password-secret"  # admin password, requires "password" key in secret
+    architecture: standalone
+
+  keycloakConfigCli:
+    ## @param keycloakConfigCli.enabled Whether to enable keycloak-config-cli job
+    ## Must be set to true to apply settings below
+    enabled: true
+    existingConfigmap: "flame-default-realm"
+
 
 # hub-api-adapter Values
-flame-hub-adapter:
-  api:
-    version: 0.1.0
+flame-node-hub-adapter:
+  ## For defining ingress specific metadata
+  ingress:
     domain: localhost
-  env:
-      API_CLIENT_ID: api-client
-      IDP_REALM: flame
-      IDP_URL: http://keycloak-service:8080
-      RESULTS_SERVICE_URL: http://results-service:5000
-      KONG_ADMIN_SERVICE_URL: http://flame-node-kong-admin:80
-      PODORC_SERVICE_URL: http://po-service:8000
-      HUB_SERVICE_URL: https://api.privateaim.net
-      HUB_AUTH_SERVICE_URL: https://auth.privateaim.net
-      HUB_USERNAME: thehubusername
-      HUB_PASSWORD: thehubpassword
+
+  ## Keycloak related information
+  idp:
+    ## @param idp.debug If true, the clientId and clientSecret will use pre-defined values
+    ## The clientSecret will be defined using the "static" k8s secret key
+    debug: true  # TODO disable once everything working
+    ## @param idp.clientId Keycloak client ID for this service
+    clientId: hub-adapter
+    ## @param idp.clientSecret Keycloak client secret. Ignored if `idp.existingSecret` is provided
+    ## If not defined and no existingSecret provided, a random string is generated
+    clientSecret: ""
+    ## @param idp.existingSecret Existing k8s secret containing Keycloak secret for this client
+    ## idp.existingSecretKey should also be defined for custom k8s secret. Defaults to hub-adapter-kc-secret
+    existingSecret: "kc-password-secret"
+    ## @param idp.existingSecretKey Key where the Keycloak secret is being stored inside the existing k8s secret
+    existingSecretKey: ""
+    ## @param idp.realm Keycloak realm that the client exists in
+    realm: flame
+    ## @param idp.host URL to keycloak service
+    ## Will be inferred using the Release.Name if not defined
+    host: ""
+
+  ## Downstream node services
+  node:
+    ## @param node.results Node results service endpoint
+    ## @param node.kong Node Kong admin service endpoint
+    ## @param node.po Node pod orchestrator service endpoint
+    results: ""
+    kong: ""
+    po: ""
+
+  ## Hub services and data
+  hub:
+    ## @param hub.coreApi Hub core API endpoint
+    coreApi: https://privateaim.net/core
+    ## @param hub.authApi Hub auth API endpoint
+    authApi: https://privateaim.net/auth
+    ## Credentials used for retrieving a valid token from the hub
+    auth:
+      username: ""
+      password: ""
 
 flame-node-pod-orchestration:
   api:
     version: 0.1.0
     domain: localhost
   env:
-    NODE_NAME: flame_test
-    NODE_KEY: /home/david/PycharmProjects/node-pod-orchestration/k8/helm/node-pod-orchestration/values.template.yaml
-    NODE_KEY_PW:
+    NODE_NAME: flame
+    NODE_KEY: ""
+    NODE_KEY_PW: ""
 
     HARBOR_URL: dev-harbor.personalhealthtrain.de
     HARBOR_PW: test
     HARBOR_USER: test
 
-    KEYCLOAK_URL: http://keycloak-service
+    KEYCLOAK_URL: ""
     KEYCLOAK_REALM: flame
 
     RESULT_CLIENT_ID: service1
     RESULT_CLIENT_SECRET: abc
+
+    POSTGRES_HOST: postgresql-service
+  postgresql:
+    auth:
+      ## @param auth.enablePostgresUser Assign a password to the "postgres" admin user. Otherwise, remote access will be blocked for this user
+      ##
+      enablePostgresUser: true
+      ## @param auth.postgresPassword Password for the "postgres" admin user. Ignored if `auth.existingSecret` is provided
+      ##
+      postgresPassword: ""
+      username: ""
+      password: ""
+      database: ""
+      existingSecret: ""
+      ## @param auth.secretKeys.adminPasswordKey Name of key in existing secret to use for PostgreSQL credentials. Only used when `auth.existingSecret` is set.
+      ## @param auth.secretKeys.userPasswordKey Name of key in existing secret to use for PostgreSQL credentials. Only used when `auth.existingSecret` is set.
+      ## @param auth.secretKeys.replicationPasswordKey Name of key in existing secret to use for PostgreSQL credentials. Only used when `auth.existingSecret` is set.
+      ##
+      secretKeys:
+        adminPasswordKey: postgres-password
+        userPasswordKey: password
+        replicationPasswordKey: replication-password
+      ## @param auth.usePasswordFiles Mount credentials as a files instead of using an environment variable
+      ##
+      usePasswordFiles: false
 
     DB_HOST: postgresql-service
     DB_PORT: 5432
@@ -117,7 +300,7 @@ flame-node-pod-orchestration:
     POSTGRES_DB: postgres_db
     POSTGRES_USER: postgres
     POSTGRES_PASSWORD: postgres
-    
+
 flame-node-message-broker:
   # Uncomment, if you want to use a specific storage class.
   # Otherwise, the default one will be used.
@@ -129,7 +312,7 @@ flame-node-message-broker:
     HUB_AUTH_BASE_URL: https://auth.privateaim.net/
     HUB_AUTH_ROBOT_ID: yourRobotId
     HUB_AUTH_ROBOT_SECRET: yourRobotSecret
-    
+
 # blaze values
 blaze:
   service:
@@ -141,12 +324,3 @@ blaze:
       SYNTHEA_N_PATIENTS: 10
       TIMEOUT: 1
       FHIR_BASE_URL: http://flame-node-blaze:80/fhir
-results-service:
-  env:
-    HUB_USERNAME: foobar
-    HUB_PASSWORD: sup3r_s3cr3t
-    MINIO_ACCESS_KEY: admin
-    MINIO_SECRET_KEY: s3cr3t_p4ssw0rd
-    MINIO_USE_SSL: false
-    MINIO_BUCKET: flame
-    OIDC_CERTS_URL: http://flame-node-keycloak-service:8080/realms/flame/protocol/openid-connect/certs

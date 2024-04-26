@@ -27,9 +27,9 @@ dependencies:
   - name: kong
     repository: https://charts.konghq.com
     version: 2.38.0
-  - name: minio
-    repository: https://charts.bitnami.com/bitnami
-    version: 14.1.7
+  - name: blaze
+    repository: file://../node-data-store/helm/blaze
+    version: 0.1.0
   - name: flame-keycloak
     repository: file://../node-keycloak/helm/node-keycloak
     version: 0.1.0
@@ -41,9 +41,6 @@ dependencies:
     version: 0.1.0
   - name: flame-node-message-broker
     repository: file://../node-message-broker/helm
-    version: 0.1.0
-  - name: blaze
-    repository: file://../node-data-store/helm/blaze
     version: 0.1.0
   - name: flame-node-result-service
     repository: file://../node-result-service/helm/node-result-service

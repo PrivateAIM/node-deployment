@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: flame-default-realm
+data:
+  flame.yaml: |
+    realm: "flame"
+    enabled: true
+    defaultSignatureAlgorithm: "RS256"
+    clients:
+    - clientId: "hub-adapter"
+      name: "Node Hub Adapter Gateway API"
+      clientAuthenticatorType: "client-secret"
+      secret: {{ include "hub.adapter.keycloak.clientSecret" . | indent 4 }}
+      standardFlowEnabled: true
+      implicitFlowEnabled: false
+      directAccessGrantsEnabled: true
+      serviceAccountsEnabled: true
+      authorizationServicesEnabled: true
+      publicClient: false
+      enabled: true
+    - clientId: "service1"
+      name: "Test service"
+      clientAuthenticatorType: "client-secret"
+      secret: 9dd01665c2f3f02f93c32d03bd854569f03cd62f439ccf9f0861c141b9d6330e
+      standardFlowEnabled: true
+      implicitFlowEnabled: false
+      directAccessGrantsEnabled: true
+      serviceAccountsEnabled: true
+      authorizationServicesEnabled: true
+      publicClient: false
+      enabled: true
+    users:
+    - username: "flameuser"
+      firstName: "Johnny"
+      lastName: "Storm"
+      email: "foobar@gmail.com"
+      emailVerified: true
+      enabled: true
+      credentials:
+      - type: "password"
+        userLabel: "My password"
+        credentialData: "{\"hashIterations\":210000,\"algorithm\":\"pbkdf2-sha512\",\"additionalParameters\":{}}"
+        secretData: "{\"value\":\"AcmFvt1RyPVxJXASu8d66p6nsCV5uwuvPAQ5Qdo1aqJoFaxc7vxPoJpwDCT8xCRR/SANHsyRRpUGfJGZhBKI0w==\",\"salt\":\"K06PBP69IiB0QWWsiaqSxQ==\",\"additionalParameters\":{}}"
