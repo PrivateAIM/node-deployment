@@ -11,7 +11,7 @@ data:
     - clientId: "hub-adapter"
       name: "Node Hub Adapter Gateway API"
       clientAuthenticatorType: "client-secret"
-      secret: {{ include "hub.adapter.keycloak.clientSecret" . | indent 4 }}
+      secret: {{ include "hub.adapter.keycloak.clientSecret" . | b64dec | quote | indent 4 }}
       standardFlowEnabled: true
       implicitFlowEnabled: false
       directAccessGrantsEnabled: true
