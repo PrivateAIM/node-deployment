@@ -24,7 +24,7 @@ spec:
             - containerPort: 5000
               name: healthcp
           readinessProbe:
-            initialDelaySeconds: 15
+            initialDelaySeconds: 45
             httpGet:
               path: /healthz
               port: healthcp

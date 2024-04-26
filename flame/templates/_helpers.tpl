@@ -3,7 +3,7 @@ Return the secret containing the Keycloak client secret
 */}}
 {{- define "hub.adapter.keycloak.secretName" -}}
 {{- $secretName := index .Values "flame-node-hub-adapter" "idp" "existingSecret" -}}
-{{- if and $secretName ( not .Values "flame-node-hub-adapter" "idp" "debug" ) -}}
+{{- if and $secretName ( not (index .Values "flame-node-hub-adapter" "idp" "debug") ) -}}
     {{- printf "%s" (tpl $secretName $) -}}
 {{- else -}}
     {{- printf "%s-hub-adapter-keycloak-secret" .Release.Name -}}
@@ -18,7 +18,7 @@ Return the secret key that contains the Keycloak client secret
 {{- if index .Values "flame-node-hub-adapter" "idp" "debug" -}}
     {{- print "hubAdapterClientSecret" -}}
 {{- else if and $secretName index .Values "flame-node-hub-adapter" "idp" "existingSecretKey" -}}
-    {{- printf "%s" (.Values "flame-node-hub-adapter" "idp" "existingSecretKey") -}}
+    {{- printf "%s" (index .Values "flame-node-hub-adapter" "idp" "existingSecretKey") -}}
 {{- else -}}
     {{- print "hubAdapterClientSecret" -}}
 {{- end -}}
@@ -31,7 +31,7 @@ Return the secret key that contains the Keycloak client secret
 {{- if index .Values "flame-node-hub-adapter" "idp" "debug" -}}
     {{- print "cFR2THJCS3V5MHZ4cnV2VXByd3NYcEV0dzg0ZEROOUM=" -}}
 {{- else if $hubAdapterClientSecret -}}
-    {{- printf "%s" (index $hubAdapterClientSecret "data" $hubAdapterSecretKey | b64dec | quote) -}}
+    {{- print (index $hubAdapterClientSecret "data" $hubAdapterSecretKey) -}}
 {{- else -}}
     {{- print "noSecretFound" -}}
 {{- end -}}
