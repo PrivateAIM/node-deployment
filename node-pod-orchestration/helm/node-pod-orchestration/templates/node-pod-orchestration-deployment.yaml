@@ -39,9 +39,9 @@ spec:
           value: {{ .Values.postgresql.database}}
           ## TODO: add _helpers.tpl in case we want to use secret instead for postgres user/pwd
         - name: POSTGRES_USER
-          value: {{ .Values.postgresql.username}}
+          value: {{ .Values.postgresql.auth.username}}
         - name: POSTGRES_PASSWORD
-          value: {{ .Values.postgresql.password}}
+          value: {{ .Values.postgresql.auth.password}}
         - name: RESULT_CLIENT_ID
           value: {{ .Values.env.RESULT_CLIENT_ID}}
         - name: RESULT_CLIENT_SECRET
