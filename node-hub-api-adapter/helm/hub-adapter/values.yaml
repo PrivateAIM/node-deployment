@@ -38,7 +38,7 @@ hub:
   coreApi: https://privateaim.net/core
   ## @param hub.authApi Hub auth API endpoint
   authApi: https://privateaim.net/auth
-  ## Credentials used for retrieving a valid token from the hub
+  ## Credentials used for retrieving a valid robot token from the hub
   auth:
-    username: ""
-    password: ""
+    robotuser: ""
+    robotpwd: ""
