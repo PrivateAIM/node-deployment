@@ -42,3 +42,14 @@ data:
         userLabel: "My password"
         credentialData: "{\"hashIterations\":210000,\"algorithm\":\"pbkdf2-sha512\",\"additionalParameters\":{}}"
         secretData: "{\"value\":\"AcmFvt1RyPVxJXASu8d66p6nsCV5uwuvPAQ5Qdo1aqJoFaxc7vxPoJpwDCT8xCRR/SANHsyRRpUGfJGZhBKI0w==\",\"salt\":\"K06PBP69IiB0QWWsiaqSxQ==\",\"additionalParameters\":{}}"
+    - username: "service-account-service1"
+      enabled: true
+      serviceAccountClientId: "service1"
+      clientRoles:
+        realm-management: [
+          "manage-clients",
+          "view-clients",
+          "query-clients",
+          "create-client"
+        ]
+        service1: ["uma_protection"]
