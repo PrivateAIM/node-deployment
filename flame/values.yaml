@@ -299,7 +299,7 @@ flame-node-message-broker:
   # common:
   #   storageClassName: yourStorageClassToBeUsed
   broker:
-    AUTH_JWKS_URL: http://keycloak-service:8080/realms/flame/protocol/openid-connect/certs
+    AUTH_JWKS_URL: http://flame-node-keycloak:80/realms/flame/protocol/openid-connect/certs
     HUB_BASE_URL: https://api.privateaim.net/
     HUB_AUTH_BASE_URL: https://auth.privateaim.net/
     HUB_AUTH_ROBOT_ID: yourRobotId
