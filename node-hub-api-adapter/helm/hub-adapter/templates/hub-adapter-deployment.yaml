@@ -51,9 +51,9 @@ spec:
             - name: HUB_AUTH_SERVICE_URL
               value: {{ .Values.hub.authApi | default "https://privateaim.net/auth" | quote }}
             - name: HUB_ROBOT_USER
-              value: {{ .Values.hub.auth.robotuser | default "" | quote }}  # To be properly filled in
+              value: {{ required "A robot ID for the Hub is required." .Values.hub.auth.robotuser | quote }}  # To be properly filled in
             - name: HUB_ROBOT_SECRET
-              value: {{ .Values.hub.auth.robotpwd | default "" | quote }}
+              value: {{ required "A robot secret for the Hub is required." .Values.hub.auth.robotpwd | quote }}
           livenessProbe:
             httpGet:
               path: /healthz

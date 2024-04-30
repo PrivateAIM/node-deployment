@@ -64,7 +64,7 @@ Return the Kong admin service endpoint
 {{- if .Values.node.kong -}}
     {{- .Values.node.kong -}}
 {{- else -}}
-    {{- printf "http://%s-kong-service" .Release.Name -}}
+    {{- printf "http://%s-kong-admin:80" .Release.Name -}}
 {{- end -}}
 {{- end -}}
 

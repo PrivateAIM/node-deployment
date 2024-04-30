@@ -1,13 +1,3 @@
-flamedir=$(dirname "$0")
-echo "Updating Results service"
-helm dependency update $flamedir/node-result-service/helm/node-result-service
-
-echo "Updating Hub Adapter"
-helm dependency update $flamedir/node-hub-api-adapter/helm/hub-adapter
-
-echo "Updating PO"
-helm dependency update $flamedir/node-pod-orchestration/helm/node-pod-orchestration
-
 # Update helm dependencies
 echo "Updating FLAME Node Helm"
 helm dependency update .
