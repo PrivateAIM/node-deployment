@@ -242,10 +242,10 @@ flame-node-hub-adapter:
     coreApi: https://privateaim.net/core
     ## @param hub.authApi Hub auth API endpoint
     authApi: https://privateaim.net/auth
-    ## Credentials used for retrieving a valid token from the hub
+    ## Credentials used for retrieving a valid token from the hub using a robot account
     auth:
-      username: ""  # TODO
-      password: ""  # TODO
+      robotuser: ""  # Needs to be added
+      robotpwd: ""  # Needs to be added
 
 flame-node-pod-orchestration:
   api:
