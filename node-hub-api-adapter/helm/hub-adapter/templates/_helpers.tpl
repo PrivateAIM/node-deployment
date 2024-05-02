@@ -42,7 +42,7 @@ Return the Keycloak endpoint
 {{- if .Values.idp.host -}}
     {{- .Values.idp.host -}}
 {{- else -}}
-    {{- printf "http://%s-keycloak-headless:8080" .Release.Name -}}
+    {{- printf "http://%s-keycloak:80" .Release.Name -}}
 {{- end -}}
 {{- end -}}
 
@@ -64,7 +64,7 @@ Return the Kong admin service endpoint
 {{- if .Values.node.kong -}}
     {{- .Values.node.kong -}}
 {{- else -}}
-    {{- printf "http://%s-kong-service" .Release.Name -}}
+    {{- printf "http://%s-kong-admin:80" .Release.Name -}}
 {{- end -}}
 {{- end -}}
 

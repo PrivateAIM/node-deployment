@@ -242,10 +242,10 @@ flame-node-hub-adapter:
     coreApi: https://privateaim.net/core
     ## @param hub.authApi Hub auth API endpoint
     authApi: https://privateaim.net/auth
-    ## Credentials used for retrieving a valid token from the hub
+    ## Credentials used for retrieving a valid token from the hub using a robot account
     auth:
-      username: ""
-      password: ""
+      robotuser: ""  # Needs to be added
+      robotpwd: ""  # Needs to be added
 
 flame-node-pod-orchestration:
   api:
@@ -266,18 +266,20 @@ flame-node-pod-orchestration:
     RESULT_CLIENT_ID: service1
     RESULT_CLIENT_SECRET: abc
 
-    POSTGRES_HOST: postgresql-service
+    POSTGRES_HOST: ""
   postgresql:
+    nameOverride: ""
+    fullnameOverride: ""
     auth:
       ## @param auth.enablePostgresUser Assign a password to the "postgres" admin user. Otherwise, remote access will be blocked for this user
       ##
       enablePostgresUser: true
       ## @param auth.postgresPassword Password for the "postgres" admin user. Ignored if `auth.existingSecret` is provided
       ##
-      postgresPassword: ""
-      username: ""
-      password: ""
-      database: ""
+      postgresPassword: "admin"
+      username: "postgres"
+      password: "postgres"
+      database: "postgres_db"
       existingSecret: ""
       ## @param auth.secretKeys.adminPasswordKey Name of key in existing secret to use for PostgreSQL credentials. Only used when `auth.existingSecret` is set.
       ## @param auth.secretKeys.userPasswordKey Name of key in existing secret to use for PostgreSQL credentials. Only used when `auth.existingSecret` is set.
@@ -291,23 +293,13 @@ flame-node-pod-orchestration:
       ##
       usePasswordFiles: false
 
-    DB_HOST: postgresql-service
-    DB_PORT: 5432
-    DB_USER: admin
-    DB_PASSWORD: admin
-
-
-    POSTGRES_DB: postgres_db
-    POSTGRES_USER: postgres
-    POSTGRES_PASSWORD: postgres
-
 flame-node-message-broker:
   # Uncomment, if you want to use a specific storage class.
   # Otherwise, the default one will be used.
   # common:
   #   storageClassName: yourStorageClassToBeUsed
   broker:
-    AUTH_JWKS_URL: http://keycloak-service:8080/realms/flame/protocol/openid-connect/certs
+    AUTH_JWKS_URL: http://flame-node-keycloak:80/realms/flame/protocol/openid-connect/certs
     HUB_BASE_URL: https://api.privateaim.net/
     HUB_AUTH_BASE_URL: https://auth.privateaim.net/
     HUB_AUTH_ROBOT_ID: yourRobotId
