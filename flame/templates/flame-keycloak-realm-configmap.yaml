@@ -7,6 +7,7 @@ data:
     realm: "flame"
     enabled: true
     defaultSignatureAlgorithm: "RS256"
+    accessTokenLifespan: 1800
     clients:
     - clientId: "hub-adapter"
       name: "Node Hub Adapter Gateway API"
