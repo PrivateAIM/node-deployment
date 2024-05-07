@@ -48,7 +48,7 @@ spec:
             - name: HUB_AUTH_BASE_URL
               value: {{ required "A valid HUB Auth base URL is required." .Values.broker.HUB_AUTH_BASE_URL | default "https://auth.privateaim.net/" | quote }}
             - name: HUB_AUTH_ROBOT_ID
-              value: {{ required "A robot ID associated with HUB Auth is required." .Values.broker.HUB_AUTH_ROBOT_ID | quote}}
+              value: {{ required "A robot ID for the Hub is required." (include "broker.hub.robotUser") | quote }}
             - name: HUB_AUTH_ROBOT_SECRET
               valueFrom:
                 secretKeyRef:
