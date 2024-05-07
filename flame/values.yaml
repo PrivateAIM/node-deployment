@@ -1,3 +1,9 @@
+# Global values
+global:
+  hubAuth:
+    robotUser: ""
+    robotPassword: ""
+
 # kong values
 kong:
   image:
@@ -52,8 +58,8 @@ kong:
 
 flame-node-result-service:
   env:
-    HUB_USERNAME: foobar
-    HUB_PASSWORD: sup3r_s3cr3t
+    HUB_USERNAME: admin
+    HUB_PASSWORD: start123
     MINIO_USE_SSL: false
     MINIO_BUCKET: flame
     OIDC_CERTS_URL: ""
@@ -176,7 +182,7 @@ flame-node-result-service:
       volumeName: ""
       accessMode: ReadWriteOnce
       size: 10Gi
-  
+
 # keycloak values
 keycloak:
   auth:
@@ -244,8 +250,11 @@ flame-node-hub-adapter:
     authApi: https://privateaim.net/auth
     ## Credentials used for retrieving a valid token from the hub using a robot account
     auth:
-      robotuser: ""  # Needs to be added
-      robotpwd: ""  # Needs to be added
+      robotUser: ""
+      robotSecret: ""
+      ## @param hub.auth.existingSecret Existing k8s secret containing secret for given hub robot ID
+      ## The secret must have a key named "robotSecret"
+      existingSecret: ""
 
 flame-node-pod-orchestration:
   api:
@@ -264,7 +273,7 @@ flame-node-pod-orchestration:
     KEYCLOAK_REALM: flame
 
     RESULT_CLIENT_ID: service1
-    RESULT_CLIENT_SECRET: abc
+    RESULT_CLIENT_SECRET: 9dd01665c2f3f02f93c32d03bd854569f03cd62f439ccf9f0861c141b9d6330e
 
     POSTGRES_HOST: ""
   postgresql:
@@ -302,8 +311,8 @@ flame-node-message-broker:
     AUTH_JWKS_URL: http://flame-node-keycloak:80/realms/flame/protocol/openid-connect/certs
     HUB_BASE_URL: https://api.privateaim.net/
     HUB_AUTH_BASE_URL: https://auth.privateaim.net/
-    HUB_AUTH_ROBOT_ID: yourRobotId
-    HUB_AUTH_ROBOT_SECRET: yourRobotSecret
+    HUB_AUTH_ROBOT_ID: ""
+    HUB_AUTH_ROBOT_SECRET: ""
 
 # blaze values
 blaze:

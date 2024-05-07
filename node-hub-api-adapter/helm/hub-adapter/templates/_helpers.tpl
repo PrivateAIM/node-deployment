@@ -1,4 +1,38 @@
 {{/*
+Return the secret containing the hub robot secret
+*/}}
+{{- define "adapter.hub.secretName" -}}
+{{- $robotSecretName := .Values.hub.auth.existingSecret -}}
+{{- if $robotSecretName -}}
+    {{- printf "%s" (tpl $robotSecretName $) -}}
+{{- else -}}
+    {{- printf "%s-hub-adapter-robot-secret" .Release.Name -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return hub robot user ID
+*/}}
+{{- define "adapter.hub.robotUser" -}}
+{{- if .global.hubAuth.robotUser -}}
+    {{- .global.hubAuth.robotUser -}}
+{{- else -}}
+    {{- .Values.hub.auth.robotUser -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return hub robot user secret
+*/}}
+{{- define "adapter.hub.robotSecret" -}}
+{{- if .global.hubAuth.robotSecret -}}
+    {{- .global.hubAuth.robotSecret -}}
+{{- else -}}
+    {{- .Values.hub.auth.robotSecret | b64enc -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the secret containing the Keycloak client secret
 */}}
 {{- define "adapter.keycloak.secretName" -}}
