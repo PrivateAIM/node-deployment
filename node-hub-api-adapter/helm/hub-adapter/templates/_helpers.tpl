@@ -14,8 +14,8 @@ Return the secret containing the hub robot secret
 Return hub robot user ID
 */}}
 {{- define "adapter.hub.robotUser" -}}
-{{- if .global.hubAuth.robotUser -}}
-    {{- .global.hubAuth.robotUser -}}
+{{- if .Values.global.hubAuth.robotUser -}}
+    {{- .Values.global.hubAuth.robotUser -}}
 {{- else -}}
     {{- .Values.hub.auth.robotUser -}}
 {{- end -}}
@@ -25,8 +25,8 @@ Return hub robot user ID
 Return hub robot user secret
 */}}
 {{- define "adapter.hub.robotSecret" -}}
-{{- if .global.hubAuth.robotSecret -}}
-    {{- .global.hubAuth.robotSecret -}}
+{{- if .Values.global.hubAuth.robotSecret -}}
+    {{- .Values.global.hubAuth.robotSecret | b64enc -}}
 {{- else -}}
     {{- .Values.hub.auth.robotSecret | b64enc -}}
 {{- end -}}
