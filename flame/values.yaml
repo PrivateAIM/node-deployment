@@ -2,7 +2,7 @@
 global:
   hubAuth:
     robotUser: ""
-    robotPassword: ""
+    robotSecret: ""
 
 # kong values
 kong:
@@ -308,7 +308,7 @@ flame-node-message-broker:
   # common:
   #   storageClassName: yourStorageClassToBeUsed
   broker:
-    AUTH_JWKS_URL: http://flame-node-keycloak:80/realms/flame/protocol/openid-connect/certs
+    AUTH_JWKS_URL: ""
     HUB_BASE_URL: https://api.privateaim.net/
     HUB_AUTH_BASE_URL: https://auth.privateaim.net/
     HUB_AUTH_ROBOT_ID: ""
@@ -324,4 +324,4 @@ blaze:
     env:
       SYNTHEA_N_PATIENTS: 10
       TIMEOUT: 1
-      FHIR_BASE_URL: http://flame-node-blaze:80/fhir
+      FHIR_BASE_URL: "http://flame-node-blaze:80/fhir"

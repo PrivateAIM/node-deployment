@@ -51,7 +51,7 @@ spec:
             - name: HUB_AUTH_SERVICE_URL
               value: {{ .Values.hub.authApi | default "https://privateaim.net/auth" | quote }}
             - name: HUB_ROBOT_USER
-              value: {{ required "A robot ID for the Hub is required." (include "adapter.hub.robotUser") | quote }}  # To be properly filled in
+              value: {{ required "A robot ID for the Hub is required." (include "adapter.hub.robotUser" .) | quote }}  # To be properly filled in
             - name: HUB_ROBOT_SECRET
               valueFrom:
                 secretKeyRef:
