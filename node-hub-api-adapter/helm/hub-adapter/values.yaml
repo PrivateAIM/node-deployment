@@ -1,3 +1,11 @@
+## Global variables
+global:
+  hubAuth:
+    ## @param global.hubAuth.robotUser Robot user ID. Overrides hub.auth.robotUser if provided
+    robotUser: ""
+    ## @param global.hubAuth.robotSecret Robot user ID. Overrides hub.auth.robotSecret if provided
+    robotSecret: ""
+
 ## For defining ingress specific metadata
 ingress:
   domain: localhost
@@ -40,5 +48,6 @@ hub:
   authApi: https://privateaim.net/auth
   ## Credentials used for retrieving a valid robot token from the hub
   auth:
-    robotuser: ""
-    robotpwd: ""
+    existingSecret: ""
+    robotUser: ""
+    robotSecret: ""

@@ -1,12 +1,20 @@
+## Global variables
+global:
+  hubAuth:
+    ## @param global.hubAuth.robotUser Robot user ID. Overrides broker.HUB_AUTH_ROBOT_ID if provided
+    robotUser: ""
+    ## @param global.hubAuth.robotSecret Robot user ID. Overrides broker.HUB_AUTH_ROBOT_SECRET if provided
+    robotSecret: ""
+
 common:
   timezone: Europe/Berlin
-  storageClassName:
+  storageClassName: ""
 broker:
-  AUTH_JWKS_URL:
+  AUTH_JWKS_URL: ""
   HUB_BASE_URL: https://api.privateaim.net/
   HUB_AUTH_BASE_URL: https://auth.privateaim.net/
-  HUB_AUTH_ROBOT_ID:
-  HUB_AUTH_ROBOT_SECRET:
+  HUB_AUTH_ROBOT_ID: ""
+  HUB_AUTH_ROBOT_SECRET: ""
 broker_db:
   storageSizeMi:
 
