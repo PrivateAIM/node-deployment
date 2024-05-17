@@ -23,11 +23,6 @@ spec:
           ports:
             - containerPort: 5000
               name: healthcp
-          readinessProbe:
-            initialDelaySeconds: 45
-            httpGet:
-              path: /healthz
-              port: healthcp
           env:
             - name: API_CLIENT_ID
               value: {{ .Values.idp.clientId | default "hub-adapter" | quote }}
