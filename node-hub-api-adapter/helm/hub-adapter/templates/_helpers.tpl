@@ -31,7 +31,7 @@ Generate a random clientSecret value for the hub-adapter client in keycloak if n
 {{- if .Values.idp.debug -}}
     {{- print "cFR2THJCS3V5MHZ4cnV2VXByd3NYcEV0dzg0ZEROOUM=" -}}
 {{- else -}}
-    {{- printf "%s" ( randAlphaNum 22 | b64enc | quote ) -}}
+    {{- print ( randAlphaNum 22 | b64enc | quote ) -}}
 {{- end -}}
 {{- end -}}
 

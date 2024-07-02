@@ -1,38 +1,25 @@
-{{/*
-Return the secret containing the Keycloak client secret
-*/}}
-{{- define "hub.adapter.keycloak.secretName" -}}
-{{- $secretName := index .Values "flame-node-hub-adapter" "idp" "existingSecret" -}}
-{{- if and $secretName ( not (index .Values "flame-node-hub-adapter" "idp" "debug") ) -}}
-    {{- printf "%s" (tpl $secretName $) -}}
-{{- else -}}
-    {{- printf "%s-hub-adapter-keycloak-secret" .Release.Name -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the secret key that contains the Keycloak client secret
-*/}}
-{{- define "hub.adapter.keycloak.secretKey" -}}
-{{- $secretName := index .Values "flame-node-hub-adapter" "idp" "existingSecret" -}}
-{{- if index .Values "flame-node-hub-adapter" "idp" "debug" -}}
-    {{- print "hubAdapterClientSecret" -}}
-{{- else if and $secretName index .Values "flame-node-hub-adapter" "idp" "existingSecretKey" -}}
-    {{- printf "%s" (index .Values "flame-node-hub-adapter" "idp" "existingSecretKey") -}}
-{{- else -}}
-    {{- print "hubAdapterClientSecret" -}}
-{{- end -}}
-{{- end -}}
-
 {{- define "hub.adapter.keycloak.clientSecret" -}}
-{{ $hubAdapterSecretName := include "hub.adapter.keycloak.secretName" . }}
-{{ $hubAdapterSecretKey := include "hub.adapter.keycloak.secretKey" . }}
+{{ $hubAdapterSecretName := (include "adapter.keycloak.secretName" (index .Subcharts "flame-node-hub-adapter") ) }}
+{{ $hubAdapterSecretKey := include "adapter.keycloak.secretKey" (index .Subcharts "flame-node-hub-adapter") }}
 {{ $hubAdapterClientSecret := (lookup "v1" "Secret" .Release.Namespace $hubAdapterSecretName) }}
 {{- if index .Values "flame-node-hub-adapter" "idp" "debug" -}}
     {{- print "cFR2THJCS3V5MHZ4cnV2VXByd3NYcEV0dzg0ZEROOUM=" -}}
 {{- else if $hubAdapterClientSecret -}}
     {{- print (index $hubAdapterClientSecret "data" $hubAdapterSecretKey) -}}
 {{- else -}}
-    {{- print "noSecretFound" -}}
+    {{- print ("noSecretFound" | b64enc) -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "frontend.ui.keycloak.clientSecret" -}}
+{{ $nodeUiSecretName := include "ui.keycloak.secretName" (index .Subcharts "flame-node-ui") }}
+{{ $nodeUiSecretKey := include "ui.keycloak.secretKey" (index .Subcharts "flame-node-ui") }}
+{{ $nodeUiClientSecret := (lookup "v1" "Secret" .Release.Namespace $nodeUiSecretName) }}
+{{- if index .Values "flame-node-ui" "idp" "debug" -}}
+    {{- print "UU4ySGVPMkxlWE1ZMTBWclA0Y2YyeDVKSFRGSW5tNGY=" -}}
+{{- else if $nodeUiClientSecret -}}
+    {{- print (index $nodeUiClientSecret "data" $nodeUiSecretKey) -}}
+{{- else -}}
+    {{- print ("noSecretFound" | b64enc) -}}
 {{- end -}}
 {{- end -}}

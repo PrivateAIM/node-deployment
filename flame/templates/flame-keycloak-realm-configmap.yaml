@@ -2,6 +2,8 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: flame-default-realm
+  annotations:
+    "helm.sh/hook": post-install
 data:
   flame.yaml: |
     realm: "flame"
@@ -12,7 +14,7 @@ data:
     - clientId: "hub-adapter"
       name: "Node Hub Adapter Gateway API"
       clientAuthenticatorType: "client-secret"
-      secret: {{ include "hub.adapter.keycloak.clientSecret" . | b64dec | quote | indent 4 }}
+      secret: {{ include "hub.adapter.keycloak.clientSecret" . | b64dec }}
       standardFlowEnabled: true
       implicitFlowEnabled: false
       directAccessGrantsEnabled: true
@@ -24,6 +26,20 @@ data:
       name: "Test service"
       clientAuthenticatorType: "client-secret"
       secret: 9dd01665c2f3f02f93c32d03bd854569f03cd62f439ccf9f0861c141b9d6330e
+      standardFlowEnabled: true
+      implicitFlowEnabled: false
+      directAccessGrantsEnabled: true
+      serviceAccountsEnabled: true
+      authorizationServicesEnabled: true
+      publicClient: false
+      enabled: true
+    - clientId: "node-ui"
+      name: "Node UI"
+      clientAuthenticatorType: "client-secret"
+      secret: {{ include "frontend.ui.keycloak.clientSecret" . | b64dec }}
+      baseUrl: "http://localhost:3000"
+      redirectUris: [ "http://localhost:3000/auth/keycloak/callback" ]
+      webOrigins: [ "http://localhost:3000" ]
       standardFlowEnabled: true
       implicitFlowEnabled: false
       directAccessGrantsEnabled: true
