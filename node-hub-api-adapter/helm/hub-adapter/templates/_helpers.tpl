@@ -31,7 +31,20 @@ Generate a random clientSecret value for the hub-adapter client in keycloak if n
 {{- if .Values.idp.debug -}}
     {{- print "cFR2THJCS3V5MHZ4cnV2VXByd3NYcEV0dzg0ZEROOUM=" -}}
 {{- else -}}
-    {{- print ( randAlphaNum 22 | b64enc | quote ) -}}
+{{/*    {{- print ( randAlphaNum 22 | b64enc | quote ) -}}*/}}
+    {{- /* Create "hub_secret" dict inside ".Release" to store various stuff. */ -}}
+    {{- if not (index .Release "hub_secret") -}}
+        {{-   $_ := set .Release "hub_secret" dict -}}
+    {{- end -}}
+    {{- /* Some random ID of this password, in case there will be other random values alongside this instance. */ -}}
+    {{- $key := printf "%s_%s" .Release.Name "password" -}}
+    {{- /* If $key does not yet exist in .Release.hub_secret, then... */ -}}
+    {{- if not (index .Release.hub_secret $key) -}}
+        {{- /* ... store random password under the $key */ -}}
+        {{-   $_ := set .Release.hub_secret $key (randAlphaNum 32) -}}
+    {{- end -}}
+        {{- /* Retrieve previously generated value. */ -}}
+        {{- print (index .Release.hub_secret $key | b64enc) -}}
 {{- end -}}
 {{- end -}}
 
