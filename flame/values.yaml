@@ -216,7 +216,7 @@ flame-node-hub-adapter:
   idp:
     ## @param idp.debug If true, the clientId and clientSecret will use pre-defined values
     ## The clientSecret will be defined using the "static" k8s secret key
-    debug: false
+    debug: true  # TODO disable once everything working
     ## @param idp.clientId Keycloak client ID for this service
     clientId: hub-adapter
     ## @param idp.clientSecret Keycloak client secret. Ignored if `idp.existingSecret` is provided
@@ -308,7 +308,7 @@ flame-node-message-broker:
   # common:
   #   storageClassName: yourStorageClassToBeUsed
   broker:
-    AUTH_JWKS_URL: ""
+    AUTH_JWKS_URL: http://flame-node-keycloak:80/realms/flame/protocol/openid-connect/certs
     HUB_BASE_URL: https://api.privateaim.net/
     HUB_AUTH_BASE_URL: https://auth.privateaim.net/
     HUB_AUTH_ROBOT_ID: ""
