@@ -273,7 +273,7 @@ flame-node-pod-orchestration:
     KEYCLOAK_REALM: flame
 
     RESULT_CLIENT_ID: service1
-    RESULT_CLIENT_SECRET: 9dd01665c2f3f02f93c32d03bd854569f03cd62f439ccf9f0861c141b9d6330e
+    RESULT_CLIENT_SECRET: abc
 
     POSTGRES_HOST: ""
   postgresql:
