@@ -46,6 +46,8 @@ hub:
   coreApi: https://privateaim.net/core
   ## @param hub.authApi Hub auth API endpoint
   authApi: https://privateaim.net/auth
+  ## @param hub.realmId Limit queries to the UUID assigned to the institution realm
+  realmId: ""
   ## Credentials used for retrieving a valid robot token from the hub
   auth:
     existingSecret: ""
