@@ -11,7 +11,7 @@ global:
       realmId: ""
       ## @param global.hub.auth.robotUser Robot user ID. Overrides hub.auth.robotUser if provided
       robotUser: ""
-      ## @param global.hub.auth.robotSecret Robot user ID. Overrides hub.auth.robotSecret if provided
+      ## @param global.hub.auth.robotSecret Robot secret. Overrides hub.auth.robotSecret if provided
       robotSecret: ""
 
 ## For defining ingress specific metadata
