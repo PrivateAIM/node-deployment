@@ -8,8 +8,8 @@ global:
       storage: https://storage.privateaim.dev
     auth:
       realmId: ""
-      robotUser: "1"
-      robotSecret: "1"
+      robotUser: ""
+      robotSecret: ""
 
 # kong values
 kong:
@@ -67,6 +67,9 @@ flame-node-result-service:
   env:
     HUB_USERNAME: admin
     HUB_PASSWORD: start123
+    HUB__AUTH_BASE_URL: https://auth.privateaim.dev
+    HUB__CORE_BASE_URL: https://core.privateaim.dev
+    HUB__STORAGE_BASE_URL: https://storage.privateaim.dev    
     MINIO_USE_SSL: false
     MINIO_BUCKET: flame
     OIDC_CERTS_URL: ""

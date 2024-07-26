@@ -1,6 +1,25 @@
+## Global variables
+global:
+  hub:
+    endpoints:
+      ## @param global.hub.endpoints.auth Hub Auth API endpoint. Overrides env.HUB__AUTH_BASE_URL
+      auth: https://auth.privateaim.dev
+      ## @param global.hub.endpoints.core Hub Core API endpoint. Overrides env.HUB__CORE_BASE_URL
+      core: https://core.privateaim.dev
+      ## @param global.hub.endpoints.storage Hub Storage API endpoint. Overrides env.HUB__STORAGE_BASE_URL
+      storage: https://storage.privateaim.dev
+    auth:
+      ## @param global.hub.auth.robotUser Robot user ID. Overrides env.HUB_USERNAME if provided
+      robotUser: ""
+      ## @param global.hub.auth.robotSecret Robot secret. Overrides env.HUB_PASSWORD if provided
+      robotSecret: ""
+
 env:
   HUB_USERNAME: foobar
   HUB_PASSWORD: sup3r_s3cr3t
+  HUB__AUTH_BASE_URL: https://auth.privateaim.dev
+  HUB__CORE_BASE_URL: https://core.privateaim.dev
+  HUB__STORAGE_BASE_URL: https://storage.privateaim.dev
   MINIO_USE_SSL: false
   MINIO_BUCKET: flame
   OIDC_CERTS_URL: http://flame-node-keycloak-service:8080/realms/flame/protocol/openid-connect/certs
