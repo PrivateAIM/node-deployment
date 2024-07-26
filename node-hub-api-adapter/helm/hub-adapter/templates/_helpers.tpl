@@ -11,11 +11,44 @@ Return the secret containing the hub robot secret
 {{- end -}}
 
 {{/*
+Return hub auth API endpoint
+*/}}
+{{- define "adapter.hub.authApi" -}}
+{{- if .Values.global.hub.endpoints.auth -}}
+    {{- .Values.global.hub.endpoints.auth -}}
+{{- else -}}
+    {{- .Values.hub.authAPI -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return hub core API endpoint
+*/}}
+{{- define "adapter.hub.coreApi" -}}
+{{- if .Values.global.hub.endpoints.core -}}
+    {{- .Values.global.hub.endpoints.core -}}
+{{- else -}}
+    {{- .Values.hub.coreAPI -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return hub realmId
+*/}}
+{{- define "adapter.hub.realmId" -}}
+{{- if .Values.global.hub.realmId -}}
+    {{- .Values.global.hub.realmId -}}
+{{- else -}}
+    {{- .Values.hub.realmId -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return hub robot user ID
 */}}
 {{- define "adapter.hub.robotUser" -}}
-{{- if .Values.global.hubAuth.robotUser -}}
-    {{- .Values.global.hubAuth.robotUser -}}
+{{- if .Values.global.hub.auth.robotUser -}}
+    {{- .Values.global.hub.auth.robotUser -}}
 {{- else -}}
     {{- .Values.hub.auth.robotUser -}}
 {{- end -}}
@@ -25,8 +58,8 @@ Return hub robot user ID
 Return hub robot user secret
 */}}
 {{- define "adapter.hub.robotSecret" -}}
-{{- if .Values.global.hubAuth.robotSecret -}}
-    {{- .Values.global.hubAuth.robotSecret | b64enc -}}
+{{- if .Values.global.hub.auth.robotSecret -}}
+    {{- .Values.global.hub.auth.robotSecret | b64enc -}}
 {{- else -}}
     {{- .Values.hub.auth.robotSecret | b64enc -}}
 {{- end -}}

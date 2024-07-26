@@ -1,8 +1,15 @@
 # Global values
 global:
-  hubAuth:
-    robotUser: ""
-    robotSecret: ""
+  hub:
+    endpoints:
+      auth: https://auth.privateaim.dev
+      core: https://core.privateaim.dev
+      messenger: https://messenger.privateaim.dev
+      storage: https://storage.privateaim.dev
+    auth:
+      realmId: ""
+      robotUser: "1"
+      robotSecret: "1"
 
 # kong values
 kong:

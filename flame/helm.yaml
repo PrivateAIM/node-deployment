@@ -1,0 +1,6994 @@
+NAME: blaze
+LAST DEPLOYED: Fri Jul 26 11:52:29 2024
+NAMESPACE: flame
+STATUS: pending-install
+REVISION: 1
+USER-SUPPLIED VALUES:
+blaze:
+  dataPopulatorJob:
+    enabled: true
+    env:
+      FHIR_BASE_URL: http://flame-node-blaze:80/fhir
+      SYNTHEA_N_PATIENTS: 10
+      TIMEOUT: 1
+  service:
+    port: 80
+    type: ClusterIP
+flame-node-hub-adapter:
+  hub:
+    auth:
+      existingSecret: ""
+      robotSecret: ""
+      robotUser: ""
+    authApi: https://privateaim.net/auth
+    coreApi: https://privateaim.net/core
+    realmId: ""
+  idp:
+    clientId: hub-adapter
+    clientSecret: ""
+    debug: true
+    existingSecret: ""
+    existingSecretKey: ""
+    host: ""
+    realm: flame
+  ingress:
+    domain: localhost
+  node:
+    kong: ""
+    po: ""
+    results: ""
+flame-node-message-broker:
+  broker:
+    AUTH_JWKS_URL: http://flame-node-keycloak:80/realms/flame/protocol/openid-connect/certs
+    HUB_AUTH_BASE_URL: https://auth.privateaim.net/
+    HUB_AUTH_ROBOT_ID: ""
+    HUB_AUTH_ROBOT_SECRET: ""
+    HUB_BASE_URL: https://api.privateaim.net/
+flame-node-pod-orchestration:
+  api:
+    domain: localhost
+    version: 0.1.0
+  env:
+    HARBOR_PW: test
+    HARBOR_URL: dev-harbor.personalhealthtrain.de
+    HARBOR_USER: test
+    KEYCLOAK_REALM: flame
+    KEYCLOAK_URL: ""
+    NODE_KEY: ""
+    NODE_KEY_PW: ""
+    NODE_NAME: flame
+    POSTGRES_HOST: ""
+    RESULT_CLIENT_ID: service1
+    RESULT_CLIENT_SECRET: abc
+  postgresql:
+    auth:
+      database: postgres_db
+      enablePostgresUser: true
+      existingSecret: ""
+      password: postgres
+      postgresPassword: admin
+      secretKeys:
+        adminPasswordKey: postgres-password
+        replicationPasswordKey: replication-password
+        userPasswordKey: password
+      usePasswordFiles: false
+      username: postgres
+    fullnameOverride: ""
+    nameOverride: ""
+flame-node-result-service:
+  env:
+    HUB_PASSWORD: start123
+    HUB_USERNAME: admin
+    MINIO_BUCKET: flame
+    MINIO_USE_SSL: false
+    OIDC_CERTS_URL: ""
+    OIDC_CLIENT_ID_CLAIM_NAME: azp
+  minio:
+    buckets:
+    - name: flame
+      objectlocking: false
+      policy: none
+      purge: false
+      versioning: false
+    clusterDomain: cluster.local
+    deploymentUpdate:
+      maxSurge: 100%
+      maxUnavailable: 0
+      type: RollingUpdate
+    drivesPerNode: 1
+    existingSecret: ""
+    fullnameOverride: ""
+    image:
+      pullPolicy: IfNotPresent
+      repository: quay.io/minio/minio
+      tag: RELEASE.2024-03-03T17-50-39Z
+    imagePullSecrets: []
+    mountPath: /mnt/data
+    nameOverride: ""
+    persistence:
+      accessMode: ReadWriteOnce
+      annotations: {}
+      enabled: true
+      existingClaim: ""
+      size: 10Gi
+      storageClass: ""
+      volumeName: ""
+    pools: 1
+    replicas: 2
+    resources:
+      requests:
+        memory: 1Gi
+    rootPassword: s3cr3t_p4ssw0rd
+    rootUser: admin
+    statefulSetUpdate:
+      updateStrategy: RollingUpdate
+flame-node-ui:
+  env: development
+  idp:
+    clientId: node-ui
+    clientSecret: ""
+    debug: false
+    existingSecret: ""
+    existingSecretKey: ""
+    host: http://localhost:8080
+    realm: flame
+  node:
+    adapter: ""
+  url: http://localhost:3000
+global:
+  hub:
+    auth:
+      realmId: ""
+      robotSecret: "1"
+      robotUser: "1"
+    endpoints:
+      auth: https://auth.privateaim.dev
+      core: https://core.privateaim.dev
+      messenger: https://messenger.privateaim.dev
+      storage: https://storage.privateaim.dev
+keycloak:
+  auth:
+    adminPassword: admin
+    adminUser: admin
+  keycloakConfigCli:
+    enabled: true
+    existingConfigmap: flame-default-realm
+  postgresql:
+    architecture: standalone
+    auth:
+      database: keycloak
+      existingSecret: kc-password-secret
+      password: keycloak
+      postgresPassword: ""
+      username: keycloak
+    enabled: true
+    nameOverride: keycloak-postgresql
+kong:
+  admin:
+    enabled: true
+    http:
+      enabled: true
+      servicePort: 80
+    tls:
+      enabled: false
+    type: ClusterIP
+  env:
+    database: postgres
+    prefix: /kong_prefix/
+  image:
+    repository: kong
+    tag: "3.6"
+  ingressController:
+    enabled: false
+  manager:
+    enabled: false
+  portal:
+    enabled: false
+  portalapi:
+    enabled: false
+  postgresql:
+    auth:
+      database: kong
+      password: kong
+      postgresPassword: supersecretpassword
+      username: kong
+    enabled: true
+    nameOverride: kong-postgresql
+  proxy:
+    enabled: true
+    http:
+      enabled: true
+      servicePort: 80
+    tls:
+      enabled: false
+    type: ClusterIP
+
+COMPUTED VALUES:
+blaze:
+  affinity: {}
+  autoscaling:
+    enabled: false
+    maxReplicas: 100
+    minReplicas: 1
+    targetCPUUtilizationPercentage: 80
+  dataPopulatorJob:
+    enabled: true
+    env:
+      FHIR_BASE_URL: http://flame-node-blaze:80/fhir
+      SYNTHEA_N_PATIENTS: 10
+      TIMEOUT: 1
+  fullnameOverride: ""
+  global:
+    hub:
+      auth:
+        realmId: ""
+        robotSecret: "1"
+        robotUser: "1"
+      endpoints:
+        auth: https://auth.privateaim.dev
+        core: https://core.privateaim.dev
+        messenger: https://messenger.privateaim.dev
+        storage: https://storage.privateaim.dev
+  image:
+    pullPolicy: IfNotPresent
+    repository: samply/blaze
+    tag: ""
+  imagePullSecrets: []
+  ingress:
+    annotations: {}
+    className: ""
+    enabled: false
+    hosts:
+    - host: chart-example.local
+      paths:
+      - path: /
+        pathType: ImplementationSpecific
+    tls: []
+  nameOverride: ""
+  nodeSelector: {}
+  podAnnotations: {}
+  podLabels: {}
+  podSecurityContext: {}
+  replicaCount: 1
+  resources: {}
+  securityContext: {}
+  service:
+    port: 80
+    type: ClusterIP
+  serviceAccount:
+    annotations: {}
+    automount: true
+    create: true
+    name: ""
+  tolerations: []
+  volumeMounts: []
+  volumes: []
+flame-node-hub-adapter:
+  global:
+    hub:
+      auth:
+        realmId: ""
+        robotSecret: "1"
+        robotUser: "1"
+      endpoints:
+        auth: https://auth.privateaim.dev
+        core: https://core.privateaim.dev
+        messenger: https://messenger.privateaim.dev
+        storage: https://storage.privateaim.dev
+  hub:
+    auth:
+      existingSecret: ""
+      robotSecret: ""
+      robotUser: ""
+    authApi: https://privateaim.net/auth
+    coreApi: https://privateaim.net/core
+    realmId: ""
+  idp:
+    clientId: hub-adapter
+    clientSecret: ""
+    debug: true
+    existingSecret: ""
+    existingSecretKey: ""
+    host: ""
+    realm: flame
+  ingress:
+    domain: localhost
+  node:
+    kong: ""
+    po: ""
+    results: ""
+flame-node-message-broker:
+  broker:
+    AUTH_JWKS_URL: http://flame-node-keycloak:80/realms/flame/protocol/openid-connect/certs
+    HUB_AUTH_BASE_URL: https://auth.privateaim.net/
+    HUB_AUTH_ROBOT_ID: ""
+    HUB_AUTH_ROBOT_SECRET: ""
+    HUB_BASE_URL: https://api.privateaim.net/
+  broker_db: {}
+  common:
+    storageClassName: ""
+    timezone: Europe/Berlin
+  global:
+    hub:
+      auth:
+        realmId: ""
+        robotSecret: "1"
+        robotUser: "1"
+      endpoints:
+        auth: https://auth.privateaim.dev
+        core: https://core.privateaim.dev
+        messenger: https://messenger.privateaim.dev
+        storage: https://storage.privateaim.dev
+flame-node-pod-orchestration:
+  api:
+    domain: localhost
+    version: 0.1.0
+  env:
+    HARBOR_PW: test
+    HARBOR_URL: dev-harbor.personalhealthtrain.de
+    HARBOR_USER: test
+    KEYCLOAK_REALM: flame
+    KEYCLOAK_URL: ""
+    NODE_KEY: ""
+    NODE_KEY_PW: ""
+    NODE_NAME: flame
+    POSTGRES_HOST: ""
+    RESULT_CLIENT_ID: service1
+    RESULT_CLIENT_SECRET: abc
+  global:
+    hub:
+      auth:
+        realmId: ""
+        robotSecret: "1"
+        robotUser: "1"
+      endpoints:
+        auth: https://auth.privateaim.dev
+        core: https://core.privateaim.dev
+        messenger: https://messenger.privateaim.dev
+        storage: https://storage.privateaim.dev
+  postgresql:
+    architecture: standalone
+    audit:
+      clientMinMessages: error
+      logConnections: false
+      logDisconnections: false
+      logHostname: false
+      logLinePrefix: ""
+      logTimezone: ""
+      pgAuditLog: ""
+      pgAuditLogCatalog: "off"
+    auth:
+      database: postgres_db
+      enablePostgresUser: true
+      existingSecret: ""
+      password: postgres
+      postgresPassword: admin
+      replicationPassword: ""
+      replicationUsername: repl_user
+      secretKeys:
+        adminPasswordKey: postgres-password
+        replicationPasswordKey: replication-password
+        userPasswordKey: password
+      usePasswordFiles: false
+      username: postgres
+    backup:
+      cronjob:
+        annotations: {}
+        command:
+        - /bin/sh
+        - -c
+        - pg_dumpall --clean --if-exists --load-via-partition-root --quote-all-identifiers
+          --no-password --file=${PGDUMP_DIR}/pg_dumpall-$(date '+%Y-%m-%d-%H-%M').pgdump
+        concurrencyPolicy: Allow
+        containerSecurityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          enabled: true
+          privileged: false
+          readOnlyRootFilesystem: true
+          runAsGroup: 1001
+          runAsNonRoot: true
+          runAsUser: 1001
+          seLinuxOptions: {}
+          seccompProfile:
+            type: RuntimeDefault
+        extraVolumeMounts: []
+        extraVolumes: []
+        failedJobsHistoryLimit: 1
+        labels: {}
+        networkPolicy:
+          enabled: true
+        nodeSelector: {}
+        podSecurityContext:
+          enabled: true
+          fsGroup: 1001
+          fsGroupChangePolicy: Always
+          supplementalGroups: []
+          sysctls: []
+        resources: {}
+        resourcesPreset: nano
+        restartPolicy: OnFailure
+        schedule: '@daily'
+        startingDeadlineSeconds: ""
+        storage:
+          accessModes:
+          - ReadWriteOnce
+          annotations: {}
+          enabled: true
+          existingClaim: ""
+          mountPath: /backup/pgdump
+          resourcePolicy: ""
+          size: 8Gi
+          storageClass: ""
+          subPath: ""
+          volumeClaimTemplates:
+            selector: {}
+        successfulJobsHistoryLimit: 3
+        timeZone: ""
+        ttlSecondsAfterFinished: ""
+      enabled: false
+    clusterDomain: cluster.local
+    common:
+      exampleValue: common-chart
+      global:
+        compatibility:
+          openshift:
+            adaptSecurityContext: auto
+        hub:
+          auth:
+            realmId: ""
+            robotSecret: "1"
+            robotUser: "1"
+          endpoints:
+            auth: https://auth.privateaim.dev
+            core: https://core.privateaim.dev
+            messenger: https://messenger.privateaim.dev
+            storage: https://storage.privateaim.dev
+        imagePullSecrets: []
+        imageRegistry: ""
+        postgresql:
+          auth:
+            database: ""
+            existingSecret: ""
+            password: ""
+            postgresPassword: ""
+            secretKeys:
+              adminPasswordKey: ""
+              replicationPasswordKey: ""
+              userPasswordKey: ""
+            username: ""
+          service:
+            ports:
+              postgresql: ""
+        storageClass: ""
+    commonAnnotations: {}
+    commonLabels: {}
+    containerPorts:
+      postgresql: 5432
+    diagnosticMode:
+      args:
+      - infinity
+      command:
+      - sleep
+      enabled: false
+    extraDeploy: []
+    fullnameOverride: ""
+    global:
+      compatibility:
+        openshift:
+          adaptSecurityContext: auto
+      hub:
+        auth:
+          realmId: ""
+          robotSecret: "1"
+          robotUser: "1"
+        endpoints:
+          auth: https://auth.privateaim.dev
+          core: https://core.privateaim.dev
+          messenger: https://messenger.privateaim.dev
+          storage: https://storage.privateaim.dev
+      imagePullSecrets: []
+      imageRegistry: ""
+      postgresql:
+        auth:
+          database: ""
+          existingSecret: ""
+          password: ""
+          postgresPassword: ""
+          secretKeys:
+            adminPasswordKey: ""
+            replicationPasswordKey: ""
+            userPasswordKey: ""
+          username: ""
+        service:
+          ports:
+            postgresql: ""
+      storageClass: ""
+    image:
+      debug: false
+      digest: ""
+      pullPolicy: IfNotPresent
+      pullSecrets: []
+      registry: docker.io
+      repository: bitnami/postgresql
+      tag: 16.2.0-debian-12-r15
+    kubeVersion: ""
+    ldap:
+      basedn: ""
+      binddn: ""
+      bindpw: ""
+      enabled: false
+      port: ""
+      prefix: ""
+      scheme: ""
+      searchAttribute: ""
+      searchFilter: ""
+      server: ""
+      suffix: ""
+      tls:
+        enabled: false
+      uri: ""
+    metrics:
+      collectors: {}
+      containerPorts:
+        metrics: 9187
+      containerSecurityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        enabled: true
+        privileged: false
+        readOnlyRootFilesystem: true
+        runAsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
+        seLinuxOptions: {}
+        seccompProfile:
+          type: RuntimeDefault
+      customLivenessProbe: {}
+      customMetrics: {}
+      customReadinessProbe: {}
+      customStartupProbe: {}
+      enabled: false
+      extraEnvVars: []
+      image:
+        digest: ""
+        pullPolicy: IfNotPresent
+        pullSecrets: []
+        registry: docker.io
+        repository: bitnami/postgres-exporter
+        tag: 0.15.0-debian-12-r16
+      livenessProbe:
+        enabled: true
+        failureThreshold: 6
+        initialDelaySeconds: 5
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      prometheusRule:
+        enabled: false
+        labels: {}
+        namespace: ""
+        rules: []
+      readinessProbe:
+        enabled: true
+        failureThreshold: 6
+        initialDelaySeconds: 5
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      resources: {}
+      resourcesPreset: nano
+      service:
+        annotations:
+          prometheus.io/port: '{{ .Values.metrics.service.ports.metrics }}'
+          prometheus.io/scrape: "true"
+        clusterIP: ""
+        ports:
+          metrics: 9187
+        sessionAffinity: None
+      serviceMonitor:
+        enabled: false
+        honorLabels: false
+        interval: ""
+        jobLabel: ""
+        labels: {}
+        metricRelabelings: []
+        namespace: ""
+        relabelings: []
+        scrapeTimeout: ""
+        selector: {}
+      startupProbe:
+        enabled: false
+        failureThreshold: 15
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 1
+    nameOverride: ""
+    postgresqlDataDir: /bitnami/postgresql/data
+    postgresqlSharedPreloadLibraries: pgaudit
+    primary:
+      affinity: {}
+      annotations: {}
+      args: []
+      automountServiceAccountToken: false
+      command: []
+      configuration: ""
+      containerSecurityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        enabled: true
+        privileged: false
+        readOnlyRootFilesystem: true
+        runAsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
+        seLinuxOptions: {}
+        seccompProfile:
+          type: RuntimeDefault
+      customLivenessProbe: {}
+      customReadinessProbe: {}
+      customStartupProbe: {}
+      existingConfigmap: ""
+      existingExtendedConfigmap: ""
+      extendedConfiguration: ""
+      extraEnvVars: []
+      extraEnvVarsCM: ""
+      extraEnvVarsSecret: ""
+      extraPodSpec: {}
+      extraVolumeMounts: []
+      extraVolumes: []
+      hostAliases: []
+      hostIPC: false
+      hostNetwork: false
+      initContainers: []
+      initdb:
+        args: ""
+        password: ""
+        postgresqlWalDir: ""
+        scripts: {}
+        scriptsConfigMap: ""
+        scriptsSecret: ""
+        user: ""
+      labels: {}
+      lifecycleHooks: {}
+      livenessProbe:
+        enabled: true
+        failureThreshold: 6
+        initialDelaySeconds: 30
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      name: primary
+      networkPolicy:
+        allowExternal: true
+        allowExternalEgress: true
+        enabled: true
+        extraEgress: []
+        extraIngress: []
+        ingressNSMatchLabels: {}
+        ingressNSPodMatchLabels: {}
+      nodeAffinityPreset:
+        key: ""
+        type: ""
+        values: []
+      nodeSelector: {}
+      persistence:
+        accessModes:
+        - ReadWriteOnce
+        annotations: {}
+        dataSource: {}
+        enabled: true
+        existingClaim: ""
+        labels: {}
+        mountPath: /bitnami/postgresql
+        selector: {}
+        size: 8Gi
+        storageClass: ""
+        subPath: ""
+        volumeName: data
+      persistentVolumeClaimRetentionPolicy:
+        enabled: false
+        whenDeleted: Retain
+        whenScaled: Retain
+      pgHbaConfiguration: ""
+      podAffinityPreset: ""
+      podAnnotations: {}
+      podAntiAffinityPreset: soft
+      podLabels: {}
+      podSecurityContext:
+        enabled: true
+        fsGroup: 1001
+        fsGroupChangePolicy: Always
+        supplementalGroups: []
+        sysctls: []
+      priorityClassName: ""
+      readinessProbe:
+        enabled: true
+        failureThreshold: 6
+        initialDelaySeconds: 5
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      resources: {}
+      resourcesPreset: nano
+      schedulerName: ""
+      service:
+        annotations: {}
+        clusterIP: ""
+        externalTrafficPolicy: Cluster
+        extraPorts: []
+        headless:
+          annotations: {}
+        loadBalancerIP: ""
+        loadBalancerSourceRanges: []
+        nodePorts:
+          postgresql: ""
+        ports:
+          postgresql: 5432
+        sessionAffinity: None
+        sessionAffinityConfig: {}
+        type: ClusterIP
+      sidecars: []
+      standby:
+        enabled: false
+        primaryHost: ""
+        primaryPort: ""
+      startupProbe:
+        enabled: false
+        failureThreshold: 15
+        initialDelaySeconds: 30
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 1
+      terminationGracePeriodSeconds: ""
+      tolerations: []
+      topologySpreadConstraints: []
+      updateStrategy:
+        rollingUpdate: {}
+        type: RollingUpdate
+    psp:
+      create: false
+    rbac:
+      create: false
+      rules: []
+    readReplicas:
+      affinity: {}
+      annotations: {}
+      args: []
+      automountServiceAccountToken: false
+      command: []
+      containerSecurityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        enabled: true
+        privileged: false
+        readOnlyRootFilesystem: true
+        runAsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
+        seLinuxOptions: {}
+        seccompProfile:
+          type: RuntimeDefault
+      customLivenessProbe: {}
+      customReadinessProbe: {}
+      customStartupProbe: {}
+      extendedConfiguration: ""
+      extraEnvVars: []
+      extraEnvVarsCM: ""
+      extraEnvVarsSecret: ""
+      extraPodSpec: {}
+      extraVolumeMounts: []
+      extraVolumes: []
+      hostAliases: []
+      hostIPC: false
+      hostNetwork: false
+      initContainers: []
+      labels: {}
+      lifecycleHooks: {}
+      livenessProbe:
+        enabled: true
+        failureThreshold: 6
+        initialDelaySeconds: 30
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      name: read
+      networkPolicy:
+        allowExternal: true
+        allowExternalEgress: true
+        enabled: true
+        extraEgress: []
+        extraIngress: []
+        ingressNSMatchLabels: {}
+        ingressNSPodMatchLabels: {}
+      nodeAffinityPreset:
+        key: ""
+        type: ""
+        values: []
+      nodeSelector: {}
+      persistence:
+        accessModes:
+        - ReadWriteOnce
+        annotations: {}
+        dataSource: {}
+        enabled: true
+        existingClaim: ""
+        labels: {}
+        mountPath: /bitnami/postgresql
+        selector: {}
+        size: 8Gi
+        storageClass: ""
+        subPath: ""
+      persistentVolumeClaimRetentionPolicy:
+        enabled: false
+        whenDeleted: Retain
+        whenScaled: Retain
+      podAffinityPreset: ""
+      podAnnotations: {}
+      podAntiAffinityPreset: soft
+      podLabels: {}
+      podSecurityContext:
+        enabled: true
+        fsGroup: 1001
+        fsGroupChangePolicy: Always
+        supplementalGroups: []
+        sysctls: []
+      priorityClassName: ""
+      readinessProbe:
+        enabled: true
+        failureThreshold: 6
+        initialDelaySeconds: 5
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      replicaCount: 1
+      resources: {}
+      resourcesPreset: nano
+      schedulerName: ""
+      service:
+        annotations: {}
+        clusterIP: ""
+        externalTrafficPolicy: Cluster
+        extraPorts: []
+        headless:
+          annotations: {}
+        loadBalancerIP: ""
+        loadBalancerSourceRanges: []
+        nodePorts:
+          postgresql: ""
+        ports:
+          postgresql: 5432
+        sessionAffinity: None
+        sessionAffinityConfig: {}
+        type: ClusterIP
+      sidecars: []
+      startupProbe:
+        enabled: false
+        failureThreshold: 15
+        initialDelaySeconds: 30
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 1
+      terminationGracePeriodSeconds: ""
+      tolerations: []
+      topologySpreadConstraints: []
+      updateStrategy:
+        rollingUpdate: {}
+        type: RollingUpdate
+    replication:
+      applicationName: my_application
+      numSynchronousReplicas: 0
+      synchronousCommit: "off"
+    serviceAccount:
+      annotations: {}
+      automountServiceAccountToken: false
+      create: true
+      name: ""
+    serviceBindings:
+      enabled: false
+    shmVolume:
+      enabled: true
+      sizeLimit: ""
+    tls:
+      autoGenerated: false
+      certCAFilename: ""
+      certFilename: ""
+      certKeyFilename: ""
+      certificatesSecret: ""
+      crlFilename: ""
+      enabled: false
+      preferServerCiphers: true
+    volumePermissions:
+      containerSecurityContext:
+        runAsGroup: 0
+        runAsNonRoot: false
+        runAsUser: 0
+        seLinuxOptions: {}
+        seccompProfile:
+          type: RuntimeDefault
+      enabled: false
+      image:
+        digest: ""
+        pullPolicy: IfNotPresent
+        pullSecrets: []
+        registry: docker.io
+        repository: bitnami/os-shell
+        tag: 12-debian-12-r18
+      resources: {}
+      resourcesPreset: nano
+flame-node-result-service:
+  env:
+    HUB_PASSWORD: start123
+    HUB_USERNAME: admin
+    MINIO_BUCKET: flame
+    MINIO_USE_SSL: false
+    OIDC_CERTS_URL: ""
+    OIDC_CLIENT_ID_CLAIM_NAME: azp
+  global:
+    hub:
+      auth:
+        realmId: ""
+        robotSecret: "1"
+        robotUser: "1"
+      endpoints:
+        auth: https://auth.privateaim.dev
+        core: https://core.privateaim.dev
+        messenger: https://messenger.privateaim.dev
+        storage: https://storage.privateaim.dev
+  minio:
+    additionalAnnotations: {}
+    additionalLabels: {}
+    affinity: {}
+    bucketRoot: ""
+    buckets:
+    - name: flame
+      objectlocking: false
+      policy: none
+      purge: false
+      versioning: false
+    certsPath: /etc/minio/certs/
+    clusterDomain: cluster.local
+    configPathmc: /etc/minio/mc/
+    consoleIngress:
+      annotations: {}
+      enabled: false
+      hosts:
+      - console.minio-example.local
+      ingressClassName: null
+      labels: {}
+      path: /
+      tls: []
+    consoleService:
+      annotations: {}
+      clusterIP: null
+      externalIPs: []
+      loadBalancerIP: null
+      nodePort: 32001
+      port: "9001"
+      type: ClusterIP
+    customCommandJob:
+      exitCommand: ""
+      resources:
+        requests:
+          memory: 128Mi
+      securityContext:
+        enabled: false
+        runAsGroup: 1000
+        runAsUser: 1000
+    customCommands: null
+    deploymentUpdate:
+      maxSurge: 100%
+      maxUnavailable: 0
+      type: RollingUpdate
+    drivesPerNode: 1
+    environment: null
+    etcd:
+      clientCert: ""
+      clientCertKey: ""
+      corednsPathPrefix: ""
+      endpoints: []
+      pathPrefix: ""
+    existingSecret: ""
+    extraArgs: []
+    extraContainers: []
+    extraSecret: null
+    extraVolumeMounts: []
+    extraVolumes: []
+    fullnameOverride: ""
+    global:
+      hub:
+        auth:
+          realmId: ""
+          robotSecret: "1"
+          robotUser: "1"
+        endpoints:
+          auth: https://auth.privateaim.dev
+          core: https://core.privateaim.dev
+          messenger: https://messenger.privateaim.dev
+          storage: https://storage.privateaim.dev
+    ignoreChartChecksums: false
+    image:
+      pullPolicy: IfNotPresent
+      repository: quay.io/minio/minio
+      tag: RELEASE.2024-03-03T17-50-39Z
+    imagePullSecrets: []
+    ingress:
+      annotations: {}
+      enabled: false
+      hosts:
+      - minio-example.local
+      ingressClassName: null
+      labels: {}
+      path: /
+      tls: []
+    makeBucketJob:
+      exitCommand: ""
+      resources:
+        requests:
+          memory: 128Mi
+      securityContext:
+        enabled: false
+        runAsGroup: 1000
+        runAsUser: 1000
+    makePolicyJob:
+      exitCommand: ""
+      resources:
+        requests:
+          memory: 128Mi
+      securityContext:
+        enabled: false
+        runAsGroup: 1000
+        runAsUser: 1000
+    makeServiceAccountJob:
+      exitCommand: ""
+      resources:
+        requests:
+          memory: 128Mi
+      securityContext:
+        enabled: false
+        runAsGroup: 1000
+        runAsUser: 1000
+    makeUserJob:
+      exitCommand: ""
+      resources:
+        requests:
+          memory: 128Mi
+      securityContext:
+        enabled: false
+        runAsGroup: 1000
+        runAsUser: 1000
+    mcImage:
+      pullPolicy: IfNotPresent
+      repository: quay.io/minio/mc
+      tag: RELEASE.2024-03-03T00-13-08Z
+    metrics:
+      serviceMonitor:
+        additionalLabels: {}
+        annotations: {}
+        enabled: false
+        includeNode: false
+        interval: null
+        namespace: null
+        public: true
+        relabelConfigs: {}
+        relabelConfigsCluster: {}
+        scrapeTimeout: null
+    minioAPIPort: "9000"
+    minioConsolePort: "9001"
+    mode: distributed
+    mountPath: /mnt/data
+    nameOverride: ""
+    networkPolicy:
+      allowExternal: true
+      egressEntities:
+      - kube-apiserver
+      enabled: false
+      flavor: kubernetes
+    nodeSelector: {}
+    oidc:
+      claimName: policy
+      claimPrefix: ""
+      clientId: minio
+      clientSecret: ""
+      comment: ""
+      configUrl: https://identity-provider-url/.well-known/openid-configuration
+      displayName: ""
+      enabled: false
+      existingClientIdKey: ""
+      existingClientSecretKey: ""
+      existingClientSecretName: ""
+      redirectUri: https://console-endpoint-url/oauth_callback
+      scopes: openid,profile,email
+    persistence:
+      accessMode: ReadWriteOnce
+      annotations: {}
+      enabled: true
+      existingClaim: ""
+      size: 10Gi
+      storageClass: ""
+      subPath: ""
+      volumeName: ""
+    podAnnotations: {}
+    podDisruptionBudget:
+      enabled: false
+      maxUnavailable: 1
+    podLabels: {}
+    policies: []
+    pools: 1
+    postJob:
+      affinity: {}
+      annotations: {}
+      nodeSelector: {}
+      podAnnotations: {}
+      securityContext:
+        enabled: false
+        fsGroup: 1000
+        runAsGroup: 1000
+        runAsUser: 1000
+      tolerations: []
+    priorityClassName: ""
+    replicas: 2
+    resources:
+      requests:
+        memory: 1Gi
+    rootPassword: s3cr3t_p4ssw0rd
+    rootUser: admin
+    runtimeClassName: ""
+    securityContext:
+      enabled: true
+      fsGroup: 1000
+      fsGroupChangePolicy: OnRootMismatch
+      runAsGroup: 1000
+      runAsUser: 1000
+    service:
+      annotations: {}
+      clusterIP: null
+      externalIPs: []
+      loadBalancerIP: null
+      nodePort: 32000
+      port: "9000"
+      type: ClusterIP
+    serviceAccount:
+      create: true
+      name: minio-sa
+    statefulSetUpdate:
+      updateStrategy: RollingUpdate
+    svcaccts: []
+    tls:
+      certSecret: ""
+      enabled: false
+      privateKey: private.key
+      publicCrt: public.crt
+    tolerations: []
+    topologySpreadConstraints: []
+    trustedCertsSecret: ""
+    users:
+    - accessKey: console
+      policy: consoleAdmin
+      secretKey: console123
+flame-node-ui:
+  env: development
+  global:
+    hub:
+      auth:
+        realmId: ""
+        robotSecret: "1"
+        robotUser: "1"
+      endpoints:
+        auth: https://auth.privateaim.dev
+        core: https://core.privateaim.dev
+        messenger: https://messenger.privateaim.dev
+        storage: https://storage.privateaim.dev
+  idp:
+    clientId: node-ui
+    clientSecret: ""
+    debug: false
+    existingSecret: ""
+    existingSecretKey: ""
+    host: http://localhost:8080
+    realm: flame
+  ingress:
+    domain: localhost
+  node:
+    adapter: ""
+  url: http://localhost:3000
+global:
+  hub:
+    auth:
+      realmId: ""
+      robotSecret: "1"
+      robotUser: "1"
+    endpoints:
+      auth: https://auth.privateaim.dev
+      core: https://core.privateaim.dev
+      messenger: https://messenger.privateaim.dev
+      storage: https://storage.privateaim.dev
+keycloak:
+  adminIngress:
+    annotations: {}
+    apiVersion: ""
+    enabled: false
+    extraHosts: []
+    extraPaths: []
+    extraRules: []
+    extraTls: []
+    hostname: keycloak.local
+    ingressClassName: ""
+    labels: {}
+    path: '{{ .Values.httpRelativePath }}'
+    pathType: ImplementationSpecific
+    secrets: []
+    selfSigned: false
+    servicePort: http
+    tls: false
+  affinity: {}
+  args: []
+  auth:
+    adminPassword: admin
+    adminUser: admin
+    annotations: {}
+    existingSecret: ""
+    passwordSecretKey: ""
+  automountServiceAccountToken: true
+  autoscaling:
+    enabled: false
+    maxReplicas: 11
+    minReplicas: 1
+    targetCPU: ""
+    targetMemory: ""
+  cache:
+    enabled: true
+    stackFile: ""
+    stackName: kubernetes
+  clusterDomain: cluster.local
+  command: []
+  common:
+    exampleValue: common-chart
+    global:
+      compatibility:
+        openshift:
+          adaptSecurityContext: auto
+      hub:
+        auth:
+          realmId: ""
+          robotSecret: "1"
+          robotUser: "1"
+        endpoints:
+          auth: https://auth.privateaim.dev
+          core: https://core.privateaim.dev
+          messenger: https://messenger.privateaim.dev
+          storage: https://storage.privateaim.dev
+      imagePullSecrets: []
+      imageRegistry: ""
+      storageClass: ""
+  commonAnnotations: {}
+  commonLabels: {}
+  configuration: ""
+  containerPorts:
+    http: 8080
+    https: 8443
+    infinispan: 7800
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - ALL
+    enabled: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    runAsGroup: 1001
+    runAsNonRoot: true
+    runAsUser: 1001
+    seLinuxOptions: {}
+    seccompProfile:
+      type: RuntimeDefault
+  customLivenessProbe: {}
+  customReadinessProbe: {}
+  customStartupProbe: {}
+  diagnosticMode:
+    args:
+    - infinity
+    command:
+    - sleep
+    enabled: false
+  dnsConfig: {}
+  dnsPolicy: ""
+  enableDefaultInitContainers: true
+  enableServiceLinks: true
+  existingConfigmap: ""
+  externalDatabase:
+    annotations: {}
+    database: bitnami_keycloak
+    existingSecret: ""
+    existingSecretDatabaseKey: ""
+    existingSecretHostKey: ""
+    existingSecretPasswordKey: ""
+    existingSecretPortKey: ""
+    existingSecretUserKey: ""
+    host: ""
+    password: ""
+    port: 5432
+    user: bn_keycloak
+  extraContainerPorts: []
+  extraDeploy: []
+  extraEnvVars: []
+  extraEnvVarsCM: ""
+  extraEnvVarsSecret: ""
+  extraStartupArgs: ""
+  extraVolumeMounts: []
+  extraVolumes: []
+  fullnameOverride: ""
+  global:
+    compatibility:
+      openshift:
+        adaptSecurityContext: auto
+    hub:
+      auth:
+        realmId: ""
+        robotSecret: "1"
+        robotUser: "1"
+      endpoints:
+        auth: https://auth.privateaim.dev
+        core: https://core.privateaim.dev
+        messenger: https://messenger.privateaim.dev
+        storage: https://storage.privateaim.dev
+    imagePullSecrets: []
+    imageRegistry: ""
+    storageClass: ""
+  hostAliases: []
+  httpRelativePath: /
+  image:
+    debug: false
+    digest: ""
+    pullPolicy: IfNotPresent
+    pullSecrets: []
+    registry: docker.io
+    repository: bitnami/keycloak
+    tag: 24.0.3-debian-12-r0
+  ingress:
+    annotations: {}
+    apiVersion: ""
+    enabled: false
+    extraHosts: []
+    extraPaths: []
+    extraRules: []
+    extraTls: []
+    hostname: keycloak.local
+    ingressClassName: ""
+    labels: {}
+    path: '{{ .Values.httpRelativePath }}'
+    pathType: ImplementationSpecific
+    secrets: []
+    selfSigned: false
+    servicePort: http
+    tls: false
+  initContainers: []
+  initdbScripts: {}
+  initdbScriptsConfigMap: ""
+  keycloakConfigCli:
+    annotations:
+      helm.sh/hook: post-install,post-upgrade,post-rollback
+      helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
+      helm.sh/hook-weight: "5"
+    args: []
+    automountServiceAccountToken: true
+    backoffLimit: 1
+    cleanupAfterFinished:
+      enabled: false
+      seconds: 600
+    command: []
+    configuration: {}
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - ALL
+      enabled: true
+      privileged: false
+      readOnlyRootFilesystem: true
+      runAsGroup: 1001
+      runAsNonRoot: true
+      runAsUser: 1001
+      seLinuxOptions: {}
+      seccompProfile:
+        type: RuntimeDefault
+    enabled: true
+    existingConfigmap: flame-default-realm
+    extraEnvVars: []
+    extraEnvVarsCM: ""
+    extraEnvVarsSecret: ""
+    extraVolumeMounts: []
+    extraVolumes: []
+    hostAliases: []
+    image:
+      digest: ""
+      pullPolicy: IfNotPresent
+      pullSecrets: []
+      registry: docker.io
+      repository: bitnami/keycloak-config-cli
+      tag: 5.12.0-debian-12-r1
+    initContainers: []
+    nodeSelector: {}
+    podAnnotations: {}
+    podLabels: {}
+    podSecurityContext:
+      enabled: true
+      fsGroup: 1001
+      fsGroupChangePolicy: Always
+      supplementalGroups: []
+      sysctls: []
+    podTolerations: []
+    resources: {}
+    resourcesPreset: small
+    sidecars: []
+  kubeVersion: ""
+  lifecycleHooks: {}
+  livenessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 300
+    periodSeconds: 1
+    successThreshold: 1
+    timeoutSeconds: 5
+  logging:
+    level: INFO
+    output: default
+  metrics:
+    enabled: false
+    prometheusRule:
+      enabled: false
+      groups: []
+      labels: {}
+      namespace: ""
+    service:
+      annotations:
+        prometheus.io/port: '{{ .Values.metrics.service.ports.http }}'
+        prometheus.io/scrape: "true"
+      extraPorts: []
+      ports:
+        http: 8080
+    serviceMonitor:
+      enabled: false
+      endpoints:
+      - path: '{{ include "keycloak.httpPath" . }}metrics'
+      - path: '{{ include "keycloak.httpPath" . }}realms/master/metrics'
+      honorLabels: false
+      interval: 30s
+      jobLabel: ""
+      labels: {}
+      metricRelabelings: []
+      namespace: ""
+      path: ""
+      port: http
+      relabelings: []
+      scrapeTimeout: ""
+      selector: {}
+  nameOverride: ""
+  namespaceOverride: ""
+  networkPolicy:
+    allowExternal: true
+    allowExternalEgress: true
+    enabled: true
+    extraEgress: []
+    extraIngress: []
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+    kubeAPIServerPorts:
+    - 443
+    - 6443
+    - 8443
+  nodeAffinityPreset:
+    key: ""
+    type: ""
+    values: []
+  nodeSelector: {}
+  pdb:
+    create: false
+    maxUnavailable: ""
+    minAvailable: 1
+  podAffinityPreset: ""
+  podAnnotations: {}
+  podAntiAffinityPreset: soft
+  podLabels: {}
+  podManagementPolicy: Parallel
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+    fsGroupChangePolicy: Always
+    supplementalGroups: []
+    sysctls: []
+  postgresql:
+    architecture: standalone
+    audit:
+      clientMinMessages: error
+      logConnections: false
+      logDisconnections: false
+      logHostname: false
+      logLinePrefix: ""
+      logTimezone: ""
+      pgAuditLog: ""
+      pgAuditLogCatalog: "off"
+    auth:
+      database: keycloak
+      enablePostgresUser: true
+      existingSecret: kc-password-secret
+      password: keycloak
+      postgresPassword: ""
+      replicationPassword: ""
+      replicationUsername: repl_user
+      secretKeys:
+        adminPasswordKey: postgres-password
+        replicationPasswordKey: replication-password
+        userPasswordKey: password
+      usePasswordFiles: false
+      username: keycloak
+    backup:
+      cronjob:
+        annotations: {}
+        command:
+        - /bin/sh
+        - -c
+        - pg_dumpall --clean --if-exists --load-via-partition-root --quote-all-identifiers
+          --no-password --file=${PGDUMP_DIR}/pg_dumpall-$(date '+%Y-%m-%d-%H-%M').pgdump
+        concurrencyPolicy: Allow
+        containerSecurityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          enabled: true
+          privileged: false
+          readOnlyRootFilesystem: true
+          runAsGroup: 1001
+          runAsNonRoot: true
+          runAsUser: 1001
+          seLinuxOptions: {}
+          seccompProfile:
+            type: RuntimeDefault
+        extraVolumeMounts: []
+        extraVolumes: []
+        failedJobsHistoryLimit: 1
+        labels: {}
+        networkPolicy:
+          enabled: true
+        nodeSelector: {}
+        podSecurityContext:
+          enabled: true
+          fsGroup: 1001
+          fsGroupChangePolicy: Always
+          supplementalGroups: []
+          sysctls: []
+        resources: {}
+        resourcesPreset: nano
+        restartPolicy: OnFailure
+        schedule: '@daily'
+        startingDeadlineSeconds: ""
+        storage:
+          accessModes:
+          - ReadWriteOnce
+          annotations: {}
+          enabled: true
+          existingClaim: ""
+          mountPath: /backup/pgdump
+          resourcePolicy: ""
+          size: 8Gi
+          storageClass: ""
+          subPath: ""
+          volumeClaimTemplates:
+            selector: {}
+        successfulJobsHistoryLimit: 3
+        timeZone: ""
+        ttlSecondsAfterFinished: ""
+      enabled: false
+    clusterDomain: cluster.local
+    common:
+      exampleValue: common-chart
+      global:
+        compatibility:
+          openshift:
+            adaptSecurityContext: auto
+        hub:
+          auth:
+            realmId: ""
+            robotSecret: "1"
+            robotUser: "1"
+          endpoints:
+            auth: https://auth.privateaim.dev
+            core: https://core.privateaim.dev
+            messenger: https://messenger.privateaim.dev
+            storage: https://storage.privateaim.dev
+        imagePullSecrets: []
+        imageRegistry: ""
+        postgresql:
+          auth:
+            database: ""
+            existingSecret: ""
+            password: ""
+            postgresPassword: ""
+            secretKeys:
+              adminPasswordKey: ""
+              replicationPasswordKey: ""
+              userPasswordKey: ""
+            username: ""
+          service:
+            ports:
+              postgresql: ""
+        storageClass: ""
+    commonAnnotations: {}
+    commonLabels: {}
+    containerPorts:
+      postgresql: 5432
+    diagnosticMode:
+      args:
+      - infinity
+      command:
+      - sleep
+      enabled: false
+    enabled: true
+    extraDeploy: []
+    fullnameOverride: ""
+    global:
+      compatibility:
+        openshift:
+          adaptSecurityContext: auto
+      hub:
+        auth:
+          realmId: ""
+          robotSecret: "1"
+          robotUser: "1"
+        endpoints:
+          auth: https://auth.privateaim.dev
+          core: https://core.privateaim.dev
+          messenger: https://messenger.privateaim.dev
+          storage: https://storage.privateaim.dev
+      imagePullSecrets: []
+      imageRegistry: ""
+      postgresql:
+        auth:
+          database: ""
+          existingSecret: ""
+          password: ""
+          postgresPassword: ""
+          secretKeys:
+            adminPasswordKey: ""
+            replicationPasswordKey: ""
+            userPasswordKey: ""
+          username: ""
+        service:
+          ports:
+            postgresql: ""
+      storageClass: ""
+    image:
+      debug: false
+      digest: ""
+      pullPolicy: IfNotPresent
+      pullSecrets: []
+      registry: docker.io
+      repository: bitnami/postgresql
+      tag: 16.2.0-debian-12-r15
+    kubeVersion: ""
+    ldap:
+      basedn: ""
+      binddn: ""
+      bindpw: ""
+      enabled: false
+      port: ""
+      prefix: ""
+      scheme: ""
+      searchAttribute: ""
+      searchFilter: ""
+      server: ""
+      suffix: ""
+      tls:
+        enabled: false
+      uri: ""
+    metrics:
+      collectors: {}
+      containerPorts:
+        metrics: 9187
+      containerSecurityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        enabled: true
+        privileged: false
+        readOnlyRootFilesystem: true
+        runAsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
+        seLinuxOptions: {}
+        seccompProfile:
+          type: RuntimeDefault
+      customLivenessProbe: {}
+      customMetrics: {}
+      customReadinessProbe: {}
+      customStartupProbe: {}
+      enabled: false
+      extraEnvVars: []
+      image:
+        digest: ""
+        pullPolicy: IfNotPresent
+        pullSecrets: []
+        registry: docker.io
+        repository: bitnami/postgres-exporter
+        tag: 0.15.0-debian-12-r16
+      livenessProbe:
+        enabled: true
+        failureThreshold: 6
+        initialDelaySeconds: 5
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      prometheusRule:
+        enabled: false
+        labels: {}
+        namespace: ""
+        rules: []
+      readinessProbe:
+        enabled: true
+        failureThreshold: 6
+        initialDelaySeconds: 5
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      resources: {}
+      resourcesPreset: nano
+      service:
+        annotations:
+          prometheus.io/port: '{{ .Values.metrics.service.ports.metrics }}'
+          prometheus.io/scrape: "true"
+        clusterIP: ""
+        ports:
+          metrics: 9187
+        sessionAffinity: None
+      serviceMonitor:
+        enabled: false
+        honorLabels: false
+        interval: ""
+        jobLabel: ""
+        labels: {}
+        metricRelabelings: []
+        namespace: ""
+        relabelings: []
+        scrapeTimeout: ""
+        selector: {}
+      startupProbe:
+        enabled: false
+        failureThreshold: 15
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 1
+    nameOverride: keycloak-postgresql
+    postgresqlDataDir: /bitnami/postgresql/data
+    postgresqlSharedPreloadLibraries: pgaudit
+    primary:
+      affinity: {}
+      annotations: {}
+      args: []
+      automountServiceAccountToken: false
+      command: []
+      configuration: ""
+      containerSecurityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        enabled: true
+        privileged: false
+        readOnlyRootFilesystem: true
+        runAsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
+        seLinuxOptions: {}
+        seccompProfile:
+          type: RuntimeDefault
+      customLivenessProbe: {}
+      customReadinessProbe: {}
+      customStartupProbe: {}
+      existingConfigmap: ""
+      existingExtendedConfigmap: ""
+      extendedConfiguration: ""
+      extraEnvVars: []
+      extraEnvVarsCM: ""
+      extraEnvVarsSecret: ""
+      extraPodSpec: {}
+      extraVolumeMounts: []
+      extraVolumes: []
+      hostAliases: []
+      hostIPC: false
+      hostNetwork: false
+      initContainers: []
+      initdb:
+        args: ""
+        password: ""
+        postgresqlWalDir: ""
+        scripts: {}
+        scriptsConfigMap: ""
+        scriptsSecret: ""
+        user: ""
+      labels: {}
+      lifecycleHooks: {}
+      livenessProbe:
+        enabled: true
+        failureThreshold: 6
+        initialDelaySeconds: 30
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      name: primary
+      networkPolicy:
+        allowExternal: true
+        allowExternalEgress: true
+        enabled: true
+        extraEgress: []
+        extraIngress: []
+        ingressNSMatchLabels: {}
+        ingressNSPodMatchLabels: {}
+      nodeAffinityPreset:
+        key: ""
+        type: ""
+        values: []
+      nodeSelector: {}
+      persistence:
+        accessModes:
+        - ReadWriteOnce
+        annotations: {}
+        dataSource: {}
+        enabled: true
+        existingClaim: ""
+        labels: {}
+        mountPath: /bitnami/postgresql
+        selector: {}
+        size: 8Gi
+        storageClass: ""
+        subPath: ""
+        volumeName: data
+      persistentVolumeClaimRetentionPolicy:
+        enabled: false
+        whenDeleted: Retain
+        whenScaled: Retain
+      pgHbaConfiguration: ""
+      podAffinityPreset: ""
+      podAnnotations: {}
+      podAntiAffinityPreset: soft
+      podLabels: {}
+      podSecurityContext:
+        enabled: true
+        fsGroup: 1001
+        fsGroupChangePolicy: Always
+        supplementalGroups: []
+        sysctls: []
+      priorityClassName: ""
+      readinessProbe:
+        enabled: true
+        failureThreshold: 6
+        initialDelaySeconds: 5
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      resources: {}
+      resourcesPreset: nano
+      schedulerName: ""
+      service:
+        annotations: {}
+        clusterIP: ""
+        externalTrafficPolicy: Cluster
+        extraPorts: []
+        headless:
+          annotations: {}
+        loadBalancerIP: ""
+        loadBalancerSourceRanges: []
+        nodePorts:
+          postgresql: ""
+        ports:
+          postgresql: 5432
+        sessionAffinity: None
+        sessionAffinityConfig: {}
+        type: ClusterIP
+      sidecars: []
+      standby:
+        enabled: false
+        primaryHost: ""
+        primaryPort: ""
+      startupProbe:
+        enabled: false
+        failureThreshold: 15
+        initialDelaySeconds: 30
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 1
+      terminationGracePeriodSeconds: ""
+      tolerations: []
+      topologySpreadConstraints: []
+      updateStrategy:
+        rollingUpdate: {}
+        type: RollingUpdate
+    psp:
+      create: false
+    rbac:
+      create: false
+      rules: []
+    readReplicas:
+      affinity: {}
+      annotations: {}
+      args: []
+      automountServiceAccountToken: false
+      command: []
+      containerSecurityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        enabled: true
+        privileged: false
+        readOnlyRootFilesystem: true
+        runAsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
+        seLinuxOptions: {}
+        seccompProfile:
+          type: RuntimeDefault
+      customLivenessProbe: {}
+      customReadinessProbe: {}
+      customStartupProbe: {}
+      extendedConfiguration: ""
+      extraEnvVars: []
+      extraEnvVarsCM: ""
+      extraEnvVarsSecret: ""
+      extraPodSpec: {}
+      extraVolumeMounts: []
+      extraVolumes: []
+      hostAliases: []
+      hostIPC: false
+      hostNetwork: false
+      initContainers: []
+      labels: {}
+      lifecycleHooks: {}
+      livenessProbe:
+        enabled: true
+        failureThreshold: 6
+        initialDelaySeconds: 30
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      name: read
+      networkPolicy:
+        allowExternal: true
+        allowExternalEgress: true
+        enabled: true
+        extraEgress: []
+        extraIngress: []
+        ingressNSMatchLabels: {}
+        ingressNSPodMatchLabels: {}
+      nodeAffinityPreset:
+        key: ""
+        type: ""
+        values: []
+      nodeSelector: {}
+      persistence:
+        accessModes:
+        - ReadWriteOnce
+        annotations: {}
+        dataSource: {}
+        enabled: true
+        existingClaim: ""
+        labels: {}
+        mountPath: /bitnami/postgresql
+        selector: {}
+        size: 8Gi
+        storageClass: ""
+        subPath: ""
+      persistentVolumeClaimRetentionPolicy:
+        enabled: false
+        whenDeleted: Retain
+        whenScaled: Retain
+      podAffinityPreset: ""
+      podAnnotations: {}
+      podAntiAffinityPreset: soft
+      podLabels: {}
+      podSecurityContext:
+        enabled: true
+        fsGroup: 1001
+        fsGroupChangePolicy: Always
+        supplementalGroups: []
+        sysctls: []
+      priorityClassName: ""
+      readinessProbe:
+        enabled: true
+        failureThreshold: 6
+        initialDelaySeconds: 5
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      replicaCount: 1
+      resources: {}
+      resourcesPreset: nano
+      schedulerName: ""
+      service:
+        annotations: {}
+        clusterIP: ""
+        externalTrafficPolicy: Cluster
+        extraPorts: []
+        headless:
+          annotations: {}
+        loadBalancerIP: ""
+        loadBalancerSourceRanges: []
+        nodePorts:
+          postgresql: ""
+        ports:
+          postgresql: 5432
+        sessionAffinity: None
+        sessionAffinityConfig: {}
+        type: ClusterIP
+      sidecars: []
+      startupProbe:
+        enabled: false
+        failureThreshold: 15
+        initialDelaySeconds: 30
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 1
+      terminationGracePeriodSeconds: ""
+      tolerations: []
+      topologySpreadConstraints: []
+      updateStrategy:
+        rollingUpdate: {}
+        type: RollingUpdate
+    replication:
+      applicationName: my_application
+      numSynchronousReplicas: 0
+      synchronousCommit: "off"
+    serviceAccount:
+      annotations: {}
+      automountServiceAccountToken: false
+      create: true
+      name: ""
+    serviceBindings:
+      enabled: false
+    shmVolume:
+      enabled: true
+      sizeLimit: ""
+    tls:
+      autoGenerated: false
+      certCAFilename: ""
+      certFilename: ""
+      certKeyFilename: ""
+      certificatesSecret: ""
+      crlFilename: ""
+      enabled: false
+      preferServerCiphers: true
+    volumePermissions:
+      containerSecurityContext:
+        runAsGroup: 0
+        runAsNonRoot: false
+        runAsUser: 0
+        seLinuxOptions: {}
+        seccompProfile:
+          type: RuntimeDefault
+      enabled: false
+      image:
+        digest: ""
+        pullPolicy: IfNotPresent
+        pullSecrets: []
+        registry: docker.io
+        repository: bitnami/os-shell
+        tag: 12-debian-12-r18
+      resources: {}
+      resourcesPreset: nano
+  priorityClassName: ""
+  production: false
+  proxy: passthrough
+  rbac:
+    create: false
+    rules: []
+  readinessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  replicaCount: 1
+  resources: {}
+  resourcesPreset: small
+  revisionHistoryLimitCount: 10
+  schedulerName: ""
+  service:
+    annotations: {}
+    clusterIP: ""
+    externalTrafficPolicy: Cluster
+    extraHeadlessPorts: []
+    extraPorts: []
+    headless:
+      annotations: {}
+      extraPorts: []
+    http:
+      enabled: true
+    loadBalancerIP: ""
+    loadBalancerSourceRanges: []
+    nodePorts:
+      http: ""
+      https: ""
+    ports:
+      http: 80
+      https: 443
+    sessionAffinity: None
+    sessionAffinityConfig: {}
+    type: ClusterIP
+  serviceAccount:
+    annotations: {}
+    automountServiceAccountToken: false
+    create: true
+    extraLabels: {}
+    name: ""
+  sidecars: []
+  spi:
+    existingSecret: ""
+    hostnameVerificationPolicy: ""
+    passwordsSecret: ""
+    truststoreFilename: keycloak-spi.truststore.jks
+    truststorePassword: ""
+  startupProbe:
+    enabled: false
+    failureThreshold: 60
+    initialDelaySeconds: 30
+    periodSeconds: 5
+    successThreshold: 1
+    timeoutSeconds: 1
+  statefulsetAnnotations: {}
+  terminationGracePeriodSeconds: ""
+  tls:
+    autoGenerated: false
+    enabled: false
+    existingSecret: ""
+    keystoreFilename: keycloak.keystore.jks
+    keystorePassword: ""
+    passwordsSecret: ""
+    truststoreFilename: keycloak.truststore.jks
+    truststorePassword: ""
+    usePem: false
+  tolerations: []
+  topologySpreadConstraints: []
+  updateStrategy:
+    rollingUpdate: {}
+    type: RollingUpdate
+kong:
+  admin:
+    annotations: {}
+    enabled: true
+    http:
+      containerPort: 8001
+      enabled: true
+      parameters: []
+      servicePort: 80
+    ingress:
+      annotations: {}
+      enabled: false
+      path: /
+      pathType: ImplementationSpecific
+    labels: {}
+    tls:
+      client:
+        caBundle: ""
+        secretName: ""
+      containerPort: 8444
+      enabled: false
+      parameters:
+      - http2
+      servicePort: 8444
+    type: ClusterIP
+  autoscaling:
+    behavior: {}
+    enabled: false
+    maxReplicas: 5
+    metrics:
+    - resource:
+        name: cpu
+        target:
+          averageUtilization: 80
+          type: Utilization
+      type: Resource
+    minReplicas: 2
+  certificates:
+    admin:
+      clusterIssuer: ""
+      commonName: kong.example
+      dnsNames: []
+      enabled: true
+      issuer: ""
+    cluster:
+      clusterIssuer: ""
+      commonName: kong_clustering
+      dnsNames: []
+      enabled: true
+      issuer: ""
+    clusterIssuer: ""
+    enabled: false
+    issuer: ""
+    portal:
+      clusterIssuer: ""
+      commonName: developer.example
+      dnsNames: []
+      enabled: true
+      issuer: ""
+    proxy:
+      clusterIssuer: ""
+      commonName: app.example
+      dnsNames: []
+      enabled: true
+      issuer: ""
+  cluster:
+    annotations: {}
+    enabled: false
+    ingress:
+      annotations: {}
+      enabled: false
+      path: /
+      pathType: ImplementationSpecific
+    labels: {}
+    tls:
+      containerPort: 8005
+      enabled: false
+      parameters: []
+      servicePort: 8005
+    type: ClusterIP
+  clusterCaSecretName: ""
+  clustertelemetry:
+    annotations: {}
+    enabled: false
+    ingress:
+      annotations: {}
+      enabled: false
+      path: /
+      pathType: ImplementationSpecific
+    labels: {}
+    tls:
+      containerPort: 8006
+      enabled: false
+      parameters: []
+      servicePort: 8006
+    type: ClusterIP
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - ALL
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    runAsUser: 1000
+    seccompProfile:
+      type: RuntimeDefault
+  dblessConfig:
+    config: ""
+    configMap: ""
+    secret: ""
+  deployment:
+    daemonset: false
+    hostNetwork: false
+    hostname: ""
+    kong:
+      enabled: true
+    prefixDir:
+      sizeLimit: 256Mi
+    serviceAccount:
+      automountServiceAccountToken: false
+      create: true
+    test:
+      enabled: false
+    tmpDir:
+      sizeLimit: 1Gi
+  deploymentAnnotations: {}
+  enterprise:
+    enabled: false
+    portal:
+      enabled: false
+    rbac:
+      admin_gui_auth: basic-auth
+      admin_gui_auth_conf_secret: CHANGEME-admin-gui-auth-conf-secret
+      enabled: false
+      session_conf_secret: kong-session-config
+    smtp:
+      admin_emails_from: none@example.com
+      admin_emails_reply_to: none@example.com
+      auth:
+        smtp_password_secret: CHANGEME-smtp-password
+        smtp_username: ""
+      enabled: false
+      portal_emails_from: none@example.com
+      portal_emails_reply_to: none@example.com
+      smtp_admin_emails: none@example.com
+      smtp_auth_type: ""
+      smtp_host: smtp.example.com
+      smtp_port: 587
+      smtp_ssl: nil
+      smtp_starttls: true
+    vitals:
+      enabled: true
+  env:
+    admin_access_log: /dev/stdout
+    admin_error_log: /dev/stderr
+    admin_gui_access_log: /dev/stdout
+    admin_gui_error_log: /dev/stderr
+    database: postgres
+    nginx_worker_processes: "2"
+    portal_api_access_log: /dev/stdout
+    portal_api_error_log: /dev/stderr
+    prefix: /kong_prefix/
+    proxy_access_log: /dev/stdout
+    proxy_error_log: /dev/stderr
+    router_flavor: traditional
+  envFrom: []
+  extraConfigMaps: []
+  extraLabels: {}
+  extraObjects: []
+  extraSecrets: []
+  global:
+    hub:
+      auth:
+        realmId: ""
+        robotSecret: "1"
+        robotUser: "1"
+      endpoints:
+        auth: https://auth.privateaim.dev
+        core: https://core.privateaim.dev
+        messenger: https://messenger.privateaim.dev
+        storage: https://storage.privateaim.dev
+  image:
+    pullPolicy: IfNotPresent
+    repository: kong
+    tag: "3.6"
+  ingressController:
+    adminApi:
+      tls:
+        client:
+          caSecretName: ""
+          certProvided: false
+          enabled: false
+          secretName: ""
+    admissionWebhook:
+      certificate:
+        provided: false
+      enabled: true
+      failurePolicy: Ignore
+      namespaceSelector: {}
+      port: 8080
+      service:
+        labels: {}
+    args: []
+    enabled: false
+    env:
+      kong_admin_tls_skip_verify: true
+    envFrom: []
+    gatewayDiscovery:
+      adminApiService:
+        name: ""
+        namespace: ""
+      enabled: false
+      generateAdminApiService: false
+    image:
+      repository: kong/kubernetes-ingress-controller
+      tag: "3.1"
+    ingressClass: kong
+    ingressClassAnnotations: {}
+    konnect:
+      apiHostname: us.kic.api.konghq.com
+      enabled: false
+      license:
+        enabled: false
+      runtimeGroupID: ""
+      tlsClientCertSecretName: konnect-client-tls
+    livenessProbe:
+      failureThreshold: 3
+      httpGet:
+        path: /healthz
+        port: 10254
+        scheme: HTTP
+      initialDelaySeconds: 5
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 5
+    rbac:
+      create: true
+    readinessProbe:
+      failureThreshold: 3
+      httpGet:
+        path: /readyz
+        port: 10254
+        scheme: HTTP
+      initialDelaySeconds: 5
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 5
+    resources: {}
+    watchNamespaces: []
+  lifecycle:
+    preStop:
+      exec:
+        command:
+        - kong
+        - quit
+        - --wait=15
+  livenessProbe:
+    failureThreshold: 3
+    httpGet:
+      path: /status
+      port: status
+      scheme: HTTP
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 5
+  manager:
+    annotations: {}
+    enabled: false
+    http:
+      containerPort: 8002
+      enabled: true
+      parameters: []
+      servicePort: 8002
+    ingress:
+      annotations: {}
+      enabled: false
+      path: /
+      pathType: ImplementationSpecific
+    labels: {}
+    tls:
+      containerPort: 8445
+      enabled: true
+      parameters:
+      - http2
+      servicePort: 8445
+    type: NodePort
+  migrations:
+    annotations:
+      sidecar.istio.io/inject: false
+    jobAnnotations: {}
+    postUpgrade: true
+    preUpgrade: true
+    resources: {}
+  nodeSelector: {}
+  plugins: {}
+  podAnnotations:
+    kuma.io/gateway: enabled
+    traffic.sidecar.istio.io/includeInboundPorts: ""
+  podDisruptionBudget:
+    enabled: false
+  podLabels: {}
+  podSecurityPolicy:
+    annotations: {}
+    enabled: false
+    labels: {}
+    spec:
+      allowPrivilegeEscalation: false
+      fsGroup:
+        rule: RunAsAny
+      hostIPC: false
+      hostNetwork: false
+      hostPID: false
+      privileged: false
+      readOnlyRootFilesystem: true
+      runAsGroup:
+        rule: RunAsAny
+      runAsUser:
+        rule: RunAsAny
+      seLinux:
+        rule: RunAsAny
+      supplementalGroups:
+        rule: RunAsAny
+      volumes:
+      - configMap
+      - secret
+      - emptyDir
+      - projected
+  portal:
+    annotations: {}
+    enabled: false
+    http:
+      containerPort: 8003
+      enabled: true
+      parameters: []
+      servicePort: 8003
+    ingress:
+      annotations: {}
+      enabled: false
+      path: /
+      pathType: ImplementationSpecific
+    labels: {}
+    tls:
+      containerPort: 8446
+      enabled: true
+      parameters:
+      - http2
+      servicePort: 8446
+    type: NodePort
+  portalapi:
+    annotations: {}
+    enabled: false
+    http:
+      containerPort: 8004
+      enabled: true
+      parameters: []
+      servicePort: 8004
+    ingress:
+      annotations: {}
+      enabled: false
+      path: /
+      pathType: ImplementationSpecific
+    labels: {}
+    tls:
+      containerPort: 8447
+      enabled: true
+      parameters:
+      - http2
+      servicePort: 8447
+    type: NodePort
+  postgresql:
+    architecture: standalone
+    audit:
+      clientMinMessages: error
+      logConnections: false
+      logDisconnections: false
+      logHostname: false
+      logLinePrefix: ""
+      logTimezone: ""
+      pgAuditLog: ""
+      pgAuditLogCatalog: "off"
+    auth:
+      database: kong
+      enablePostgresUser: true
+      existingSecret: ""
+      password: kong
+      postgresPassword: supersecretpassword
+      replicationPassword: ""
+      replicationUsername: repl_user
+      secretKeys:
+        adminPasswordKey: postgres-password
+        replicationPasswordKey: replication-password
+        userPasswordKey: password
+      usePasswordFiles: false
+      username: kong
+    clusterDomain: cluster.local
+    common:
+      exampleValue: common-chart
+      global:
+        hub:
+          auth:
+            realmId: ""
+            robotSecret: "1"
+            robotUser: "1"
+          endpoints:
+            auth: https://auth.privateaim.dev
+            core: https://core.privateaim.dev
+            messenger: https://messenger.privateaim.dev
+            storage: https://storage.privateaim.dev
+        imagePullSecrets: []
+        imageRegistry: ""
+        postgresql:
+          auth:
+            database: ""
+            existingSecret: ""
+            password: ""
+            postgresPassword: ""
+            secretKeys:
+              adminPasswordKey: ""
+              replicationPasswordKey: ""
+              userPasswordKey: ""
+            username: ""
+          service:
+            ports:
+              postgresql: ""
+        storageClass: ""
+    commonAnnotations: {}
+    commonLabels: {}
+    containerPorts:
+      postgresql: 5432
+    diagnosticMode:
+      args:
+      - infinity
+      command:
+      - sleep
+      enabled: false
+    enabled: true
+    extraDeploy: []
+    fullnameOverride: ""
+    global:
+      hub:
+        auth:
+          realmId: ""
+          robotSecret: "1"
+          robotUser: "1"
+        endpoints:
+          auth: https://auth.privateaim.dev
+          core: https://core.privateaim.dev
+          messenger: https://messenger.privateaim.dev
+          storage: https://storage.privateaim.dev
+      imagePullSecrets: []
+      imageRegistry: ""
+      postgresql:
+        auth:
+          database: ""
+          existingSecret: ""
+          password: ""
+          postgresPassword: ""
+          secretKeys:
+            adminPasswordKey: ""
+            replicationPasswordKey: ""
+            userPasswordKey: ""
+          username: ""
+        service:
+          ports:
+            postgresql: ""
+      storageClass: ""
+    image:
+      debug: false
+      digest: ""
+      pullPolicy: IfNotPresent
+      pullSecrets: []
+      registry: docker.io
+      repository: bitnami/postgresql
+      tag: 13.11.0-debian-11-r20
+    kubeVersion: ""
+    ldap:
+      basedn: ""
+      binddn: ""
+      bindpw: ""
+      enabled: false
+      port: ""
+      prefix: ""
+      scheme: ""
+      searchAttribute: ""
+      searchFilter: ""
+      server: ""
+      suffix: ""
+      tls:
+        enabled: false
+      uri: ""
+    metrics:
+      containerPorts:
+        metrics: 9187
+      containerSecurityContext:
+        enabled: true
+        runAsNonRoot: true
+        runAsUser: 1001
+      customLivenessProbe: {}
+      customMetrics: {}
+      customReadinessProbe: {}
+      customStartupProbe: {}
+      enabled: false
+      extraEnvVars: []
+      image:
+        digest: ""
+        pullPolicy: IfNotPresent
+        pullSecrets: []
+        registry: docker.io
+        repository: bitnami/postgres-exporter
+        tag: 0.11.1-debian-11-r22
+      livenessProbe:
+        enabled: true
+        failureThreshold: 6
+        initialDelaySeconds: 5
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      prometheusRule:
+        enabled: false
+        labels: {}
+        namespace: ""
+        rules: []
+      readinessProbe:
+        enabled: true
+        failureThreshold: 6
+        initialDelaySeconds: 5
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      resources:
+        limits: {}
+        requests: {}
+      service:
+        annotations:
+          prometheus.io/port: '{{ .Values.metrics.service.ports.metrics }}'
+          prometheus.io/scrape: "true"
+        clusterIP: ""
+        ports:
+          metrics: 9187
+        sessionAffinity: None
+      serviceMonitor:
+        enabled: false
+        honorLabels: false
+        interval: ""
+        jobLabel: ""
+        labels: {}
+        metricRelabelings: []
+        namespace: ""
+        relabelings: []
+        scrapeTimeout: ""
+        selector: {}
+      startupProbe:
+        enabled: false
+        failureThreshold: 15
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 1
+    nameOverride: kong-postgresql
+    networkPolicy:
+      egressRules:
+        customRules: {}
+        denyConnectionsToExternal: false
+      enabled: false
+      ingressRules:
+        primaryAccessOnlyFrom:
+          customRules: {}
+          enabled: false
+          namespaceSelector: {}
+          podSelector: {}
+        readReplicasAccessOnlyFrom:
+          customRules: {}
+          enabled: false
+          namespaceSelector: {}
+          podSelector: {}
+      metrics:
+        enabled: false
+        namespaceSelector: {}
+        podSelector: {}
+    postgresqlDataDir: /bitnami/postgresql/data
+    postgresqlSharedPreloadLibraries: pgaudit
+    primary:
+      affinity: {}
+      annotations: {}
+      args: []
+      command: []
+      configuration: ""
+      containerSecurityContext:
+        enabled: true
+        runAsUser: 1001
+      customLivenessProbe: {}
+      customReadinessProbe: {}
+      customStartupProbe: {}
+      existingConfigmap: ""
+      existingExtendedConfigmap: ""
+      extendedConfiguration: ""
+      extraEnvVars: []
+      extraEnvVarsCM: ""
+      extraEnvVarsSecret: ""
+      extraPodSpec: {}
+      extraVolumeMounts: []
+      extraVolumes: []
+      hostAliases: []
+      hostIPC: false
+      hostNetwork: false
+      initContainers: []
+      initdb:
+        args: ""
+        password: ""
+        postgresqlWalDir: ""
+        scripts: {}
+        scriptsConfigMap: ""
+        scriptsSecret: ""
+        user: ""
+      labels: {}
+      lifecycleHooks: {}
+      livenessProbe:
+        enabled: true
+        failureThreshold: 6
+        initialDelaySeconds: 30
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      name: primary
+      nodeAffinityPreset:
+        key: ""
+        type: ""
+        values: []
+      nodeSelector: {}
+      persistence:
+        accessModes:
+        - ReadWriteOnce
+        annotations: {}
+        dataSource: {}
+        enabled: true
+        existingClaim: ""
+        labels: {}
+        mountPath: /bitnami/postgresql
+        selector: {}
+        size: 8Gi
+        storageClass: ""
+        subPath: ""
+      pgHbaConfiguration: ""
+      podAffinityPreset: ""
+      podAnnotations: {}
+      podAntiAffinityPreset: soft
+      podLabels: {}
+      podSecurityContext:
+        enabled: true
+        fsGroup: 1001
+      priorityClassName: ""
+      readinessProbe:
+        enabled: true
+        failureThreshold: 6
+        initialDelaySeconds: 5
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      resources:
+        limits: {}
+        requests:
+          cpu: 250m
+          memory: 256Mi
+      schedulerName: ""
+      service:
+        annotations: {}
+        clusterIP: ""
+        externalTrafficPolicy: Cluster
+        extraPorts: []
+        loadBalancerIP: ""
+        loadBalancerSourceRanges: []
+        nodePorts:
+          postgresql: ""
+        ports:
+          postgresql: 5432
+        sessionAffinity: None
+        sessionAffinityConfig: {}
+        type: ClusterIP
+      sidecars: []
+      standby:
+        enabled: false
+        primaryHost: ""
+        primaryPort: ""
+      startupProbe:
+        enabled: false
+        failureThreshold: 15
+        initialDelaySeconds: 30
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 1
+      terminationGracePeriodSeconds: ""
+      tolerations: []
+      topologySpreadConstraints: []
+      updateStrategy:
+        rollingUpdate: {}
+        type: RollingUpdate
+    psp:
+      create: false
+    rbac:
+      create: false
+      rules: []
+    readReplicas:
+      affinity: {}
+      annotations: {}
+      args: []
+      command: []
+      containerSecurityContext:
+        enabled: true
+        runAsUser: 1001
+      customLivenessProbe: {}
+      customReadinessProbe: {}
+      customStartupProbe: {}
+      extendedConfiguration: ""
+      extraEnvVars: []
+      extraEnvVarsCM: ""
+      extraEnvVarsSecret: ""
+      extraPodSpec: {}
+      extraVolumeMounts: []
+      extraVolumes: []
+      hostAliases: []
+      hostIPC: false
+      hostNetwork: false
+      initContainers: []
+      labels: {}
+      lifecycleHooks: {}
+      livenessProbe:
+        enabled: true
+        failureThreshold: 6
+        initialDelaySeconds: 30
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      name: read
+      nodeAffinityPreset:
+        key: ""
+        type: ""
+        values: []
+      nodeSelector: {}
+      persistence:
+        accessModes:
+        - ReadWriteOnce
+        annotations: {}
+        dataSource: {}
+        enabled: true
+        existingClaim: ""
+        labels: {}
+        mountPath: /bitnami/postgresql
+        selector: {}
+        size: 8Gi
+        storageClass: ""
+        subPath: ""
+      podAffinityPreset: ""
+      podAnnotations: {}
+      podAntiAffinityPreset: soft
+      podLabels: {}
+      podSecurityContext:
+        enabled: true
+        fsGroup: 1001
+      priorityClassName: ""
+      readinessProbe:
+        enabled: true
+        failureThreshold: 6
+        initialDelaySeconds: 5
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      replicaCount: 1
+      resources:
+        limits: {}
+        requests:
+          cpu: 250m
+          memory: 256Mi
+      schedulerName: ""
+      service:
+        annotations: {}
+        clusterIP: ""
+        externalTrafficPolicy: Cluster
+        extraPorts: []
+        loadBalancerIP: ""
+        loadBalancerSourceRanges: []
+        nodePorts:
+          postgresql: ""
+        ports:
+          postgresql: 5432
+        sessionAffinity: None
+        sessionAffinityConfig: {}
+        type: ClusterIP
+      sidecars: []
+      startupProbe:
+        enabled: false
+        failureThreshold: 15
+        initialDelaySeconds: 30
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 1
+      terminationGracePeriodSeconds: ""
+      tolerations: []
+      topologySpreadConstraints: []
+      updateStrategy:
+        rollingUpdate: {}
+        type: RollingUpdate
+    replication:
+      applicationName: my_application
+      numSynchronousReplicas: 0
+      synchronousCommit: "off"
+    service:
+      ports:
+        postgresql: "5432"
+    serviceAccount:
+      annotations: {}
+      automountServiceAccountToken: true
+      create: false
+      name: ""
+    shmVolume:
+      enabled: true
+      sizeLimit: ""
+    tls:
+      autoGenerated: false
+      certCAFilename: ""
+      certFilename: ""
+      certKeyFilename: ""
+      certificatesSecret: ""
+      crlFilename: ""
+      enabled: false
+      preferServerCiphers: true
+    volumePermissions:
+      containerSecurityContext:
+        runAsUser: 0
+      enabled: false
+      image:
+        digest: ""
+        pullPolicy: IfNotPresent
+        pullSecrets: []
+        registry: docker.io
+        repository: bitnami/bitnami-shell
+        tag: 11-debian-11-r45
+      resources:
+        limits: {}
+        requests: {}
+  priorityClassName: ""
+  proxy:
+    annotations: {}
+    enabled: true
+    http:
+      containerPort: 8000
+      enabled: true
+      parameters: []
+      servicePort: 80
+    ingress:
+      annotations: {}
+      enabled: false
+      hosts: []
+      labels: {}
+      path: /
+      pathType: ImplementationSpecific
+    labels:
+      enable-metrics: "true"
+    nameOverride: ""
+    stream: []
+    tls:
+      appProtocol: ""
+      containerPort: 8443
+      enabled: false
+      parameters:
+      - http2
+      servicePort: 443
+    type: ClusterIP
+  readinessProbe:
+    failureThreshold: 3
+    httpGet:
+      path: /status/ready
+      port: status
+      scheme: HTTP
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 5
+  replicaCount: 1
+  resources: {}
+  secretVolumes: []
+  securityContext: {}
+  serviceMonitor:
+    enabled: false
+  status:
+    enabled: true
+    http:
+      containerPort: 8100
+      enabled: true
+      parameters: []
+    tls:
+      containerPort: 8543
+      enabled: false
+      parameters: []
+  terminationGracePeriodSeconds: 30
+  tolerations: []
+  udpProxy:
+    annotations: {}
+    enabled: false
+    labels: {}
+    stream: []
+    type: LoadBalancer
+  updateStrategy: {}
+  waitImage:
+    enabled: true
+    pullPolicy: IfNotPresent
+
+HOOKS:
+---
+# Source: flame-node/charts/blaze/templates/tests/test-connection.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "blaze-test-connection"
+  labels:
+    helm.sh/chart: blaze-0.1.0
+    app.kubernetes.io/name: blaze
+    app.kubernetes.io/instance: blaze
+    app.kubernetes.io/version: "0.25.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['blaze:80']
+  restartPolicy: Never
+---
+# Source: flame-node/charts/flame-node-result-service/charts/minio/templates/post-job.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: blaze-minio-post-job
+  labels:
+    app: minio-post-job
+    chart: minio-5.1.0
+    release: blaze
+    heritage: Helm
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+spec:
+  template:
+    metadata:
+      labels:
+        app: minio-job
+        release: blaze
+    spec:
+      restartPolicy: OnFailure      
+      volumes:
+        - name: etc-path
+          emptyDir: {}
+        - name: tmp
+          emptyDir: {}
+        - name: minio-configuration
+          projected:
+            sources:
+              - configMap:
+                  name: blaze-minio
+              - secret:
+                  name: blaze-minio
+      serviceAccountName: minio-sa
+      containers:
+        - name: minio-make-bucket
+          image: "quay.io/minio/mc:RELEASE.2024-03-03T00-13-08Z"
+          imagePullPolicy: IfNotPresent
+          command: [ "/bin/sh", "/config/initialize" ]
+          env:
+            - name: MINIO_ENDPOINT
+              value: blaze-minio
+            - name: MINIO_PORT
+              value: "9000"
+          volumeMounts:
+            - name: etc-path
+              mountPath: /etc/minio/mc
+            - name: tmp
+              mountPath: /tmp
+            - name: minio-configuration
+              mountPath: /config
+          resources:
+            requests:
+              memory: 128Mi
+        - name: minio-make-user
+          image: "quay.io/minio/mc:RELEASE.2024-03-03T00-13-08Z"
+          imagePullPolicy: IfNotPresent
+          command: [ "/bin/sh", "/config/add-user" ]
+          env:
+            - name: MINIO_ENDPOINT
+              value: blaze-minio
+            - name: MINIO_PORT
+              value: "9000"
+          volumeMounts:
+            - name: etc-path
+              mountPath: /etc/minio/mc
+            - name: tmp
+              mountPath: /tmp
+            - name: minio-configuration
+              mountPath: /config
+          resources:
+            requests:
+              memory: 128Mi
+---
+# Source: flame-node/charts/keycloak/templates/keycloak-config-cli-job.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: blaze-keycloak-keycloak-config-cli
+  namespace: "flame"
+  labels:
+    app.kubernetes.io/instance: blaze
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/version: 24.0.3
+    helm.sh/chart: keycloak-21.0.2
+    app.kubernetes.io/component: keycloak-config-cli
+  annotations:
+    helm.sh/hook: post-install,post-upgrade,post-rollback
+    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
+    helm.sh/hook-weight: "5"
+spec:
+  backoffLimit: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: blaze
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: keycloak
+        app.kubernetes.io/version: 24.0.3
+        helm.sh/chart: keycloak-21.0.2
+        app.kubernetes.io/component: keycloak-config-cli
+      annotations:
+    spec:
+      serviceAccountName: blaze-keycloak
+      
+      restartPolicy: Never
+      securityContext:
+        fsGroup: 1001
+        fsGroupChangePolicy: Always
+        supplementalGroups: []
+        sysctls: []
+      automountServiceAccountToken: true
+      containers:
+        - name: keycloak-config-cli
+          image: docker.io/bitnami/keycloak-config-cli:5.12.0-debian-12-r1
+          imagePullPolicy: IfNotPresent
+          command:
+            - java
+            - -jar
+            - /opt/bitnami/keycloak-config-cli/keycloak-config-cli.jar
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsGroup: 1001
+            runAsNonRoot: true
+            runAsUser: 1001
+            seLinuxOptions: {}
+            seccompProfile:
+              type: RuntimeDefault
+          env:
+            - name: KEYCLOAK_URL
+              value: http://blaze-keycloak-headless:8080/
+            - name: KEYCLOAK_USER
+              value: "admin"
+            - name: KEYCLOAK_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: blaze-keycloak
+                  key: admin-password
+            - name: IMPORT_FILES_LOCATIONS
+              value: /config/*
+            - name: KEYCLOAK_AVAILABILITYCHECK_ENABLED
+              value: "true"
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: config-volume
+              mountPath: /config
+          resources:
+            limits:
+              cpu: 750m
+              ephemeral-storage: 1024Mi
+              memory: 768Mi
+            requests:
+              cpu: 500m
+              ephemeral-storage: 50Mi
+              memory: 512Mi
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        - name: config-volume
+          configMap:
+            name: flame-default-realm
+---
+# Source: flame-node/charts/kong/templates/migrations-post-upgrade.yaml
+# Why is this Job duplicated and not using only helm hooks?
+# See: https://github.com/helm/charts/pull/7362
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: blaze-kong-post-upgrade-migrations
+  namespace: flame
+  labels:
+    app.kubernetes.io/name: kong
+    helm.sh/chart: kong-2.38.0
+    app.kubernetes.io/instance: "blaze"
+    app.kubernetes.io/managed-by: "Helm"
+    app.kubernetes.io/version: "3.6"
+    app.kubernetes.io/component: post-upgrade-migrations
+  annotations:
+    helm.sh/hook: "post-upgrade"
+    helm.sh/hook-delete-policy: "before-hook-creation"
+spec:
+  backoffLimit: 
+  template:
+    metadata:
+      name: kong-post-upgrade-migrations
+      labels:
+        app.kubernetes.io/name: kong
+        helm.sh/chart: kong-2.38.0
+        app.kubernetes.io/instance: "blaze"
+        app.kubernetes.io/managed-by: "Helm"
+        app.kubernetes.io/version: "3.6"
+        app.kubernetes.io/component: post-upgrade-migrations
+      annotations:
+        sidecar.istio.io/inject: "false"
+        kuma.io/service-account-token-volume: blaze-kong-token
+    spec:
+      serviceAccountName: blaze-kong
+      automountServiceAccountToken: false
+      
+      initContainers:
+      - name: wait-for-postgres 
+        image: kong:3.6
+        imagePullPolicy: IfNotPresent
+        env:
+         
+        
+        
+        - name: KONG_ADMIN_ACCESS_LOG
+          value: "/dev/stdout"
+        - name: KONG_ADMIN_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_ADMIN_GUI_ACCESS_LOG
+          value: "/dev/stdout"
+        - name: KONG_ADMIN_GUI_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_ADMIN_LISTEN
+          value: "0.0.0.0:8001, [::]:8001"
+        - name: KONG_CLUSTER_LISTEN
+          value: "off"
+        - name: KONG_DATABASE
+          value: "postgres"
+        - name: KONG_LUA_PACKAGE_PATH
+          value: "/opt/?.lua;/opt/?/init.lua;;"
+        - name: KONG_NGINX_WORKER_PROCESSES
+          value: "2"
+        - name: KONG_PG_HOST
+          value: "blaze-kong-postgresql"
+        - name: KONG_PG_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: blaze-kong-postgresql
+              key: password
+        - name: KONG_PG_PORT
+          value: "5432"
+        - name: KONG_PORTAL_API_ACCESS_LOG
+          value: "/dev/stdout"
+        - name: KONG_PORTAL_API_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_PORT_MAPS
+          value: "80:8000"
+        - name: KONG_PREFIX
+          value: "/kong_prefix/"
+        - name: KONG_PROXY_ACCESS_LOG
+          value: "/dev/stdout"
+        - name: KONG_PROXY_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_PROXY_LISTEN
+          value: "0.0.0.0:8000, [::]:8000"
+        - name: KONG_PROXY_STREAM_ACCESS_LOG
+          value: "/dev/stdout basic"
+        - name: KONG_PROXY_STREAM_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_ROUTER_FLAVOR
+          value: "traditional"
+        - name: KONG_STATUS_ACCESS_LOG
+          value: "off"
+        - name: KONG_STATUS_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_STATUS_LISTEN
+          value: "0.0.0.0:8100, [::]:8100"
+        - name: KONG_STREAM_LISTEN
+          value: "off"
+        - name: KONG_NGINX_DAEMON
+          value: "off"
+        
+        command: [ "bash", "/wait_postgres/wait.sh" ]
+        volumeMounts:
+        - name: blaze-kong-bash-wait-for-postgres
+          mountPath: /wait_postgres
+        resources:
+          {}
+      containers:
+      - name: kong-post-upgrade-migrations
+        image: kong:3.6
+        imagePullPolicy: IfNotPresent
+        securityContext:
+        
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1000
+          seccompProfile:
+            type: RuntimeDefault 
+        env:
+         
+        
+        
+        - name: KONG_ADMIN_ACCESS_LOG
+          value: "/dev/stdout"
+        - name: KONG_ADMIN_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_ADMIN_GUI_ACCESS_LOG
+          value: "/dev/stdout"
+        - name: KONG_ADMIN_GUI_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_ADMIN_LISTEN
+          value: "0.0.0.0:8001, [::]:8001"
+        - name: KONG_CLUSTER_LISTEN
+          value: "off"
+        - name: KONG_DATABASE
+          value: "postgres"
+        - name: KONG_LUA_PACKAGE_PATH
+          value: "/opt/?.lua;/opt/?/init.lua;;"
+        - name: KONG_NGINX_WORKER_PROCESSES
+          value: "2"
+        - name: KONG_PG_HOST
+          value: "blaze-kong-postgresql"
+        - name: KONG_PG_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: blaze-kong-postgresql
+              key: password
+        - name: KONG_PG_PORT
+          value: "5432"
+        - name: KONG_PORTAL_API_ACCESS_LOG
+          value: "/dev/stdout"
+        - name: KONG_PORTAL_API_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_PORT_MAPS
+          value: "80:8000"
+        - name: KONG_PREFIX
+          value: "/kong_prefix/"
+        - name: KONG_PROXY_ACCESS_LOG
+          value: "/dev/stdout"
+        - name: KONG_PROXY_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_PROXY_LISTEN
+          value: "0.0.0.0:8000, [::]:8000"
+        - name: KONG_PROXY_STREAM_ACCESS_LOG
+          value: "/dev/stdout basic"
+        - name: KONG_PROXY_STREAM_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_ROUTER_FLAVOR
+          value: "traditional"
+        - name: KONG_STATUS_ACCESS_LOG
+          value: "off"
+        - name: KONG_STATUS_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_STATUS_LISTEN
+          value: "0.0.0.0:8100, [::]:8100"
+        - name: KONG_STREAM_LISTEN
+          value: "off"
+        - name: KONG_NGINX_DAEMON
+          value: "off"
+        
+        args: [ "kong", "migrations", "finish" ]
+        volumeMounts:
+        - name: blaze-kong-prefix-dir
+          mountPath: /kong_prefix/
+        - name: blaze-kong-tmp
+          mountPath: /tmp
+        
+        resources:
+          {}
+      securityContext:
+        {}
+      restartPolicy: OnFailure
+      volumes:
+      - name: blaze-kong-prefix-dir
+        emptyDir:
+          sizeLimit: 256Mi
+      - name: blaze-kong-tmp
+        emptyDir:
+          sizeLimit: 1Gi
+      - name: blaze-kong-token
+        projected:
+          sources:
+          - serviceAccountToken:
+              expirationSeconds: 3607
+              path: token
+          - configMap:
+              items:
+              - key: ca.crt
+                path: ca.crt
+              name: kube-root-ca.crt
+          - downwardAPI:
+              items:
+              - fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+                path: namespace
+      - name: blaze-kong-bash-wait-for-postgres
+        configMap:
+          name: blaze-kong-bash-wait-for-postgres
+          defaultMode: 0755
+---
+# Source: flame-node/charts/kong/templates/migrations-pre-upgrade.yaml
+# Why is this Job duplicated and not using only helm hooks?
+# See: https://github.com/helm/charts/pull/7362
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: blaze-kong-pre-upgrade-migrations
+  namespace: flame
+  labels:
+    app.kubernetes.io/name: kong
+    helm.sh/chart: kong-2.38.0
+    app.kubernetes.io/instance: "blaze"
+    app.kubernetes.io/managed-by: "Helm"
+    app.kubernetes.io/version: "3.6"
+    app.kubernetes.io/component: pre-upgrade-migrations
+  annotations:
+    helm.sh/hook: "pre-upgrade"
+    helm.sh/hook-delete-policy: "before-hook-creation"
+    argocd.argoproj.io/hook: Sync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
+spec:
+  backoffLimit: 
+  template:
+    metadata:
+      name: kong-pre-upgrade-migrations
+      labels:
+        app.kubernetes.io/name: kong
+        helm.sh/chart: kong-2.38.0
+        app.kubernetes.io/instance: "blaze"
+        app.kubernetes.io/managed-by: "Helm"
+        app.kubernetes.io/version: "3.6"
+        app.kubernetes.io/component: pre-upgrade-migrations
+      annotations:
+        sidecar.istio.io/inject: "false"
+        kuma.io/service-account-token-volume: blaze-kong-token
+    spec:
+      serviceAccountName: blaze-kong
+      automountServiceAccountToken: false
+      
+      initContainers:
+      - name: wait-for-postgres 
+        image: kong:3.6
+        imagePullPolicy: IfNotPresent
+        env:
+         
+        
+        
+        - name: KONG_ADMIN_ACCESS_LOG
+          value: "/dev/stdout"
+        - name: KONG_ADMIN_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_ADMIN_GUI_ACCESS_LOG
+          value: "/dev/stdout"
+        - name: KONG_ADMIN_GUI_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_ADMIN_LISTEN
+          value: "0.0.0.0:8001, [::]:8001"
+        - name: KONG_CLUSTER_LISTEN
+          value: "off"
+        - name: KONG_DATABASE
+          value: "postgres"
+        - name: KONG_LUA_PACKAGE_PATH
+          value: "/opt/?.lua;/opt/?/init.lua;;"
+        - name: KONG_NGINX_WORKER_PROCESSES
+          value: "2"
+        - name: KONG_PG_HOST
+          value: "blaze-kong-postgresql"
+        - name: KONG_PG_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: blaze-kong-postgresql
+              key: password
+        - name: KONG_PG_PORT
+          value: "5432"
+        - name: KONG_PORTAL_API_ACCESS_LOG
+          value: "/dev/stdout"
+        - name: KONG_PORTAL_API_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_PORT_MAPS
+          value: "80:8000"
+        - name: KONG_PREFIX
+          value: "/kong_prefix/"
+        - name: KONG_PROXY_ACCESS_LOG
+          value: "/dev/stdout"
+        - name: KONG_PROXY_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_PROXY_LISTEN
+          value: "0.0.0.0:8000, [::]:8000"
+        - name: KONG_PROXY_STREAM_ACCESS_LOG
+          value: "/dev/stdout basic"
+        - name: KONG_PROXY_STREAM_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_ROUTER_FLAVOR
+          value: "traditional"
+        - name: KONG_STATUS_ACCESS_LOG
+          value: "off"
+        - name: KONG_STATUS_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_STATUS_LISTEN
+          value: "0.0.0.0:8100, [::]:8100"
+        - name: KONG_STREAM_LISTEN
+          value: "off"
+        - name: KONG_NGINX_DAEMON
+          value: "off"
+        
+        command: [ "bash", "/wait_postgres/wait.sh" ]
+        volumeMounts:
+        - name: blaze-kong-bash-wait-for-postgres
+          mountPath: /wait_postgres
+        resources:
+          {}
+      containers:
+      - name: kong-upgrade-migrations
+        image: kong:3.6
+        imagePullPolicy: IfNotPresent
+        securityContext:
+        
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1000
+          seccompProfile:
+            type: RuntimeDefault
+        env:
+         
+        
+        
+        - name: KONG_ADMIN_ACCESS_LOG
+          value: "/dev/stdout"
+        - name: KONG_ADMIN_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_ADMIN_GUI_ACCESS_LOG
+          value: "/dev/stdout"
+        - name: KONG_ADMIN_GUI_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_ADMIN_LISTEN
+          value: "0.0.0.0:8001, [::]:8001"
+        - name: KONG_CLUSTER_LISTEN
+          value: "off"
+        - name: KONG_DATABASE
+          value: "postgres"
+        - name: KONG_LUA_PACKAGE_PATH
+          value: "/opt/?.lua;/opt/?/init.lua;;"
+        - name: KONG_NGINX_WORKER_PROCESSES
+          value: "2"
+        - name: KONG_PG_HOST
+          value: "blaze-kong-postgresql"
+        - name: KONG_PG_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: blaze-kong-postgresql
+              key: password
+        - name: KONG_PG_PORT
+          value: "5432"
+        - name: KONG_PORTAL_API_ACCESS_LOG
+          value: "/dev/stdout"
+        - name: KONG_PORTAL_API_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_PORT_MAPS
+          value: "80:8000"
+        - name: KONG_PREFIX
+          value: "/kong_prefix/"
+        - name: KONG_PROXY_ACCESS_LOG
+          value: "/dev/stdout"
+        - name: KONG_PROXY_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_PROXY_LISTEN
+          value: "0.0.0.0:8000, [::]:8000"
+        - name: KONG_PROXY_STREAM_ACCESS_LOG
+          value: "/dev/stdout basic"
+        - name: KONG_PROXY_STREAM_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_ROUTER_FLAVOR
+          value: "traditional"
+        - name: KONG_STATUS_ACCESS_LOG
+          value: "off"
+        - name: KONG_STATUS_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_STATUS_LISTEN
+          value: "0.0.0.0:8100, [::]:8100"
+        - name: KONG_STREAM_LISTEN
+          value: "off"
+        - name: KONG_NGINX_DAEMON
+          value: "off"
+        
+        args: [ "kong", "migrations", "up" ]
+        volumeMounts:
+        - name: blaze-kong-prefix-dir
+          mountPath: /kong_prefix/
+        - name: blaze-kong-tmp
+          mountPath: /tmp
+        
+        resources:
+          {}
+      securityContext:
+        {}
+      restartPolicy: OnFailure
+      volumes:
+      - name: blaze-kong-prefix-dir
+        emptyDir:
+          sizeLimit: 256Mi
+      - name: blaze-kong-tmp
+        emptyDir:
+          sizeLimit: 1Gi
+      - name: blaze-kong-token
+        projected:
+          sources:
+          - serviceAccountToken:
+              expirationSeconds: 3607
+              path: token
+          - configMap:
+              items:
+              - key: ca.crt
+                path: ca.crt
+              name: kube-root-ca.crt
+          - downwardAPI:
+              items:
+              - fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+                path: namespace
+      - name: blaze-kong-bash-wait-for-postgres
+        configMap:
+          name: blaze-kong-bash-wait-for-postgres
+          defaultMode: 0755
+MANIFEST:
+---
+# Source: flame-node/charts/flame-node-pod-orchestration/charts/postgresql/templates/primary/networkpolicy.yaml
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: blaze-postgresql
+  namespace: "flame"
+  labels:
+    app.kubernetes.io/instance: blaze
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/version: 16.2.0
+    helm.sh/chart: postgresql-15.2.5
+    app.kubernetes.io/component: primary
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/instance: blaze
+      app.kubernetes.io/name: postgresql
+      app.kubernetes.io/component: primary
+  policyTypes:
+    - Ingress
+    - Egress
+  egress:
+    - {}
+  ingress:
+    - ports:
+        - port: 5432
+---
+# Source: flame-node/charts/keycloak/charts/postgresql/templates/primary/networkpolicy.yaml
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: blaze-keycloak-postgresql
+  namespace: "flame"
+  labels:
+    app.kubernetes.io/instance: blaze
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: keycloak-postgresql
+    app.kubernetes.io/version: 16.2.0
+    helm.sh/chart: postgresql-15.2.5
+    app.kubernetes.io/component: primary
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/instance: blaze
+      app.kubernetes.io/name: keycloak-postgresql
+      app.kubernetes.io/component: primary
+  policyTypes:
+    - Ingress
+    - Egress
+  egress:
+    - {}
+  ingress:
+    - ports:
+        - port: 5432
+---
+# Source: flame-node/charts/keycloak/templates/networkpolicy.yaml
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: blaze-keycloak
+  namespace: "flame"
+  labels:
+    app.kubernetes.io/instance: blaze
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/version: 24.0.3
+    helm.sh/chart: keycloak-21.0.2
+    app.kubernetes.io/component: keycloak
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/instance: blaze
+      app.kubernetes.io/name: keycloak
+      app.kubernetes.io/component: keycloak
+  policyTypes:
+    - Ingress
+    - Egress
+  egress:
+    - {}
+  ingress:
+    - ports:
+        - port: 7800
+        - port: 8080
+---
+# Source: flame-node/charts/blaze/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: blaze
+  labels:
+    helm.sh/chart: blaze-0.1.0
+    app.kubernetes.io/name: blaze
+    app.kubernetes.io/instance: blaze
+    app.kubernetes.io/version: "0.25.0"
+    app.kubernetes.io/managed-by: Helm
+automountServiceAccountToken: true
+---
+# Source: flame-node/charts/flame-node-pod-orchestration/charts/postgresql/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: blaze-postgresql
+  namespace: "flame"
+  labels:
+    app.kubernetes.io/instance: blaze
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/version: 16.2.0
+    helm.sh/chart: postgresql-15.2.5
+automountServiceAccountToken: false
+---
+# Source: flame-node/charts/flame-node-result-service/charts/minio/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: "minio-sa"
+---
+# Source: flame-node/charts/keycloak/charts/postgresql/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: blaze-keycloak-postgresql
+  namespace: "flame"
+  labels:
+    app.kubernetes.io/instance: blaze
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: keycloak-postgresql
+    app.kubernetes.io/version: 16.2.0
+    helm.sh/chart: postgresql-15.2.5
+automountServiceAccountToken: false
+---
+# Source: flame-node/charts/keycloak/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: blaze-keycloak
+  namespace: "flame"
+  labels:
+    app.kubernetes.io/instance: blaze
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/version: 24.0.3
+    helm.sh/chart: keycloak-21.0.2
+    app.kubernetes.io/component: keycloak
+automountServiceAccountToken: false
+---
+# Source: flame-node/charts/kong/templates/service-account.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: blaze-kong
+  namespace: flame
+  labels:
+    app.kubernetes.io/name: kong
+    helm.sh/chart: kong-2.38.0
+    app.kubernetes.io/instance: "blaze"
+    app.kubernetes.io/managed-by: "Helm"
+    app.kubernetes.io/version: "3.6"
+---
+# Source: flame-node/charts/flame-node-hub-adapter/templates/hub-adapter-secret.yaml
+# Only created if idp.existingSecret not defined
+apiVersion: v1
+kind: Secret
+metadata:
+  name: blaze-hub-adapter-keycloak-secret
+  namespace: flame
+type: Opaque
+data:
+  hubAdapterClientSecret: cFR2THJCS3V5MHZ4cnV2VXByd3NYcEV0dzg0ZEROOUM=
+---
+# Source: flame-node/charts/flame-node-hub-adapter/templates/hub-adapter-secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: blaze-hub-adapter-robot-secret
+  namespace: flame
+type: Opaque
+data:
+  robotSecret: MQ==
+---
+# Source: flame-node/charts/flame-node-message-broker/templates/node-message-broker-hub-auth-secret.yml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: blaze-node-message-broker-hub-auth
+data:
+  robot-secret: MQ==
+---
+# Source: flame-node/charts/flame-node-pod-orchestration/charts/postgresql/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: blaze-postgresql
+  namespace: "flame"
+  labels:
+    app.kubernetes.io/instance: blaze
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/version: 16.2.0
+    helm.sh/chart: postgresql-15.2.5
+type: Opaque
+data:
+  postgres-password: "cG9zdGdyZXM="
+  # We don't auto-generate LDAP password when it's not provided as we do for other passwords
+---
+# Source: flame-node/charts/flame-node-result-service/charts/minio/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: blaze-minio
+  labels:
+    app: minio
+    chart: minio-5.1.0
+    release: blaze
+    heritage: Helm
+type: Opaque
+data:
+  rootUser: "YWRtaW4="
+  rootPassword: "czNjcjN0X3A0c3N3MHJk"
+---
+# Source: flame-node/charts/flame-node-ui/templates/node-ui-secret.yaml
+# Only created if idp.existingSecret not defined
+apiVersion: v1
+kind: Secret
+metadata:
+  name: blaze-node-ui-keycloak-secret
+  namespace: flame
+type: Opaque
+data:
+  nodeUiClientSecret: SnZXN0ZCYmllejY1MHdTNUYyUkxNWFY5MEhJQWRQMEs=
+---
+# Source: flame-node/charts/keycloak/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: blaze-keycloak
+  namespace: "flame"
+  labels:
+    app.kubernetes.io/instance: blaze
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/version: 24.0.3
+    helm.sh/chart: keycloak-21.0.2
+    app.kubernetes.io/component: keycloak
+type: Opaque
+data:
+  admin-password: "YWRtaW4="
+---
+# Source: flame-node/charts/kong/charts/postgresql/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: blaze-kong-postgresql
+  namespace: "flame"
+  labels:
+    app.kubernetes.io/name: kong-postgresql
+    helm.sh/chart: postgresql-11.9.13
+    app.kubernetes.io/instance: blaze
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: "14.5.0"
+type: Opaque
+data:
+  postgres-password: "c3VwZXJzZWNyZXRwYXNzd29yZA=="
+  password: "a29uZw=="
+  # We don't auto-generate LDAP password when it's not provided as we do for other passwords
+---
+# Source: flame-node/templates/keycloak-admin-secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kc-password-secret
+data:
+  kc-admin-password: YWRtaW4=  # base64 admin
+  postgres-password: c3VwZXJzZWNyZXQ= # postgres admin pwd - base64 supersecret
+  password: c3VwZXJzZWNyZXQ= # postgres user pwd - base64 supersecret
+---
+# Source: flame-node/charts/flame-node-result-service/charts/minio/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: blaze-minio
+  labels:
+    app: minio
+    chart: minio-5.1.0
+    release: blaze
+    heritage: Helm
+data:
+  initialize: |-
+    #!/bin/sh
+    set -e # Have script exit in the event of a failed command.
+    MC_CONFIG_DIR="/etc/minio/mc/"
+    MC="/usr/bin/mc --insecure --config-dir ${MC_CONFIG_DIR}"
+    
+    # connectToMinio
+    # Use a check-sleep-check loop to wait for MinIO service to be available
+    connectToMinio() {
+    	SCHEME=$1
+    	ATTEMPTS=0
+    	LIMIT=29 # Allow 30 attempts
+    	set -e   # fail if we can't read the keys.
+    	ACCESS=$(cat /config/rootUser)
+    	SECRET=$(cat /config/rootPassword)
+    	set +e # The connections to minio are allowed to fail.
+    	echo "Connecting to MinIO server: $SCHEME://$MINIO_ENDPOINT:$MINIO_PORT"
+    	MC_COMMAND="${MC} alias set myminio $SCHEME://$MINIO_ENDPOINT:$MINIO_PORT $ACCESS $SECRET"
+    	$MC_COMMAND
+    	STATUS=$?
+    	until [ $STATUS = 0 ]; do
+    		ATTEMPTS=$(expr $ATTEMPTS + 1)
+    		echo \"Failed attempts: $ATTEMPTS\"
+    		if [ $ATTEMPTS -gt $LIMIT ]; then
+    			exit 1
+    		fi
+    		sleep 2 # 1 second intervals between attempts
+    		$MC_COMMAND
+    		STATUS=$?
+    	done
+    	set -e # reset `e` as active
+    	return 0
+    }
+    
+    # checkBucketExists ($bucket)
+    # Check if the bucket exists, by using the exit code of `mc ls`
+    checkBucketExists() {
+    	BUCKET=$1
+    	CMD=$(${MC} stat myminio/$BUCKET >/dev/null 2>&1)
+    	return $?
+    }
+    
+    # createBucket ($bucket, $policy, $purge)
+    # Ensure bucket exists, purging if asked to
+    createBucket() {
+    	BUCKET=$1
+    	POLICY=$2
+    	PURGE=$3
+    	VERSIONING=$4
+    	OBJECTLOCKING=$5
+    
+    	# Purge the bucket, if set & exists
+    	# Since PURGE is user input, check explicitly for `true`
+    	if [ $PURGE = true ]; then
+    		if checkBucketExists $BUCKET; then
+    			echo "Purging bucket '$BUCKET'."
+    			set +e # don't exit if this fails
+    			${MC} rm -r --force myminio/$BUCKET
+    			set -e # reset `e` as active
+    		else
+    			echo "Bucket '$BUCKET' does not exist, skipping purge."
+    		fi
+    	fi
+    
+    	# Create the bucket if it does not exist and set objectlocking if enabled (NOTE: versioning will be not changed if OBJECTLOCKING is set because it enables versioning to the Buckets created)
+    	if ! checkBucketExists $BUCKET; then
+    		if [ ! -z $OBJECTLOCKING ]; then
+    			if [ $OBJECTLOCKING = true ]; then
+    				echo "Creating bucket with OBJECTLOCKING '$BUCKET'"
+    				${MC} mb --with-lock myminio/$BUCKET
+    			elif [ $OBJECTLOCKING = false ]; then
+    				echo "Creating bucket '$BUCKET'"
+    				${MC} mb myminio/$BUCKET
+    			fi
+    		elif [ -z $OBJECTLOCKING ]; then
+    			echo "Creating bucket '$BUCKET'"
+    			${MC} mb myminio/$BUCKET
+    		else
+    			echo "Bucket '$BUCKET' already exists."
+    		fi
+    	fi
+    
+    	# set versioning for bucket if objectlocking is disabled or not set
+    	if [ $OBJECTLOCKING = false ]; then
+    		if [ ! -z $VERSIONING ]; then
+    			if [ $VERSIONING = true ]; then
+    				echo "Enabling versioning for '$BUCKET'"
+    				${MC} version enable myminio/$BUCKET
+    			elif [ $VERSIONING = false ]; then
+    				echo "Suspending versioning for '$BUCKET'"
+    				${MC} version suspend myminio/$BUCKET
+    			fi
+    		fi
+    	else
+    		echo "Bucket '$BUCKET' versioning unchanged."
+    	fi
+    
+    	# At this point, the bucket should exist, skip checking for existence
+    	# Set policy on the bucket
+    	echo "Setting policy of bucket '$BUCKET' to '$POLICY'."
+    	${MC} anonymous set $POLICY myminio/$BUCKET
+    }
+    
+    # Try connecting to MinIO instance
+    scheme=http
+    connectToMinio $scheme
+    
+    
+    
+    # Create the buckets
+    createBucket flame "none" false false false
+    
+  add-user: |-
+    #!/bin/sh
+    set -e ; # Have script exit in the event of a failed command.
+    MC_CONFIG_DIR="/etc/minio/mc/"
+    MC="/usr/bin/mc --insecure --config-dir ${MC_CONFIG_DIR}"
+    
+    # AccessKey and secretkey credentials file are added to prevent shell execution errors caused by special characters.
+    # Special characters for example : ',",<,>,{,}
+    MINIO_ACCESSKEY_SECRETKEY_TMP="/tmp/accessKey_and_secretKey_tmp"
+    
+    # connectToMinio
+    # Use a check-sleep-check loop to wait for MinIO service to be available
+    connectToMinio() {
+      SCHEME=$1
+      ATTEMPTS=0 ; LIMIT=29 ; # Allow 30 attempts
+      set -e ; # fail if we can't read the keys.
+      ACCESS=$(cat /config/rootUser) ; SECRET=$(cat /config/rootPassword) ;
+      set +e ; # The connections to minio are allowed to fail.
+      echo "Connecting to MinIO server: $SCHEME://$MINIO_ENDPOINT:$MINIO_PORT" ;
+      MC_COMMAND="${MC} alias set myminio $SCHEME://$MINIO_ENDPOINT:$MINIO_PORT $ACCESS $SECRET" ;
+      $MC_COMMAND ;
+      STATUS=$? ;
+      until [ $STATUS = 0 ]
+      do
+        ATTEMPTS=`expr $ATTEMPTS + 1` ;
+        echo \"Failed attempts: $ATTEMPTS\" ;
+        if [ $ATTEMPTS -gt $LIMIT ]; then
+          exit 1 ;
+        fi ;
+        sleep 2 ; # 1 second intervals between attempts
+        $MC_COMMAND ;
+        STATUS=$? ;
+      done ;
+      set -e ; # reset `e` as active
+      return 0
+    }
+    
+    # checkUserExists ()
+    # Check if the user exists, by using the exit code of `mc admin user info`
+    checkUserExists() {
+      CMD=$(${MC} admin user info myminio $(head -1 $MINIO_ACCESSKEY_SECRETKEY_TMP) > /dev/null 2>&1)
+      return $?
+    }
+    
+    # createUser ($policy)
+    createUser() {
+      POLICY=$1
+      #check accessKey_and_secretKey_tmp file
+      if [[ ! -f $MINIO_ACCESSKEY_SECRETKEY_TMP ]];then
+        echo "credentials file does not exist"
+        return 1
+      fi
+      if [[ $(cat $MINIO_ACCESSKEY_SECRETKEY_TMP|wc -l) -ne 2 ]];then
+        echo "credentials file is invalid"
+        rm -f $MINIO_ACCESSKEY_SECRETKEY_TMP
+        return 1
+      fi
+      USER=$(head -1 $MINIO_ACCESSKEY_SECRETKEY_TMP)
+      # Create the user if it does not exist
+      if ! checkUserExists ; then
+        echo "Creating user '$USER'"
+        cat $MINIO_ACCESSKEY_SECRETKEY_TMP | ${MC} admin user add myminio
+      else
+        echo "User '$USER' already exists."
+      fi
+      #clean up credentials files.
+      rm -f $MINIO_ACCESSKEY_SECRETKEY_TMP
+    
+      # set policy for user
+      if [ ! -z $POLICY -a $POLICY != " " ] ; then
+          echo "Adding policy '$POLICY' for '$USER'"
+          set +e ; # policy already attach errors out, allow it.
+          ${MC} admin policy attach myminio $POLICY --user=$USER
+          set -e
+      else
+          echo "User '$USER' has no policy attached."
+      fi
+    }
+    
+    # Try connecting to MinIO instance
+    scheme=http
+    connectToMinio $scheme
+    
+    
+    
+    # Create the users
+    echo console > $MINIO_ACCESSKEY_SECRETKEY_TMP
+    echo console123 >> $MINIO_ACCESSKEY_SECRETKEY_TMP
+    createUser consoleAdmin
+    
+  add-policy: |-
+    #!/bin/sh
+    set -e ; # Have script exit in the event of a failed command.
+    MC_CONFIG_DIR="/etc/minio/mc/"
+    MC="/usr/bin/mc --insecure --config-dir ${MC_CONFIG_DIR}"
+    
+    # connectToMinio
+    # Use a check-sleep-check loop to wait for MinIO service to be available
+    connectToMinio() {
+      SCHEME=$1
+      ATTEMPTS=0 ; LIMIT=29 ; # Allow 30 attempts
+      set -e ; # fail if we can't read the keys.
+      ACCESS=$(cat /config/rootUser) ; SECRET=$(cat /config/rootPassword) ;
+      set +e ; # The connections to minio are allowed to fail.
+      echo "Connecting to MinIO server: $SCHEME://$MINIO_ENDPOINT:$MINIO_PORT" ;
+      MC_COMMAND="${MC} alias set myminio $SCHEME://$MINIO_ENDPOINT:$MINIO_PORT $ACCESS $SECRET" ;
+      $MC_COMMAND ;
+      STATUS=$? ;
+      until [ $STATUS = 0 ]
+      do
+        ATTEMPTS=`expr $ATTEMPTS + 1` ;
+        echo \"Failed attempts: $ATTEMPTS\" ;
+        if [ $ATTEMPTS -gt $LIMIT ]; then
+          exit 1 ;
+        fi ;
+        sleep 2 ; # 1 second intervals between attempts
+        $MC_COMMAND ;
+        STATUS=$? ;
+      done ;
+      set -e ; # reset `e` as active
+      return 0
+    }
+    
+    # checkPolicyExists ($policy)
+    # Check if the policy exists, by using the exit code of `mc admin policy info`
+    checkPolicyExists() {
+      POLICY=$1
+      CMD=$(${MC} admin policy info myminio $POLICY > /dev/null 2>&1)
+      return $?
+    }
+    
+    # createPolicy($name, $filename)
+    createPolicy () {
+      NAME=$1
+      FILENAME=$2
+    
+      # Create the name if it does not exist
+      echo "Checking policy: $NAME (in /config/$FILENAME.json)"
+      if ! checkPolicyExists $NAME ; then
+        echo "Creating policy '$NAME'"
+      else
+        echo "Policy '$NAME' already exists."
+      fi
+      ${MC} admin policy create myminio $NAME /config/$FILENAME.json
+    
+    }
+    
+    # Try connecting to MinIO instance
+    scheme=http
+    connectToMinio $scheme
+    
+    
+    
+  add-svcacct: |-
+    #!/bin/sh
+    set -e ; # Have script exit in the event of a failed command.
+    MC_CONFIG_DIR="/etc/minio/mc/"
+    MC="/usr/bin/mc --insecure --config-dir ${MC_CONFIG_DIR}"
+    
+    # AccessKey and secretkey credentials file are added to prevent shell execution errors caused by special characters.
+    # Special characters for example : ',",<,>,{,}
+    MINIO_ACCESSKEY_SECRETKEY_TMP="/tmp/accessKey_and_secretKey_svcacct_tmp"
+    
+    # connectToMinio
+    # Use a check-sleep-check loop to wait for MinIO service to be available
+    connectToMinio() {
+      SCHEME=$1
+      ATTEMPTS=0 ; LIMIT=29 ; # Allow 30 attempts
+      set -e ; # fail if we can't read the keys.
+      ACCESS=$(cat /config/rootUser) ; SECRET=$(cat /config/rootPassword) ;
+      set +e ; # The connections to minio are allowed to fail.
+      echo "Connecting to MinIO server: $SCHEME://$MINIO_ENDPOINT:$MINIO_PORT" ;
+      MC_COMMAND="${MC} alias set myminio $SCHEME://$MINIO_ENDPOINT:$MINIO_PORT $ACCESS $SECRET" ;
+      $MC_COMMAND ;
+      STATUS=$? ;
+      until [ $STATUS = 0 ]
+      do
+        ATTEMPTS=`expr $ATTEMPTS + 1` ;
+        echo \"Failed attempts: $ATTEMPTS\" ;
+        if [ $ATTEMPTS -gt $LIMIT ]; then
+          exit 1 ;
+        fi ;
+        sleep 2 ; # 2 second intervals between attempts
+        $MC_COMMAND ;
+        STATUS=$? ;
+      done ;
+      set -e ; # reset `e` as active
+      return 0
+    }
+    
+    # checkSvcacctExists ()
+    # Check if the svcacct exists, by using the exit code of `mc admin user svcacct info`
+    checkSvcacctExists() {
+      CMD=$(${MC} admin user svcacct info myminio $(head -1 $MINIO_ACCESSKEY_SECRETKEY_TMP) > /dev/null 2>&1)
+      return $?
+    }
+    
+    # createSvcacct ($user)
+    createSvcacct () {
+      USER=$1
+      FILENAME=$2
+      #check accessKey_and_secretKey_tmp file
+      if [[ ! -f $MINIO_ACCESSKEY_SECRETKEY_TMP ]];then
+        echo "credentials file does not exist"
+        return 1
+      fi
+      if [[ $(cat $MINIO_ACCESSKEY_SECRETKEY_TMP|wc -l) -ne 2 ]];then
+        echo "credentials file is invalid"
+        rm -f $MINIO_ACCESSKEY_SECRETKEY_TMP
+        return 1
+      fi
+      SVCACCT=$(head -1 $MINIO_ACCESSKEY_SECRETKEY_TMP)
+      # Create the svcacct if it does not exist
+      if ! checkSvcacctExists ; then
+        echo "Creating svcacct '$SVCACCT'"
+        # Check if policy file is define
+        if [ -z $FILENAME ]; then
+          ${MC} admin user svcacct add --access-key $(head -1 $MINIO_ACCESSKEY_SECRETKEY_TMP) --secret-key $(tail -n1 $MINIO_ACCESSKEY_SECRETKEY_TMP) myminio $USER
+        else
+          ${MC} admin user svcacct add --access-key $(head -1 $MINIO_ACCESSKEY_SECRETKEY_TMP) --secret-key $(tail -n1 $MINIO_ACCESSKEY_SECRETKEY_TMP) --policy /config/$FILENAME.json myminio $USER
+        fi
+      else
+        echo "Svcacct '$SVCACCT' already exists."
+      fi
+      #clean up credentials files.
+      rm -f $MINIO_ACCESSKEY_SECRETKEY_TMP
+    }
+    
+    # Try connecting to MinIO instance
+    scheme=http
+    connectToMinio $scheme
+    
+    
+    
+  custom-command: |-
+    #!/bin/sh
+    set -e ; # Have script exit in the event of a failed command.
+    MC_CONFIG_DIR="/etc/minio/mc/"
+    MC="/usr/bin/mc --insecure --config-dir ${MC_CONFIG_DIR}"
+    
+    # connectToMinio
+    # Use a check-sleep-check loop to wait for MinIO service to be available
+    connectToMinio() {
+      SCHEME=$1
+      ATTEMPTS=0 ; LIMIT=29 ; # Allow 30 attempts
+      set -e ; # fail if we can't read the keys.
+      ACCESS=$(cat /config/rootUser) ; SECRET=$(cat /config/rootPassword) ;
+      set +e ; # The connections to minio are allowed to fail.
+      echo "Connecting to MinIO server: $SCHEME://$MINIO_ENDPOINT:$MINIO_PORT" ;
+      MC_COMMAND="${MC} alias set myminio $SCHEME://$MINIO_ENDPOINT:$MINIO_PORT $ACCESS $SECRET" ;
+      $MC_COMMAND ;
+      STATUS=$? ;
+      until [ $STATUS = 0 ]
+      do
+        ATTEMPTS=`expr $ATTEMPTS + 1` ;
+        echo \"Failed attempts: $ATTEMPTS\" ;
+        if [ $ATTEMPTS -gt $LIMIT ]; then
+          exit 1 ;
+        fi ;
+        sleep 2 ; # 1 second intervals between attempts
+        $MC_COMMAND ;
+        STATUS=$? ;
+      done ;
+      set -e ; # reset `e` as active
+      return 0
+    }
+    
+    # runCommand ($@)
+    # Run custom mc command
+    runCommand() {
+      ${MC} "$@"
+      return $?
+    }
+    
+    # Try connecting to MinIO instance
+    scheme=http
+    connectToMinio $scheme
+---
+# Source: flame-node/charts/keycloak/templates/configmap-env-vars.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: blaze-keycloak-env-vars
+  namespace: "flame"
+  labels:
+    app.kubernetes.io/instance: blaze
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/version: 24.0.3
+    helm.sh/chart: keycloak-21.0.2
+    app.kubernetes.io/component: keycloak
+data:
+  KEYCLOAK_ADMIN: "admin"
+  KEYCLOAK_HTTP_PORT: "8080"
+  KEYCLOAK_PROXY: "passthrough"
+  KEYCLOAK_ENABLE_STATISTICS: "false"
+  KEYCLOAK_DATABASE_HOST: "blaze-keycloak-postgresql"
+  KEYCLOAK_DATABASE_PORT: "5432"
+  KEYCLOAK_DATABASE_NAME: "keycloak"
+  KEYCLOAK_DATABASE_USER: "keycloak"
+  KEYCLOAK_PRODUCTION:  "false"
+  KEYCLOAK_ENABLE_HTTPS: "false"
+  KEYCLOAK_CACHE_TYPE: "ispn"
+  KEYCLOAK_CACHE_STACK: "kubernetes"
+  JAVA_OPTS_APPEND: "-Djgroups.dns.query=blaze-keycloak-headless.flame.svc.cluster.local"
+  KEYCLOAK_LOG_OUTPUT: "default"
+  KEYCLOAK_LOG_LEVEL: "INFO"
+---
+# Source: flame-node/charts/kong/templates/wait-for-postgres-script.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: blaze-kong-bash-wait-for-postgres
+  namespace: flame
+  labels:
+    app.kubernetes.io/name: kong
+    helm.sh/chart: kong-2.38.0
+    app.kubernetes.io/instance: "blaze"
+    app.kubernetes.io/managed-by: "Helm"
+    app.kubernetes.io/version: "3.6"
+data:
+  wait.sh: |
+    until timeout 2 bash -c "9<>/dev/tcp/${KONG_PG_HOST}/${KONG_PG_PORT}"
+      do echo "waiting for db - trying ${KONG_PG_HOST}:${KONG_PG_PORT}"
+      sleep 2
+    done
+---
+# Source: flame-node/templates/flame-keycloak-realm-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: flame-default-realm
+data:
+  flame.yaml: |
+    realm: "flame"
+    enabled: true
+    defaultSignatureAlgorithm: "RS256"
+    accessTokenLifespan: 1800
+    clients:
+    - clientId: "hub-adapter"
+      name: "Node Hub Adapter Gateway API"
+      clientAuthenticatorType: "client-secret"
+      secret: pTvLrBKuy0vxruvUprwsXpEtw84dDN9C
+      standardFlowEnabled: true
+      implicitFlowEnabled: false
+      directAccessGrantsEnabled: true
+      serviceAccountsEnabled: true
+      authorizationServicesEnabled: true
+      publicClient: false
+      enabled: true
+    - clientId: "service1"
+      name: "Test service"
+      clientAuthenticatorType: "client-secret"
+      secret: 9dd01665c2f3f02f93c32d03bd854569f03cd62f439ccf9f0861c141b9d6330e
+      standardFlowEnabled: true
+      implicitFlowEnabled: false
+      directAccessGrantsEnabled: true
+      serviceAccountsEnabled: true
+      authorizationServicesEnabled: true
+      publicClient: false
+      enabled: true
+    - clientId: "node-ui"
+      name: "Node UI"
+      clientAuthenticatorType: "client-secret"
+      secret: JvW7FBbiez650wS5F2RLMXV90HIAdP0K
+      baseUrl: "http://localhost:3000"
+      redirectUris: [ "http://localhost:3000/auth/keycloak/callback" ]
+      webOrigins: [ "http://localhost:3000" ]
+      standardFlowEnabled: true
+      implicitFlowEnabled: false
+      directAccessGrantsEnabled: true
+      serviceAccountsEnabled: true
+      authorizationServicesEnabled: true
+      publicClient: false
+      enabled: true
+    users:
+    - username: "flameuser"
+      firstName: "Johnny"
+      lastName: "Storm"
+      email: "foobar@gmail.com"
+      emailVerified: true
+      enabled: true
+      credentials:
+      - type: "password"
+        userLabel: "My password"
+        credentialData: "{\"hashIterations\":210000,\"algorithm\":\"pbkdf2-sha512\",\"additionalParameters\":{}}"
+        secretData: "{\"value\":\"AcmFvt1RyPVxJXASu8d66p6nsCV5uwuvPAQ5Qdo1aqJoFaxc7vxPoJpwDCT8xCRR/SANHsyRRpUGfJGZhBKI0w==\",\"salt\":\"K06PBP69IiB0QWWsiaqSxQ==\",\"additionalParameters\":{}}"
+    - username: "service-account-service1"
+      enabled: true
+      serviceAccountClientId: "service1"
+      clientRoles:
+        realm-management: [
+          "manage-clients",
+          "view-clients",
+          "query-clients",
+          "create-client"
+        ]
+        service1: ["uma_protection"]
+---
+# Source: flame-node/charts/flame-node-pod-orchestration/templates/node-pod-orchestration-role.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: default
+  name:  blaze-po-sa
+rules:
+- apiGroups: ["networking.k8s.io"] # indicates the network API group
+  resources: ["networkpolicies"]
+  verbs: ["*"]
+- apiGroups: ["apps"] # indicates the apps API group
+  resources: ["deployments"]
+  verbs: ["*"]
+- apiGroups: [""] # indicates the core API group
+  resources: ["pods", "secrets", "services"]
+  verbs: ["*"]
+---
+# Source: flame-node/charts/flame-node-pod-orchestration/templates/node-pod-orchestration-rolebinding.yaml
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: blaze-po-sa-binding
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: default
+roleRef:
+  kind: Role
+  name: blaze-po-sa
+  apiGroup: rbac.authorization.k8s.io
+---
+# Source: flame-node/charts/blaze/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: blaze
+  labels:
+    helm.sh/chart: blaze-0.1.0
+    app.kubernetes.io/name: blaze
+    app.kubernetes.io/instance: blaze
+    app.kubernetes.io/version: "0.25.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: blaze
+    app.kubernetes.io/instance: blaze
+---
+# Source: flame-node/charts/flame-node-hub-adapter/templates/hub-adapter-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: blaze-hub-adapter-service
+  labels:
+    component: hub-adapter-service
+    version: latest
+    deployment-id:  blaze
+spec:
+  ports:
+  - name: api
+    port: 5000
+  selector:
+    component: hub-adapter-service
+    version: latest
+    deployment-id:  blaze
+---
+# Source: flame-node/charts/flame-node-message-broker/templates/node-message-broker-db-service.yml
+apiVersion: v1
+kind: Service
+metadata:
+  name: blaze-node-message-broker-db
+spec:
+  selector:
+    app.kubernetes.io/name: blaze-node-message-broker
+    app.kubernetes.io/component: database
+    app.kubernetes.io/part-of: flame
+    app.kubernetes.io/version: 0.1.0
+  ports:
+    - port: 27017
+      targetPort: 27017
+---
+# Source: flame-node/charts/flame-node-message-broker/templates/node-message-broker-service.yml
+apiVersion: v1
+kind: Service
+metadata:
+  name: blaze-node-message-broker
+spec:
+  selector:
+    app.kubernetes.io/name: blaze-node-message-broker
+    app.kubernetes.io/component: server
+    app.kubernetes.io/part-of: flame
+    app.kubernetes.io/version: 0.1.0
+  ports:
+    - port: 80
+      targetPort: 8080
+---
+# Source: flame-node/charts/flame-node-pod-orchestration/charts/postgresql/templates/primary/svc-headless.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: blaze-postgresql-hl
+  namespace: "flame"
+  labels:
+    app.kubernetes.io/instance: blaze
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/version: 16.2.0
+    helm.sh/chart: postgresql-15.2.5
+    app.kubernetes.io/component: primary
+  annotations:
+    # Use this annotation in addition to the actual publishNotReadyAddresses
+    # field below because the annotation will stop being respected soon but the
+    # field is broken in some versions of Kubernetes:
+    # https://github.com/kubernetes/kubernetes/issues/58662
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+spec:
+  type: ClusterIP
+  clusterIP: None
+  # We want all pods in the StatefulSet to have their addresses published for
+  # the sake of the other Postgresql pods even before they're ready, since they
+  # have to be able to talk to each other in order to become ready.
+  publishNotReadyAddresses: true
+  ports:
+    - name: tcp-postgresql
+      port: 5432
+      targetPort: tcp-postgresql
+  selector:
+    app.kubernetes.io/instance: blaze
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/component: primary
+---
+# Source: flame-node/charts/flame-node-pod-orchestration/charts/postgresql/templates/primary/svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: blaze-postgresql
+  namespace: "flame"
+  labels:
+    app.kubernetes.io/instance: blaze
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/version: 16.2.0
+    helm.sh/chart: postgresql-15.2.5
+    app.kubernetes.io/component: primary
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: tcp-postgresql
+      port: 5432
+      targetPort: tcp-postgresql
+      nodePort: null
+  selector:
+    app.kubernetes.io/instance: blaze
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/component: primary
+---
+# Source: flame-node/charts/flame-node-pod-orchestration/templates/node-pod-orchestration-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: blaze-po-service
+spec:
+  ports:
+  - name: api
+    port: 8000 # Selector to match the pods of your Python app deployment
+  selector:
+    component: po
+    #version: latest
+    deployment-id: blaze
+---
+# Source: flame-node/charts/flame-node-result-service/charts/minio/templates/console-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: blaze-minio-console
+  labels:
+    app: minio
+    chart: minio-5.1.0
+    release: blaze
+    heritage: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 9001
+      protocol: TCP
+      targetPort: 9001
+  selector:
+    app: minio
+    release: blaze
+---
+# Source: flame-node/charts/flame-node-result-service/charts/minio/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: blaze-minio
+  labels:
+    app: minio
+    chart: minio-5.1.0
+    release: blaze
+    heritage: Helm
+    monitoring: "true"
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 9000
+      protocol: TCP
+      targetPort: 9000
+  selector:
+    app: minio
+    release: blaze
+---
+# Source: flame-node/charts/flame-node-result-service/charts/minio/templates/statefulset.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: blaze-minio-svc
+  labels:
+    app: minio
+    chart: minio-5.1.0
+    release: blaze
+    heritage: Helm
+spec:
+  publishNotReadyAddresses: true
+  clusterIP: None
+  ports:
+    - name: http
+      port: 9000
+      protocol: TCP
+      targetPort: 9000
+  selector:
+    app: minio
+    release: blaze
+---
+# Source: flame-node/charts/flame-node-result-service/templates/node-result-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: blaze-node-result-service
+spec:
+  selector:
+    app: blaze-node-result
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: http-result-srv
+  type: ClusterIP
+---
+# Source: flame-node/charts/flame-node-ui/templates/node-ui-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: blaze-node-ui-service
+  labels:
+    component: node-ui-service
+    version: latest
+    deployment-id:  blaze
+spec:
+  ports:
+  - name: ui
+    port: 3000
+  selector:
+    component: node-ui-service
+    version: latest
+    deployment-id:  blaze
+---
+# Source: flame-node/charts/keycloak/charts/postgresql/templates/primary/svc-headless.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: blaze-keycloak-postgresql-hl
+  namespace: "flame"
+  labels:
+    app.kubernetes.io/instance: blaze
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: keycloak-postgresql
+    app.kubernetes.io/version: 16.2.0
+    helm.sh/chart: postgresql-15.2.5
+    app.kubernetes.io/component: primary
+  annotations:
+    # Use this annotation in addition to the actual publishNotReadyAddresses
+    # field below because the annotation will stop being respected soon but the
+    # field is broken in some versions of Kubernetes:
+    # https://github.com/kubernetes/kubernetes/issues/58662
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+spec:
+  type: ClusterIP
+  clusterIP: None
+  # We want all pods in the StatefulSet to have their addresses published for
+  # the sake of the other Postgresql pods even before they're ready, since they
+  # have to be able to talk to each other in order to become ready.
+  publishNotReadyAddresses: true
+  ports:
+    - name: tcp-postgresql
+      port: 5432
+      targetPort: tcp-postgresql
+  selector:
+    app.kubernetes.io/instance: blaze
+    app.kubernetes.io/name: keycloak-postgresql
+    app.kubernetes.io/component: primary
+---
+# Source: flame-node/charts/keycloak/charts/postgresql/templates/primary/svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: blaze-keycloak-postgresql
+  namespace: "flame"
+  labels:
+    app.kubernetes.io/instance: blaze
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: keycloak-postgresql
+    app.kubernetes.io/version: 16.2.0
+    helm.sh/chart: postgresql-15.2.5
+    app.kubernetes.io/component: primary
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: tcp-postgresql
+      port: 5432
+      targetPort: tcp-postgresql
+      nodePort: null
+  selector:
+    app.kubernetes.io/instance: blaze
+    app.kubernetes.io/name: keycloak-postgresql
+    app.kubernetes.io/component: primary
+---
+# Source: flame-node/charts/keycloak/templates/headless-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: blaze-keycloak-headless
+  namespace: "flame"
+  labels:
+    app.kubernetes.io/instance: blaze
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/version: 24.0.3
+    helm.sh/chart: keycloak-21.0.2
+    app.kubernetes.io/component: keycloak
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: http
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/instance: blaze
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/component: keycloak
+---
+# Source: flame-node/charts/keycloak/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: blaze-keycloak
+  namespace: "flame"
+  labels:
+    app.kubernetes.io/instance: blaze
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/version: 24.0.3
+    helm.sh/chart: keycloak-21.0.2
+    app.kubernetes.io/component: keycloak
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: http
+      nodePort: null
+  selector:
+    app.kubernetes.io/instance: blaze
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/component: keycloak
+---
+# Source: flame-node/charts/kong/charts/postgresql/templates/primary/svc-headless.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: blaze-kong-postgresql-hl
+  namespace: "flame"
+  labels:
+    app.kubernetes.io/name: kong-postgresql
+    helm.sh/chart: postgresql-11.9.13
+    app.kubernetes.io/instance: blaze
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: "14.5.0"
+    app.kubernetes.io/component: primary
+    # Use this annotation in addition to the actual publishNotReadyAddresses
+    # field below because the annotation will stop being respected soon but the
+    # field is broken in some versions of Kubernetes:
+    # https://github.com/kubernetes/kubernetes/issues/58662
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+spec:
+  type: ClusterIP
+  clusterIP: None
+  # We want all pods in the StatefulSet to have their addresses published for
+  # the sake of the other Postgresql pods even before they're ready, since they
+  # have to be able to talk to each other in order to become ready.
+  publishNotReadyAddresses: true
+  ports:
+    - name: tcp-postgresql
+      port: 5432
+      targetPort: tcp-postgresql
+  selector:
+    app.kubernetes.io/name: kong-postgresql
+    app.kubernetes.io/instance: blaze
+    app.kubernetes.io/component: primary
+---
+# Source: flame-node/charts/kong/charts/postgresql/templates/primary/svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: blaze-kong-postgresql
+  namespace: "flame"
+  labels:
+    app.kubernetes.io/name: kong-postgresql
+    helm.sh/chart: postgresql-11.9.13
+    app.kubernetes.io/instance: blaze
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: "14.5.0"
+    app.kubernetes.io/component: primary
+  annotations:
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: tcp-postgresql
+      port: 5432
+      targetPort: tcp-postgresql
+      nodePort: null
+  selector:
+    app.kubernetes.io/name: kong-postgresql
+    app.kubernetes.io/instance: blaze
+    app.kubernetes.io/component: primary
+---
+# Source: flame-node/charts/kong/templates/service-kong-admin.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: blaze-kong-admin
+  namespace: flame
+  labels:
+    app.kubernetes.io/name: kong
+    helm.sh/chart: kong-2.38.0
+    app.kubernetes.io/instance: "blaze"
+    app.kubernetes.io/managed-by: "Helm"
+    app.kubernetes.io/version: "3.6"
+spec:
+  type: ClusterIP
+  ports:
+  - name: kong-admin
+    port: 80
+    targetPort: 8001
+    protocol: TCP
+  selector:
+    app.kubernetes.io/name: kong
+    app.kubernetes.io/component: app
+    app.kubernetes.io/instance: "blaze"
+---
+# Source: flame-node/charts/kong/templates/service-kong-proxy.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: blaze-kong-proxy
+  namespace: flame
+  labels:
+    app.kubernetes.io/name: kong
+    helm.sh/chart: kong-2.38.0
+    app.kubernetes.io/instance: "blaze"
+    app.kubernetes.io/managed-by: "Helm"
+    app.kubernetes.io/version: "3.6"
+    enable-metrics: "true"
+spec:
+  type: ClusterIP
+  ports:
+  - name: kong-proxy
+    port: 80
+    targetPort: 8000
+    protocol: TCP
+  selector:
+    app.kubernetes.io/name: kong
+    app.kubernetes.io/component: app
+    app.kubernetes.io/instance: "blaze"
+---
+# Source: flame-node/charts/blaze/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blaze
+  labels:
+    helm.sh/chart: blaze-0.1.0
+    app.kubernetes.io/name: blaze
+    app.kubernetes.io/instance: blaze
+    app.kubernetes.io/version: "0.25.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: blaze
+      app.kubernetes.io/instance: blaze
+  template:
+    metadata:
+      labels:
+        helm.sh/chart: blaze-0.1.0
+        app.kubernetes.io/name: blaze
+        app.kubernetes.io/instance: blaze
+        app.kubernetes.io/version: "0.25.0"
+        app.kubernetes.io/managed-by: Helm
+    spec:
+      serviceAccountName: blaze
+      securityContext:
+        {}
+      containers:
+        - name: blaze
+          securityContext:
+            {}
+          image: "samply/blaze:0.25.0"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            null
+          readinessProbe:
+            null
+          resources:
+            {}
+---
+# Source: flame-node/charts/flame-node-hub-adapter/templates/hub-adapter-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blaze-hub-adapter-deployment
+spec:
+  selector:
+    matchLabels:
+      component: hub-adapter-service
+      version: latest
+      deployment-id:  blaze
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: hub-adapter-service
+        version: latest
+        deployment-id:  blaze
+    spec:
+      containers:
+        - name: api-gateway
+          image: ghcr.io/privateaim/node-hub-api-adapter:latest
+          imagePullPolicy: IfNotPresent  # Maybe "Always" during debug
+          ports:
+            - containerPort: 5000
+              name: healthcp
+          env:
+            - name: API_CLIENT_ID
+              value: "hub-adapter"
+            - name: API_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: blaze-hub-adapter-keycloak-secret
+                  key: hubAdapterClientSecret
+            - name: IDP_URL
+              value: http://blaze-keycloak:80
+            - name: IDP_REALM
+              value: "flame"  # To be replaced
+            - name: RESULTS_SERVICE_URL
+              value: http://blaze-node-result-service:8080
+            - name: PODORC_SERVICE_URL
+              value: http://blaze-po-service:8000
+            - name: KONG_ADMIN_SERVICE_URL
+              value: http://blaze-kong-admin:80
+            - name: HUB_REALM_UUID
+              value: ""  # To be properly filled in
+            - name: HUB_SERVICE_URL
+              value: "https://core.privateaim.dev"
+            - name: HUB_AUTH_SERVICE_URL
+              value: "https://auth.privateaim.dev"
+            - name: HUB_ROBOT_USER
+              value: "1"  # To be properly filled in
+            - name: HUB_ROBOT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: blaze-hub-adapter-robot-secret
+                  key: "robotSecret"
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: healthcp
+            failureThreshold: 3
+            periodSeconds: 60
+            initialDelaySeconds: 60
+---
+# Source: flame-node/charts/flame-node-message-broker/templates/node-message-broker-deployment.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blaze-node-message-broker
+  labels:
+    app.kubernetes.io/name: blaze-node-message-broker
+    app.kubernetes.io/component: server
+    app.kubernetes.io/part-of: flame
+    app.kubernetes.io/version: 0.1.0
+spec:
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: blaze-node-message-broker
+      app.kubernetes.io/component: server
+      app.kubernetes.io/part-of: flame
+      app.kubernetes.io/version: 0.1.0
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: blaze-node-message-broker
+        app.kubernetes.io/component: server
+        app.kubernetes.io/part-of: flame
+        app.kubernetes.io/version: 0.1.0
+    spec:
+      restartPolicy: "Always"
+      containers:
+        - name: blaze-node-message-broker
+          image: ghcr.io/privateaim/node-message-broker:0.1.0
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            allowPrivilegeEscalation: false
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SERVER_PORT
+              value: "8080"
+            - name: AUTH_JWKS_URL
+              value: http://flame-node-keycloak:80/realms/flame/protocol/openid-connect/certs
+            - name: MONGO_DB_URL
+              value: "mongodb://blaze-node-message-broker-db:27017"
+            - name: MONGO_DB_NAME
+              value: "message-broker"
+            - name: HUB_BASE_URL
+              value: "https://core.privateaim.dev"
+            - name: HUB_AUTH_BASE_URL
+              value: "https://auth.privateaim.dev"
+            - name: HUB_AUTH_ROBOT_ID
+              value: "1"
+            - name: HUB_AUTH_ROBOT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: blaze-node-message-broker-hub-auth
+                  key: robot-secret
+            # DO NOT USE THIS IN PRODUCTION!!! This is just for internal testing purposes.
+            - name: NODE_TLS_REJECT_UNAUTHORIZED
+              value: "0"
+          resources:
+            requests:
+              memory: "256Mi"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          readinessProbe:
+            httpGet:
+              path: "/health"
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 5
+            timeoutSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: "/health"
+              port: 8080
+            periodSeconds: 10
+            timeoutSeconds: 10
+---
+# Source: flame-node/charts/flame-node-pod-orchestration/templates/node-pod-orchestration-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blaze-po
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: po
+      version: latest
+      deployment-id:  blaze
+  template:
+    metadata:
+      labels:
+        component: po
+        version: latest
+        deployment-id: blaze
+    spec:
+      #volumes:
+      #  - name: keys
+      #    hostPath:
+      #      path: 
+      #      type: File
+      containers:
+      - name: po
+        image: ghcr.io/privateaim/node-pod-orchestration:latest
+        imagePullPolicy: Always
+        #image: po:latest
+        #imagePullPolicy: IfNotPresent
+        #VolumeMounts:
+        #  - mountPath: /config/keys
+        #    name: keys
+        ports:
+        - containerPort: 8080
+        env:
+        - name: POSTGRES_HOST
+          value: blaze-postgresql
+        - name: POSTGRES_DB
+          value: 
+          ## TODO: add _helpers.tpl in case we want to use secret instead for postgres user/pwd
+        - name: POSTGRES_USER
+          value: postgres
+        - name: POSTGRES_PASSWORD
+          value: postgres
+        - name: RESULT_CLIENT_ID
+          value: service1
+        - name: RESULT_CLIENT_SECRET
+          value: abc
+        - name: KEYCLOAK_URL
+          value: http://blaze-keycloak
+        - name: KEYCLOAK_REALM
+          value: flame
+        - name: HARBOR_URL
+          value: dev-harbor.personalhealthtrain.de
+        - name: HARBOR_USER
+          value: test
+        - name: HARBOR_PW
+          value: test
+        - name: NODE_NAME
+          value: flame
+        - name: NODE_PW
+          value: 
+        - name: NODE_KEY_PW
+          value: 
+        livenessProbe:
+          httpGet:
+            path: /po/healthz
+            port: 8000
+          initialDelaySeconds: 15
+          periodSeconds: 20
+          failureThreshold: 1
+          timeoutSeconds: 5
+---
+# Source: flame-node/charts/flame-node-result-service/templates/node-result-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blaze-node-result-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blaze-node-result
+  template:
+    metadata:
+      labels:
+        app: blaze-node-result
+    spec:
+      containers:
+        - name: results-service
+          image: ghcr.io/privateaim/node-result-service:sha-7740b53
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              name: http-result-srv
+          env:
+            - name: MINIO__ENDPOINT
+              value: blaze-minio:9000
+              ## TODO: add _helpers.tpl in case we want to use secret instead for minio user/pwd
+            - name: MINIO__ACCESS_KEY
+              value: "admin"
+            - name: MINIO__SECRET_KEY
+              value: "s3cr3t_p4ssw0rd"
+            - name: MINIO__USE_SSL
+              value: "false"
+            - name: MINIO__BUCKET
+              value: "flame"
+            - name: HUB__AUTH_USERNAME
+              value: "admin"
+            - name: HUB__AUTH_PASSWORD
+              value: "start123"
+            - name: OIDC__CERTS_URL
+              value: http://blaze-keycloak:80/realms/flame/protocol/openid-connect/certs
+            - name: OIDC__CLIENT_ID_CLAIM_NAME
+              value: azp
+            # Change this to "1" for testing purposes. This will cause the value of OIDC__CERTS_URL to be
+            # ignored. You will still need to set this variable for the service to start up correctly.
+            - name: OIDC__SKIP_JWT_VALIDATION
+              value: "0"
+#           startupProbe:
+#             httpGet:
+#               path: /healthz
+#               port: http-result-srv
+#             failureThreshold: 5
+#             periodSeconds: 5
+#           livenessProbe:
+#             httpGet:
+#               path: /healthz
+#               port: http-result-srv
+#             failureThreshold: 3
+#             periodSeconds: 10
+---
+# Source: flame-node/charts/flame-node-ui/templates/node-ui-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blaze-node-ui-deployment
+spec:
+  selector:
+    matchLabels:
+      component: node-ui-service
+      version: latest
+      deployment-id:  blaze
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: node-ui-service
+        version: latest
+        deployment-id:  blaze
+    spec:
+      containers:
+        - name: node-ui
+          image: ghcr.io/privateaim/node-ui:latest
+          imagePullPolicy: Always  # Maybe "Always" during debug
+          ports:
+            - containerPort: 3000
+              name: ui
+
+
+
+
+
+          env:
+            - name: NODE_ENV
+              value: "development"
+            - name: BASE_URL
+              value: "http://localhost:3000"
+            - name: HUB_ADAPTER_API_URL
+              value: "http://localhost:5000"
+            - name: KEYCLOAK_URL
+              value: http://localhost:8080
+            - name: KEYCLOAK_REALM
+              value: "flame"
+            - name: KEYCLOAK_CLIENT_ID
+              value: "node-ui"
+            - name: KEYCLOAK_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: blaze-node-ui-keycloak-secret
+                  key: nodeUiClientSecret
+            - name: NUXT_OIDC_TOKEN_KEY
+              value: "uSaYgisqDb1VX0UjYU7WEmOXArW8cvcSpIsyICBIqzV9b92g"
+            - name: NUXT_OIDC_SESSION_SECRET
+              value: "3c7dMDjLpNLdsrLsLCrr1QDqT83FPTw2liaVlN1AljCsStko"
+            - name: NUXT_OIDC_AUTH_SESSION_SECRET
+              value: VFE4TUI5QUJBdzR6bzBzWW9CNkplakNVRzBBd3hXRkc=
+---
+# Source: flame-node/charts/kong/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blaze-kong
+  namespace:  flame
+  labels:
+    app.kubernetes.io/name: kong
+    helm.sh/chart: kong-2.38.0
+    app.kubernetes.io/instance: "blaze"
+    app.kubernetes.io/managed-by: "Helm"
+    app.kubernetes.io/version: "3.6"
+    app.kubernetes.io/component: app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: kong
+      app.kubernetes.io/component: app
+      app.kubernetes.io/instance: "blaze"
+
+  template:
+    metadata:
+      annotations:
+        kuma.io/service-account-token-volume: blaze-kong-token
+        kuma.io/gateway: "enabled"
+        traffic.sidecar.istio.io/includeInboundPorts: ""
+      labels:
+        app.kubernetes.io/name: kong
+        helm.sh/chart: kong-2.38.0
+        app.kubernetes.io/instance: "blaze"
+        app.kubernetes.io/managed-by: "Helm"
+        app.kubernetes.io/version: "3.6"
+        app.kubernetes.io/component: app
+        app: blaze-kong
+        version: "3.6"
+    spec:
+      serviceAccountName: blaze-kong
+      automountServiceAccountToken: false
+      
+      initContainers:
+      - name: clear-stale-pid
+        image: kong:3.6
+        imagePullPolicy: IfNotPresent
+        securityContext:
+        
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1000
+          seccompProfile:
+            type: RuntimeDefault
+        resources:
+          {}
+        command:
+        - "rm"
+        - "-vrf"
+        - "$KONG_PREFIX/pids"
+        env:
+         
+        
+        
+        - name: KONG_ADMIN_ACCESS_LOG
+          value: "/dev/stdout"
+        - name: KONG_ADMIN_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_ADMIN_GUI_ACCESS_LOG
+          value: "/dev/stdout"
+        - name: KONG_ADMIN_GUI_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_ADMIN_LISTEN
+          value: "0.0.0.0:8001, [::]:8001"
+        - name: KONG_CLUSTER_LISTEN
+          value: "off"
+        - name: KONG_DATABASE
+          value: "postgres"
+        - name: KONG_LUA_PACKAGE_PATH
+          value: "/opt/?.lua;/opt/?/init.lua;;"
+        - name: KONG_NGINX_WORKER_PROCESSES
+          value: "2"
+        - name: KONG_PG_HOST
+          value: "blaze-kong-postgresql"
+        - name: KONG_PG_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: blaze-kong-postgresql
+              key: password
+        - name: KONG_PG_PORT
+          value: "5432"
+        - name: KONG_PORTAL_API_ACCESS_LOG
+          value: "/dev/stdout"
+        - name: KONG_PORTAL_API_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_PORT_MAPS
+          value: "80:8000"
+        - name: KONG_PREFIX
+          value: "/kong_prefix/"
+        - name: KONG_PROXY_ACCESS_LOG
+          value: "/dev/stdout"
+        - name: KONG_PROXY_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_PROXY_LISTEN
+          value: "0.0.0.0:8000, [::]:8000"
+        - name: KONG_PROXY_STREAM_ACCESS_LOG
+          value: "/dev/stdout basic"
+        - name: KONG_PROXY_STREAM_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_ROUTER_FLAVOR
+          value: "traditional"
+        - name: KONG_STATUS_ACCESS_LOG
+          value: "off"
+        - name: KONG_STATUS_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_STATUS_LISTEN
+          value: "0.0.0.0:8100, [::]:8100"
+        - name: KONG_STREAM_LISTEN
+          value: "off"
+        
+        volumeMounts:
+        - name: blaze-kong-prefix-dir
+          mountPath: /kong_prefix/
+        - name: blaze-kong-tmp
+          mountPath: /tmp
+      - name: wait-for-db
+        image: kong:3.6
+        imagePullPolicy: IfNotPresent
+        securityContext:
+        
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1000
+          seccompProfile:
+            type: RuntimeDefault
+        env:
+         
+        
+        
+        - name: KONG_ADMIN_ACCESS_LOG
+          value: "/dev/stdout"
+        - name: KONG_ADMIN_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_ADMIN_GUI_ACCESS_LOG
+          value: "/dev/stdout"
+        - name: KONG_ADMIN_GUI_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_ADMIN_LISTEN
+          value: "0.0.0.0:8001, [::]:8001"
+        - name: KONG_CLUSTER_LISTEN
+          value: "off"
+        - name: KONG_DATABASE
+          value: "postgres"
+        - name: KONG_LUA_PACKAGE_PATH
+          value: "/opt/?.lua;/opt/?/init.lua;;"
+        - name: KONG_NGINX_WORKER_PROCESSES
+          value: "2"
+        - name: KONG_PG_HOST
+          value: "blaze-kong-postgresql"
+        - name: KONG_PG_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: blaze-kong-postgresql
+              key: password
+        - name: KONG_PG_PORT
+          value: "5432"
+        - name: KONG_PORTAL_API_ACCESS_LOG
+          value: "/dev/stdout"
+        - name: KONG_PORTAL_API_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_PORT_MAPS
+          value: "80:8000"
+        - name: KONG_PREFIX
+          value: "/kong_prefix/"
+        - name: KONG_PROXY_ACCESS_LOG
+          value: "/dev/stdout"
+        - name: KONG_PROXY_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_PROXY_LISTEN
+          value: "0.0.0.0:8000, [::]:8000"
+        - name: KONG_PROXY_STREAM_ACCESS_LOG
+          value: "/dev/stdout basic"
+        - name: KONG_PROXY_STREAM_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_ROUTER_FLAVOR
+          value: "traditional"
+        - name: KONG_STATUS_ACCESS_LOG
+          value: "off"
+        - name: KONG_STATUS_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_STATUS_LISTEN
+          value: "0.0.0.0:8100, [::]:8100"
+        - name: KONG_STREAM_LISTEN
+          value: "off"
+        
+      
+        args: [ "/bin/bash", "-c", "export KONG_NGINX_DAEMON=on KONG_PREFIX=`mktemp -d` KONG_KEYRING_ENABLED=off; until kong start; do echo 'waiting for db'; sleep 1; done; kong stop"]
+        volumeMounts:
+          - name: blaze-kong-prefix-dir
+            mountPath: /kong_prefix/
+          - name: blaze-kong-tmp
+            mountPath: /tmp
+          
+        resources:
+          {}
+      containers:
+      - name: "proxy"
+        image: kong:3.6
+        imagePullPolicy: IfNotPresent
+        securityContext:
+        
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1000
+          seccompProfile:
+            type: RuntimeDefault
+        env:
+         
+        
+        
+        - name: KONG_ADMIN_ACCESS_LOG
+          value: "/dev/stdout"
+        - name: KONG_ADMIN_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_ADMIN_GUI_ACCESS_LOG
+          value: "/dev/stdout"
+        - name: KONG_ADMIN_GUI_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_ADMIN_LISTEN
+          value: "0.0.0.0:8001, [::]:8001"
+        - name: KONG_CLUSTER_LISTEN
+          value: "off"
+        - name: KONG_DATABASE
+          value: "postgres"
+        - name: KONG_LUA_PACKAGE_PATH
+          value: "/opt/?.lua;/opt/?/init.lua;;"
+        - name: KONG_NGINX_WORKER_PROCESSES
+          value: "2"
+        - name: KONG_PG_HOST
+          value: "blaze-kong-postgresql"
+        - name: KONG_PG_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: blaze-kong-postgresql
+              key: password
+        - name: KONG_PG_PORT
+          value: "5432"
+        - name: KONG_PORTAL_API_ACCESS_LOG
+          value: "/dev/stdout"
+        - name: KONG_PORTAL_API_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_PORT_MAPS
+          value: "80:8000"
+        - name: KONG_PREFIX
+          value: "/kong_prefix/"
+        - name: KONG_PROXY_ACCESS_LOG
+          value: "/dev/stdout"
+        - name: KONG_PROXY_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_PROXY_LISTEN
+          value: "0.0.0.0:8000, [::]:8000"
+        - name: KONG_PROXY_STREAM_ACCESS_LOG
+          value: "/dev/stdout basic"
+        - name: KONG_PROXY_STREAM_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_ROUTER_FLAVOR
+          value: "traditional"
+        - name: KONG_STATUS_ACCESS_LOG
+          value: "off"
+        - name: KONG_STATUS_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_STATUS_LISTEN
+          value: "0.0.0.0:8100, [::]:8100"
+        - name: KONG_STREAM_LISTEN
+          value: "off"
+        - name: KONG_NGINX_DAEMON
+          value: "off"
+        
+        lifecycle:
+          preStop:
+            exec:
+              command:
+              - kong
+              - quit
+              - --wait=15
+        ports:
+        - name: admin
+          containerPort: 8001
+          protocol: TCP
+        - name: proxy
+          containerPort: 8000
+          protocol: TCP
+        - name: status
+          containerPort: 8100
+          protocol: TCP
+        volumeMounts:
+          - name: blaze-kong-prefix-dir
+            mountPath: /kong_prefix/
+          - name: blaze-kong-tmp
+            mountPath: /tmp
+          
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /status/ready
+            port: status
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /status
+            port: status
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+          {} 
+      securityContext:
+        {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: blaze-kong-prefix-dir
+          emptyDir:
+            sizeLimit: 256Mi
+        - name: blaze-kong-tmp
+          emptyDir:
+            sizeLimit: 1Gi
+        - name: blaze-kong-token
+          projected:
+            sources:
+            - serviceAccountToken:
+                expirationSeconds: 3607
+                path: token
+            - configMap:
+                items:
+                - key: ca.crt
+                  path: ca.crt
+                name: kube-root-ca.crt
+            - downwardAPI:
+                items:
+                - fieldRef:
+                    apiVersion: v1
+                    fieldPath: metadata.namespace
+                  path: namespace
+        - name: blaze-kong-bash-wait-for-postgres
+          configMap:
+            name: blaze-kong-bash-wait-for-postgres
+            defaultMode: 0755
+---
+# Source: flame-node/charts/flame-node-message-broker/templates/node-message-broker-db-statefulset.yml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: blaze-node-message-broker-db
+  labels:
+    app.kubernetes.io/name: blaze-node-message-broker
+    app.kubernetes.io/component: database
+    app.kubernetes.io/part-of: flame
+    app.kubernetes.io/version: 0.1.0
+spec:
+  serviceName: blaze-node-message-broker-db
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: blaze-node-message-broker
+      app.kubernetes.io/component: database
+      app.kubernetes.io/part-of: flame
+      app.kubernetes.io/version: 0.1.0
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: blaze-node-message-broker
+        app.kubernetes.io/component: database
+        app.kubernetes.io/part-of: flame
+        app.kubernetes.io/version: 0.1.0
+    spec:
+      restartPolicy: "Always"
+      containers:
+        - name: blaze-node-message-broker-db
+          image: mongo:7.0.5@sha256:fcde2d71bf00b592c9cabab1d7d01defde37d69b3d788c53c3bc7431b6b15de8
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            allowPrivilegeEscalation: false
+          ports:
+            - containerPort: 27017
+          env:
+            - name: MONGO_INITDB_DATABASE
+              value: "message-broker"
+            - name: TZ
+              value: "Europe/Berlin"
+          resources:
+            requests:
+              memory: "256Mi"
+            limits:
+              memory: "1Gi"
+              cpu: "1"
+          readinessProbe:
+            exec:
+              command:
+                - mongosh
+                - --eval
+                - 'db.runCommand("ping").ok'
+                - --quiet
+            failureThreshold: 3
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 15
+            initialDelaySeconds: 30
+          livenessProbe:
+            exec:
+              command:
+                - mongosh
+                - --eval
+                - 'db.runCommand("ping").ok'
+                - --quiet
+            failureThreshold: 3
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 15
+          volumeMounts:
+            - name: storage
+              mountPath: /data/db
+  volumeClaimTemplates:
+    - metadata:
+        name: storage
+      spec:
+        accessModes: ["ReadWriteMany"]
+        resources:
+          requests:
+            storage: 100Mi
+---
+# Source: flame-node/charts/flame-node-pod-orchestration/charts/postgresql/templates/primary/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: blaze-postgresql
+  namespace: "flame"
+  labels:
+    app.kubernetes.io/instance: blaze
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/version: 16.2.0
+    helm.sh/chart: postgresql-15.2.5
+    app.kubernetes.io/component: primary
+spec:
+  replicas: 1
+  serviceName: blaze-postgresql-hl
+  updateStrategy:
+    rollingUpdate: {}
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: blaze
+      app.kubernetes.io/name: postgresql
+      app.kubernetes.io/component: primary
+  template:
+    metadata:
+      name: blaze-postgresql
+      labels:
+        app.kubernetes.io/instance: blaze
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: postgresql
+        app.kubernetes.io/version: 16.2.0
+        helm.sh/chart: postgresql-15.2.5
+        app.kubernetes.io/component: primary
+    spec:
+      serviceAccountName: blaze-postgresql
+      
+      automountServiceAccountToken: false
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/instance: blaze
+                    app.kubernetes.io/name: postgresql
+                    app.kubernetes.io/component: primary
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      securityContext:
+        fsGroup: 1001
+        fsGroupChangePolicy: Always
+        supplementalGroups: []
+        sysctls: []
+      hostNetwork: false
+      hostIPC: false
+      containers:
+        - name: postgresql
+          image: docker.io/bitnami/postgresql:16.2.0-debian-12-r15
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsGroup: 1001
+            runAsNonRoot: true
+            runAsUser: 1001
+            seLinuxOptions: {}
+            seccompProfile:
+              type: RuntimeDefault
+          env:
+            - name: BITNAMI_DEBUG
+              value: "false"
+            - name: POSTGRESQL_PORT_NUMBER
+              value: "5432"
+            - name: POSTGRESQL_VOLUME_DIR
+              value: "/bitnami/postgresql"
+            - name: PGDATA
+              value: "/bitnami/postgresql/data"
+            # Authentication
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: blaze-postgresql
+                  key: postgres-password
+            - name: POSTGRES_DATABASE
+              value: "postgres_db"
+            # Replication
+            # Initdb
+            # Standby
+            # LDAP
+            - name: POSTGRESQL_ENABLE_LDAP
+              value: "no"
+            # TLS
+            - name: POSTGRESQL_ENABLE_TLS
+              value: "no"
+            # Audit
+            - name: POSTGRESQL_LOG_HOSTNAME
+              value: "false"
+            - name: POSTGRESQL_LOG_CONNECTIONS
+              value: "false"
+            - name: POSTGRESQL_LOG_DISCONNECTIONS
+              value: "false"
+            - name: POSTGRESQL_PGAUDIT_LOG_CATALOG
+              value: "off"
+            # Others
+            - name: POSTGRESQL_CLIENT_MIN_MESSAGES
+              value: "error"
+            - name: POSTGRESQL_SHARED_PRELOAD_LIBRARIES
+              value: "pgaudit"
+          ports:
+            - name: tcp-postgresql
+              containerPort: 5432
+          livenessProbe:
+            failureThreshold: 6
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - exec pg_isready -U "postgres" -d "dbname=postgres_db" -h 127.0.0.1 -p 5432
+          readinessProbe:
+            failureThreshold: 6
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - -e
+                - |
+                  exec pg_isready -U "postgres" -d "dbname=postgres_db" -h 127.0.0.1 -p 5432
+                  [ -f /opt/bitnami/postgresql/tmp/.initialized ] || [ -f /bitnami/postgresql/.initialized ]
+          resources:
+            limits:
+              cpu: 150m
+              ephemeral-storage: 1024Mi
+              memory: 192Mi
+            requests:
+              cpu: 100m
+              ephemeral-storage: 50Mi
+              memory: 128Mi
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/postgresql/conf
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/postgresql/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/postgresql/logs
+              subPath: app-logs-dir
+            - name: dshm
+              mountPath: /dev/shm
+            - name: data
+              mountPath: /bitnami/postgresql
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        - name: dshm
+          emptyDir:
+            medium: Memory
+  volumeClaimTemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: data
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "8Gi"
+---
+# Source: flame-node/charts/flame-node-result-service/charts/minio/templates/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: blaze-minio
+  labels:
+    app: minio
+    chart: minio-5.1.0
+    release: blaze
+    heritage: Helm
+spec:
+  updateStrategy:
+    type: RollingUpdate
+  podManagementPolicy: "Parallel"
+  serviceName: blaze-minio-svc
+  replicas: 2
+  selector:
+    matchLabels:
+      app: minio
+      release: blaze
+  template:
+    metadata:
+      name: blaze-minio
+      labels:
+        app: minio
+        release: blaze
+      annotations:
+        checksum/secrets: 1716649363b0ac41266e96feed380cba3ec658597603e0c0bce0f402cc50d4a5
+        checksum/config: c913b5469e4f0a6c76e5468c20bee58a9b1846eefacb38701265ab4e858d3366
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+      serviceAccountName: minio-sa
+      containers:
+        - name: minio
+          image: quay.io/minio/minio:RELEASE.2024-03-03T17-50-39Z
+          imagePullPolicy: IfNotPresent
+          command: [
+            "/bin/sh",
+            "-ce",
+            "/usr/bin/docker-entrypoint.sh minio server  http://blaze-minio-{0...1}.blaze-minio-svc.flame.svc.cluster.local/mnt/data -S /etc/minio/certs/ --address :9000 --console-address :9001"
+          ]
+          volumeMounts:
+            - name: export
+              mountPath: /mnt/data            
+          ports:
+            - name: http
+              containerPort: 9000
+            - name: http-console
+              containerPort: 9001
+          env:
+            - name: MINIO_ROOT_USER
+              valueFrom:
+                secretKeyRef:
+                  name: blaze-minio
+                  key: rootUser
+            - name: MINIO_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: blaze-minio
+                  key: rootPassword
+            - name: MINIO_PROMETHEUS_AUTH_TYPE
+              value: "public"
+          resources:
+            requests:
+              memory: 1Gi      
+      volumes:
+        - name: minio-user
+          secret:
+            secretName: blaze-minio        
+  volumeClaimTemplates:
+    - apiVersion: v1	
+      kind: PersistentVolumeClaim	
+      metadata:
+        name: export
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 10Gi
+---
+# Source: flame-node/charts/keycloak/charts/postgresql/templates/primary/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: blaze-keycloak-postgresql
+  namespace: "flame"
+  labels:
+    app.kubernetes.io/instance: blaze
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: keycloak-postgresql
+    app.kubernetes.io/version: 16.2.0
+    helm.sh/chart: postgresql-15.2.5
+    app.kubernetes.io/component: primary
+spec:
+  replicas: 1
+  serviceName: blaze-keycloak-postgresql-hl
+  updateStrategy:
+    rollingUpdate: {}
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: blaze
+      app.kubernetes.io/name: keycloak-postgresql
+      app.kubernetes.io/component: primary
+  template:
+    metadata:
+      name: blaze-keycloak-postgresql
+      labels:
+        app.kubernetes.io/instance: blaze
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: keycloak-postgresql
+        app.kubernetes.io/version: 16.2.0
+        helm.sh/chart: postgresql-15.2.5
+        app.kubernetes.io/component: primary
+    spec:
+      serviceAccountName: blaze-keycloak-postgresql
+      
+      automountServiceAccountToken: false
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/instance: blaze
+                    app.kubernetes.io/name: keycloak-postgresql
+                    app.kubernetes.io/component: primary
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      securityContext:
+        fsGroup: 1001
+        fsGroupChangePolicy: Always
+        supplementalGroups: []
+        sysctls: []
+      hostNetwork: false
+      hostIPC: false
+      containers:
+        - name: postgresql
+          image: docker.io/bitnami/postgresql:16.2.0-debian-12-r15
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsGroup: 1001
+            runAsNonRoot: true
+            runAsUser: 1001
+            seLinuxOptions: {}
+            seccompProfile:
+              type: RuntimeDefault
+          env:
+            - name: BITNAMI_DEBUG
+              value: "false"
+            - name: POSTGRESQL_PORT_NUMBER
+              value: "5432"
+            - name: POSTGRESQL_VOLUME_DIR
+              value: "/bitnami/postgresql"
+            - name: PGDATA
+              value: "/bitnami/postgresql/data"
+            # Authentication
+            - name: POSTGRES_USER
+              value: "keycloak"
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kc-password-secret
+                  key: password
+            - name: POSTGRES_POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kc-password-secret
+                  key: postgres-password
+            - name: POSTGRES_DATABASE
+              value: "keycloak"
+            # Replication
+            # Initdb
+            # Standby
+            # LDAP
+            - name: POSTGRESQL_ENABLE_LDAP
+              value: "no"
+            # TLS
+            - name: POSTGRESQL_ENABLE_TLS
+              value: "no"
+            # Audit
+            - name: POSTGRESQL_LOG_HOSTNAME
+              value: "false"
+            - name: POSTGRESQL_LOG_CONNECTIONS
+              value: "false"
+            - name: POSTGRESQL_LOG_DISCONNECTIONS
+              value: "false"
+            - name: POSTGRESQL_PGAUDIT_LOG_CATALOG
+              value: "off"
+            # Others
+            - name: POSTGRESQL_CLIENT_MIN_MESSAGES
+              value: "error"
+            - name: POSTGRESQL_SHARED_PRELOAD_LIBRARIES
+              value: "pgaudit"
+          ports:
+            - name: tcp-postgresql
+              containerPort: 5432
+          livenessProbe:
+            failureThreshold: 6
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - exec pg_isready -U "keycloak" -d "dbname=keycloak" -h 127.0.0.1 -p 5432
+          readinessProbe:
+            failureThreshold: 6
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - -e
+                - |
+                  exec pg_isready -U "keycloak" -d "dbname=keycloak" -h 127.0.0.1 -p 5432
+                  [ -f /opt/bitnami/postgresql/tmp/.initialized ] || [ -f /bitnami/postgresql/.initialized ]
+          resources:
+            limits:
+              cpu: 150m
+              ephemeral-storage: 1024Mi
+              memory: 192Mi
+            requests:
+              cpu: 100m
+              ephemeral-storage: 50Mi
+              memory: 128Mi
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/postgresql/conf
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/postgresql/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/postgresql/logs
+              subPath: app-logs-dir
+            - name: dshm
+              mountPath: /dev/shm
+            - name: data
+              mountPath: /bitnami/postgresql
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        - name: dshm
+          emptyDir:
+            medium: Memory
+  volumeClaimTemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: data
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "8Gi"
+---
+# Source: flame-node/charts/keycloak/templates/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: blaze-keycloak
+  namespace: "flame"
+  labels:
+    app.kubernetes.io/instance: blaze
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/version: 24.0.3
+    helm.sh/chart: keycloak-21.0.2
+    app.kubernetes.io/component: keycloak
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  podManagementPolicy: Parallel
+  serviceName: blaze-keycloak-headless
+  updateStrategy:
+    rollingUpdate: {}
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: blaze
+      app.kubernetes.io/name: keycloak
+      app.kubernetes.io/component: keycloak
+  template:
+    metadata:
+      annotations:
+        checksum/configmap-env-vars: b35da3b567e7f1e248b2a5d2bc0e9e11e2bf3262bd6a950e30a7f80bebaf6427
+        checksum/secrets: 7c0266ce0aa2be28e495ebfb8d3ad28f5e2f333cdbbf3ff39f872bc441115ed4
+      labels:
+        app.kubernetes.io/instance: blaze
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: keycloak
+        app.kubernetes.io/version: 24.0.3
+        helm.sh/chart: keycloak-21.0.2
+        app.kubernetes.io/component: keycloak
+    spec:
+      serviceAccountName: blaze-keycloak
+      
+      automountServiceAccountToken: true
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/instance: blaze
+                    app.kubernetes.io/name: keycloak
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      securityContext:
+        fsGroup: 1001
+        fsGroupChangePolicy: Always
+        supplementalGroups: []
+        sysctls: []
+      enableServiceLinks: true
+      initContainers:
+        - name: init-quarkus-directory
+          image: docker.io/bitnami/keycloak:24.0.3-debian-12-r0
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              #!/bin/bash
+              cp -r /opt/bitnami/keycloak/lib/quarkus/* /quarkus
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsGroup: 1001
+            runAsNonRoot: true
+            runAsUser: 1001
+            seLinuxOptions: {}
+            seccompProfile:
+              type: RuntimeDefault
+          resources:
+            limits:
+              cpu: 750m
+              ephemeral-storage: 1024Mi
+              memory: 768Mi
+            requests:
+              cpu: 500m
+              ephemeral-storage: 50Mi
+              memory: 512Mi
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /quarkus
+              subPath: app-quarkus-dir
+      containers:
+        - name: keycloak
+          image: docker.io/bitnami/keycloak:24.0.3-debian-12-r0
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsGroup: 1001
+            runAsNonRoot: true
+            runAsUser: 1001
+            seLinuxOptions: {}
+            seccompProfile:
+              type: RuntimeDefault
+          env:
+            - name: KUBERNETES_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+            - name: BITNAMI_DEBUG
+              value: "false"
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: blaze-keycloak
+                  key: admin-password
+            - name: KEYCLOAK_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kc-password-secret
+                  key: password
+            - name: KEYCLOAK_HTTP_RELATIVE_PATH
+              value: "/"
+          envFrom:
+            - configMapRef:
+                name: blaze-keycloak-env-vars
+          resources:
+            limits:
+              cpu: 750m
+              ephemeral-storage: 1024Mi
+              memory: 768Mi
+            requests:
+              cpu: 500m
+              ephemeral-storage: 50Mi
+              memory: 512Mi
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+            - name: infinispan
+              containerPort: 7800
+              protocol: TCP
+            - name: discovery
+              containerPort: 7800
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 300
+            periodSeconds: 1
+            successThreshold: 1
+            timeoutSeconds: 5
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+            httpGet:
+              path: /realms/master
+              port: http
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/keycloak/conf
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/keycloak/lib/quarkus
+              subPath: app-quarkus-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/keycloak/data
+              subPath: app-data-dir
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+---
+# Source: flame-node/charts/kong/charts/postgresql/templates/primary/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: blaze-kong-postgresql
+  namespace: "flame"
+  labels:
+    app.kubernetes.io/name: kong-postgresql
+    helm.sh/chart: postgresql-11.9.13
+    app.kubernetes.io/instance: blaze
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: "14.5.0"
+    app.kubernetes.io/component: primary
+  annotations:
+spec:
+  replicas: 1
+  serviceName: blaze-kong-postgresql-hl
+  updateStrategy:
+    rollingUpdate: {}
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: kong-postgresql
+      app.kubernetes.io/instance: blaze
+      app.kubernetes.io/component: primary
+  template:
+    metadata:
+      name: blaze-kong-postgresql
+      labels:
+        app.kubernetes.io/name: kong-postgresql
+        helm.sh/chart: postgresql-11.9.13
+        app.kubernetes.io/instance: blaze
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/version: "14.5.0"
+        app.kubernetes.io/component: primary
+      annotations:
+    spec:
+      serviceAccountName: default
+      
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/instance: blaze
+                    app.kubernetes.io/name: kong-postgresql
+                    app.kubernetes.io/component: primary
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      securityContext:
+        fsGroup: 1001
+      hostNetwork: false
+      hostIPC: false
+      initContainers:
+      containers:
+        - name: postgresql
+          image: docker.io/bitnami/postgresql:13.11.0-debian-11-r20
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            runAsUser: 1001
+          env:
+            - name: BITNAMI_DEBUG
+              value: "false"
+            - name: POSTGRESQL_PORT_NUMBER
+              value: "5432"
+            - name: POSTGRESQL_VOLUME_DIR
+              value: "/bitnami/postgresql"
+            - name: PGDATA
+              value: "/bitnami/postgresql/data"
+            # Authentication
+            - name: POSTGRES_USER
+              value: "kong"
+            - name: POSTGRES_POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: blaze-kong-postgresql
+                  key: postgres-password
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: blaze-kong-postgresql
+                  key: password
+            - name: POSTGRES_DB
+              value: "kong"
+            # Replication
+            # Initdb
+            # Standby
+            # LDAP
+            - name: POSTGRESQL_ENABLE_LDAP
+              value: "no"
+            # TLS
+            - name: POSTGRESQL_ENABLE_TLS
+              value: "no"
+            # Audit
+            - name: POSTGRESQL_LOG_HOSTNAME
+              value: "false"
+            - name: POSTGRESQL_LOG_CONNECTIONS
+              value: "false"
+            - name: POSTGRESQL_LOG_DISCONNECTIONS
+              value: "false"
+            - name: POSTGRESQL_PGAUDIT_LOG_CATALOG
+              value: "off"
+            # Others
+            - name: POSTGRESQL_CLIENT_MIN_MESSAGES
+              value: "error"
+            - name: POSTGRESQL_SHARED_PRELOAD_LIBRARIES
+              value: "pgaudit"
+          ports:
+            - name: tcp-postgresql
+              containerPort: 5432
+          livenessProbe:
+            failureThreshold: 6
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - exec pg_isready -U "kong" -d "dbname=kong" -h 127.0.0.1 -p 5432
+          readinessProbe:
+            failureThreshold: 6
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - -e
+                
+                - |
+                  exec pg_isready -U "kong" -d "dbname=kong" -h 127.0.0.1 -p 5432
+                  [ -f /opt/bitnami/postgresql/tmp/.initialized ] || [ -f /bitnami/postgresql/.initialized ]
+          resources:
+            limits: {}
+            requests:
+              cpu: 250m
+              memory: 256Mi
+          volumeMounts:
+            - name: dshm
+              mountPath: /dev/shm
+            - name: data
+              mountPath: /bitnami/postgresql
+      volumes:
+        - name: dshm
+          emptyDir:
+            medium: Memory
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "8Gi"
+---
+# Source: flame-node/charts/blaze/templates/data-populator-job.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: blaze-node-fhir-test-data-populator
+spec:
+  template:
+    spec:
+      initContainers:
+        - name: blaze-node-fhir-test-data-populator-init-wait
+          image: busybox
+          command: ["/bin/sh", "-c", "for i in $(seq 1 5); do curl -f http://flame-node-blaze:80/fhir && break || sleep 60; done"]
+      containers:
+        - name: blaze-node-fhir-test-data-populator
+          image: ghcr.io/privateaim/node-fhir-test-data-populator:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: CLEAR_TESTDATA_DIRS
+              value: "true"
+            - name: ENABLE_GENERATE_SYNTHEA_DATA
+              value: "true"
+            - name: N_PATIENTS
+              value: "10"
+            - name: TIMEOUT
+              value: "1"
+            - name: ENABLE_PROCESS_TESTDATA
+              value: "true"
+            - name: GZIP_PROCESSED_OUTPUT_FILES
+              value: "true"
+            - name: REMOVE_INPUTFILES_PROCESSING
+              value: "true"
+            - name: RELEVANT_RESOURCES
+              value: "Patient,Encounter,Observation,Condition,DiagnosticReport,Medication,MedicationAdministration,Procedure"
+            - name: ENABLE_SENT_DATA_TO_FHIR
+              value: "true"
+            - name: GZIPPED_FHIR_SEND_INPUT_FILES
+              value: "true"
+            - name: REMOVE_INPUTFILES_FHIR_SENDING
+              value: "true"
+            - name: FHIR_URL
+              value: "http://flame-node-blaze:80/fhir"
+            - name: FHIR_USER
+              value: "''"
+            - name: FHIR_PW
+              value: "''"
+      restartPolicy: Never
+---
+# Source: flame-node/charts/kong/templates/migrations.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: blaze-kong-init-migrations
+  namespace: flame
+  labels:
+    app.kubernetes.io/name: kong
+    helm.sh/chart: kong-2.38.0
+    app.kubernetes.io/instance: "blaze"
+    app.kubernetes.io/managed-by: "Helm"
+    app.kubernetes.io/version: "3.6"
+    app.kubernetes.io/component: init-migrations
+  annotations:
+    argocd.argoproj.io/hook: Sync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
+spec:
+  backoffLimit: 
+  template:
+    metadata:
+      name: kong-init-migrations
+      labels:
+        app.kubernetes.io/name: kong
+        helm.sh/chart: kong-2.38.0
+        app.kubernetes.io/instance: "blaze"
+        app.kubernetes.io/managed-by: "Helm"
+        app.kubernetes.io/version: "3.6"
+        app.kubernetes.io/component: init-migrations
+      annotations:
+        sidecar.istio.io/inject: "false"
+        kuma.io/service-account-token-volume: blaze-kong-token
+    spec:
+      serviceAccountName: blaze-kong
+      automountServiceAccountToken: false
+      
+      initContainers:
+      - name: wait-for-postgres 
+        image: kong:3.6
+        imagePullPolicy: IfNotPresent
+        env:
+         
+        
+        
+        - name: KONG_ADMIN_ACCESS_LOG
+          value: "/dev/stdout"
+        - name: KONG_ADMIN_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_ADMIN_GUI_ACCESS_LOG
+          value: "/dev/stdout"
+        - name: KONG_ADMIN_GUI_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_ADMIN_LISTEN
+          value: "0.0.0.0:8001, [::]:8001"
+        - name: KONG_CLUSTER_LISTEN
+          value: "off"
+        - name: KONG_DATABASE
+          value: "postgres"
+        - name: KONG_LUA_PACKAGE_PATH
+          value: "/opt/?.lua;/opt/?/init.lua;;"
+        - name: KONG_NGINX_WORKER_PROCESSES
+          value: "2"
+        - name: KONG_PG_HOST
+          value: "blaze-kong-postgresql"
+        - name: KONG_PG_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: blaze-kong-postgresql
+              key: password
+        - name: KONG_PG_PORT
+          value: "5432"
+        - name: KONG_PORTAL_API_ACCESS_LOG
+          value: "/dev/stdout"
+        - name: KONG_PORTAL_API_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_PORT_MAPS
+          value: "80:8000"
+        - name: KONG_PREFIX
+          value: "/kong_prefix/"
+        - name: KONG_PROXY_ACCESS_LOG
+          value: "/dev/stdout"
+        - name: KONG_PROXY_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_PROXY_LISTEN
+          value: "0.0.0.0:8000, [::]:8000"
+        - name: KONG_PROXY_STREAM_ACCESS_LOG
+          value: "/dev/stdout basic"
+        - name: KONG_PROXY_STREAM_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_ROUTER_FLAVOR
+          value: "traditional"
+        - name: KONG_STATUS_ACCESS_LOG
+          value: "off"
+        - name: KONG_STATUS_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_STATUS_LISTEN
+          value: "0.0.0.0:8100, [::]:8100"
+        - name: KONG_STREAM_LISTEN
+          value: "off"
+        - name: KONG_NGINX_DAEMON
+          value: "off"
+        
+        command: [ "bash", "/wait_postgres/wait.sh" ]
+        volumeMounts:
+        - name: blaze-kong-bash-wait-for-postgres
+          mountPath: /wait_postgres
+        resources:
+          {}
+      containers:
+      - name: kong-migrations
+        image: kong:3.6
+        imagePullPolicy: IfNotPresent
+        securityContext:
+        
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1000
+          seccompProfile:
+            type: RuntimeDefault 
+        env:
+         
+        
+        
+        - name: KONG_ADMIN_ACCESS_LOG
+          value: "/dev/stdout"
+        - name: KONG_ADMIN_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_ADMIN_GUI_ACCESS_LOG
+          value: "/dev/stdout"
+        - name: KONG_ADMIN_GUI_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_ADMIN_LISTEN
+          value: "0.0.0.0:8001, [::]:8001"
+        - name: KONG_CLUSTER_LISTEN
+          value: "off"
+        - name: KONG_DATABASE
+          value: "postgres"
+        - name: KONG_LUA_PACKAGE_PATH
+          value: "/opt/?.lua;/opt/?/init.lua;;"
+        - name: KONG_NGINX_WORKER_PROCESSES
+          value: "2"
+        - name: KONG_PG_HOST
+          value: "blaze-kong-postgresql"
+        - name: KONG_PG_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: blaze-kong-postgresql
+              key: password
+        - name: KONG_PG_PORT
+          value: "5432"
+        - name: KONG_PORTAL_API_ACCESS_LOG
+          value: "/dev/stdout"
+        - name: KONG_PORTAL_API_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_PORT_MAPS
+          value: "80:8000"
+        - name: KONG_PREFIX
+          value: "/kong_prefix/"
+        - name: KONG_PROXY_ACCESS_LOG
+          value: "/dev/stdout"
+        - name: KONG_PROXY_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_PROXY_LISTEN
+          value: "0.0.0.0:8000, [::]:8000"
+        - name: KONG_PROXY_STREAM_ACCESS_LOG
+          value: "/dev/stdout basic"
+        - name: KONG_PROXY_STREAM_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_ROUTER_FLAVOR
+          value: "traditional"
+        - name: KONG_STATUS_ACCESS_LOG
+          value: "off"
+        - name: KONG_STATUS_ERROR_LOG
+          value: "/dev/stderr"
+        - name: KONG_STATUS_LISTEN
+          value: "0.0.0.0:8100, [::]:8100"
+        - name: KONG_STREAM_LISTEN
+          value: "off"
+        - name: KONG_NGINX_DAEMON
+          value: "off"
+        
+        args: [ "kong", "migrations", "bootstrap" ]
+        volumeMounts:
+        - name: blaze-kong-prefix-dir
+          mountPath: /kong_prefix/
+        - name: blaze-kong-tmp
+          mountPath: /tmp
+        
+        resources:
+          {}
+      securityContext:
+        {}
+      restartPolicy: OnFailure
+      volumes:
+      - name: blaze-kong-prefix-dir
+        emptyDir:
+          sizeLimit: 256Mi
+      - name: blaze-kong-tmp
+        emptyDir:
+          sizeLimit: 1Gi
+      - name: blaze-kong-token
+        projected:
+          sources:
+          - serviceAccountToken:
+              expirationSeconds: 3607
+              path: token
+          - configMap:
+              items:
+              - key: ca.crt
+                path: ca.crt
+              name: kube-root-ca.crt
+          - downwardAPI:
+              items:
+              - fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+                path: namespace
+      - name: blaze-kong-bash-wait-for-postgres
+        configMap:
+          name: blaze-kong-bash-wait-for-postgres
+          defaultMode: 0755
+---
+# Source: flame-node/charts/flame-node-hub-adapter/templates/hub-adapter-ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: blaze-hub-adapter-ingress
+  labels:
+    component: hub-adapter-service
+    version: latest
+    deployment-id:  blaze
+spec:
+  rules:
+    - host: localhost
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: blaze-hub-adapter-service
+                port:
+                  number: 5000
+---
+# Source: flame-node/charts/flame-node-ui/templates/node-ui-ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: blaze-node-ui-ingress
+  labels:
+    component: node-ui-service
+    version: latest
+    deployment-id:  blaze
+spec:
+  rules:
+    - host: localhost
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: blaze-node-ui-service
+                port:
+                  number: 3000
+

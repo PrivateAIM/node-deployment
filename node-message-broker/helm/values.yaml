@@ -1,10 +1,19 @@
 ## Global variables
 global:
-  hubAuth:
-    ## @param global.hubAuth.robotUser Robot user ID. Overrides broker.HUB_AUTH_ROBOT_ID if provided
-    robotUser: ""
-    ## @param global.hubAuth.robotSecret Robot user ID. Overrides broker.HUB_AUTH_ROBOT_SECRET if provided
-    robotSecret: ""
+  hub:
+    endpoints:
+      ## @param global.hub.endpoints.auth Hub Auth API endpoint. Overrides broker.HUB_AUTH_BASE_URL if provided
+      auth: https://auth.privateaim.dev
+      ## @param global.hub.endpoints.core Hub Core API endpoint. Overrides broker.HUB_BASE_URL if provided
+      core: https://core.privateaim.dev
+    auth:
+      ## TODO: does this need to be set? if not, remove it, otherwise, set it to the correct value
+      ## @param global.hub.auth.realmId Realm ID. Overrides broker.HUB_AUTH_REALM_ID
+      # realmId: ""
+      ## @param global.hub.auth.robotUser Robot user ID. Overrides broker.HUB_AUTH_ROBOT_ID if provided
+      robotUser: ""
+      ## @param global.hub.auth.robotSecret Robot user ID. Overrides broker.HUB_AUTH_ROBOT_SECRET if provided
+      robotSecret: ""
 
 common:
   timezone: Europe/Berlin
@@ -17,4 +26,3 @@ broker:
   HUB_AUTH_ROBOT_SECRET: ""
 broker_db:
   storageSizeMi:
-

@@ -1,10 +1,18 @@
 ## Global variables
 global:
-  hubAuth:
-    ## @param global.hubAuth.robotUser Robot user ID. Overrides hub.auth.robotUser if provided
-    robotUser: ""
-    ## @param global.hubAuth.robotSecret Robot user ID. Overrides hub.auth.robotSecret if provided
-    robotSecret: ""
+  hub:
+    endpoints:
+      ## @param global.hub.endpoints.auth Hub Auth API endpoint. Overrides hub.authApi if provided
+      auth: https://auth.privateaim.dev
+      ## @param global.hub.endpoints.core Hub Core API endpoint. Overrides hub.coreApi if provided
+      core: https://core.privateaim.dev
+    auth:
+      ## @param global.hub.auth.realmId Realm ID. Overrides hub.realmId if provided
+      realmId: ""
+      ## @param global.hub.auth.robotUser Robot user ID. Overrides hub.auth.robotUser if provided
+      robotUser: ""
+      ## @param global.hub.auth.robotSecret Robot user ID. Overrides hub.auth.robotSecret if provided
+      robotSecret: ""
 
 ## For defining ingress specific metadata
 ingress:
