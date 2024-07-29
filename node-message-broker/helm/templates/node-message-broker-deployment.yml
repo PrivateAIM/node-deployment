@@ -38,21 +38,21 @@ spec:
             - name: SERVER_PORT
               value: "8080"
             - name: AUTH_JWKS_URL
-              value: {{ required "A valid JWKS URL for Keycloak is required." .Values.broker.AUTH_JWKS_URL }}
+              value: {{ required "A valid JWKS URL for Keycloak is required." (include "broker.keycloak.endpoint" .) }}
             - name: MONGO_DB_URL
               value: "mongodb://{{ .Release.Name}}-node-message-broker-db:27017"
             - name: MONGO_DB_NAME
               value: "message-broker"
             - name: HUB_BASE_URL
-              value: {{ required "A valid HUB API base URL is required." .Values.broker.HUB_BASE_URL | default "https://api.privateaim.net/" | quote}}
+              value: {{ required "A valid HUB API base URL is required." (include "broker.hub.coreApi" .) | default "https://api.privateaim.net/" | quote}}
             - name: HUB_AUTH_BASE_URL
-              value: {{ required "A valid HUB Auth base URL is required." .Values.broker.HUB_AUTH_BASE_URL | default "https://auth.privateaim.net/" | quote }}
+              value: {{ required "A valid HUB Auth base URL is required." (include "broker.hub.authApi" .) | default "https://auth.privateaim.net/" | quote }}
             - name: HUB_AUTH_ROBOT_ID
-              value: {{ required "A robot ID associated with HUB Auth is required." .Values.broker.HUB_AUTH_ROBOT_ID | quote}}
+              value: {{ required "A robot ID for the Hub is required." (include "broker.hub.robotUser" .) | quote }}
             - name: HUB_AUTH_ROBOT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Release.Name}}-node-message-broker-hub-auth
+                  name: {{ .Release.Name }}-node-message-broker-hub-auth
                   key: robot-secret
             # DO NOT USE THIS IN PRODUCTION!!! This is just for internal testing purposes.
             - name: NODE_TLS_REJECT_UNAUTHORIZED

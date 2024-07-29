@@ -1,64 +1,65 @@
 {{/*
 Return hub auth API endpoint
 */}}
-{{- define "results.hub.authApi" -}}
+{{- define "broker.hub.authApi" -}}
 {{- if .Values.global.hub.endpoints.auth -}}
     {{- .Values.global.hub.endpoints.auth -}}
 {{- else -}}
-    {{- .Values.env.HUB__AUTH_BASE_URL -}}
+    {{- .Values.broker.HUB_AUTH_BASE_URL -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
 Return hub core API endpoint
 */}}
-{{- define "results.hub.coreApi" -}}
+{{- define "broker.hub.coreApi" -}}
 {{- if .Values.global.hub.endpoints.core -}}
     {{- .Values.global.hub.endpoints.core -}}
 {{- else -}}
-    {{- .Values.env.HUB__CORE_BASE_URL -}}
+    {{- .Values.broker.HUB_BASE_URL -}}
 {{- end -}}
 {{- end -}}
 
-{{/*
-Return hub storage API endpoint
-*/}}
-{{- define "results.hub.storageApi" -}}
-{{- if .Values.global.hub.endpoints.storage -}}
-    {{- .Values.global.hub.endpoints.storage -}}
-{{- else -}}
-    {{- .Values.env.HUB__STORAGE_BASE_URL -}}
-{{- end -}}
-{{- end -}}
+## TODO: does message broker use realmId? If not, remove it from the template
+# {{/*
+# Return hub realmId
+# */}}
+# {{- define "broker.hub.realmId" -}}
+# {{- if .Values.global.hub.realmId -}}
+#     {{- .Values.global.hub.realmId -}}
+# {{- else -}}
+#     {{- .Values.broker.HUB_AUTH_REALM_ID -}}
+# {{- end -}}
+# {{- end -}}
 
 {{/*
 Return hub robot user ID
 */}}
-{{- define "results.hub.robotUser" -}}
+{{- define "broker.hub.robotUser" -}}
 {{- if .Values.global.hub.auth.robotUser -}}
     {{- .Values.global.hub.auth.robotUser -}}
 {{- else -}}
-    {{- .Values.env.HUB_USERNAME -}}
+    {{- .Values.broker.HUB_AUTH_ROBOT_ID -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
 Return hub robot user secret
 */}}
-{{- define "results.hub.robotSecret" -}}
+{{- define "broker.hub.robotSecret" -}}
 {{- if .Values.global.hub.auth.robotSecret -}}
     {{- .Values.global.hub.auth.robotSecret | b64enc -}}
 {{- else -}}
-    {{- .Values.env.HUB_PASSWORD | b64enc -}}
+    {{- .Values.broker.HUB_AUTH_ROBOT_SECRET | b64enc -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
 Return the Keycloak certs endpoint
 */}}
-{{- define "results.keycloak.endpoint" -}}
-{{- if .Values.env.OIDC_CERTS_URL -}}
-    {{- .Values.env.OIDC_CERTS_URL -}}
+{{- define "broker.keycloak.endpoint" -}}
+{{- if .Values.broker.AUTH_JWKS_URL -}}
+    {{- .Values.broker.AUTH_JWKS_URL -}}
 {{- else -}}
     {{- printf "http://%s-keycloak:80/realms/flame/protocol/openid-connect/certs" .Release.Name -}}
 {{- end -}}

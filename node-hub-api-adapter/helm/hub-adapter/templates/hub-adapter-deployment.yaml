@@ -23,11 +23,6 @@ spec:
           ports:
             - containerPort: 5000
               name: healthcp
-          readinessProbe:
-            initialDelaySeconds: 45
-            httpGet:
-              path: /healthz
-              port: healthcp
           env:
             - name: API_CLIENT_ID
               value: {{ .Values.idp.clientId | default "hub-adapter" | quote }}
@@ -47,15 +42,18 @@ spec:
             - name: KONG_ADMIN_SERVICE_URL
               value: {{ include "adapter.kong.endpoint" . }}
             - name: HUB_REALM_UUID
-              value: {{ .Values.hub.realmId | quote }}  # To be properly filled in
+              value: {{ (include "adapter.hub.realmId" .) | quote }}  # To be properly filled in
             - name: HUB_SERVICE_URL
-              value: {{ .Values.hub.coreApi | default "https://privateaim.net/core" | quote }}
+              value: {{ (include "adapter.hub.coreApi" .) | default "https://privateaim.net/core" | quote }}
             - name: HUB_AUTH_SERVICE_URL
-              value: {{ .Values.hub.authApi | default "https://privateaim.net/auth" | quote }}
+              value: {{ (include "adapter.hub.authApi" .) | default "https://privateaim.net/auth" | quote }}
             - name: HUB_ROBOT_USER
-              value: {{ required "A robot ID for the Hub is required." .Values.hub.auth.robotuser | quote }}  # To be properly filled in
+              value: {{ required "A robot ID for the Hub is required." (include "adapter.hub.robotUser" .) | quote }}  # To be properly filled in
             - name: HUB_ROBOT_SECRET
-              value: {{ required "A robot secret for the Hub is required." .Values.hub.auth.robotpwd | quote }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "adapter.hub.secretName" . }}
+                  key: "robotSecret"
           livenessProbe:
             httpGet:
               path: /healthz

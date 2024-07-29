@@ -1,3 +1,16 @@
+# Global values
+global:
+  hub:
+    endpoints:
+      auth: https://auth.privateaim.dev
+      core: https://core.privateaim.dev
+      messenger: https://messenger.privateaim.dev
+      storage: https://storage.privateaim.dev
+    auth:
+      realmId: ""
+      robotUser: ""
+      robotSecret: ""
+
 # kong values
 kong:
   image:
@@ -52,8 +65,11 @@ kong:
 
 flame-node-result-service:
   env:
-    HUB_USERNAME: foobar
-    HUB_PASSWORD: sup3r_s3cr3t
+    HUB_USERNAME: admin
+    HUB_PASSWORD: start123
+    HUB__AUTH_BASE_URL: https://auth.privateaim.dev
+    HUB__CORE_BASE_URL: https://core.privateaim.dev
+    HUB__STORAGE_BASE_URL: https://storage.privateaim.dev    
     MINIO_USE_SSL: false
     MINIO_BUCKET: flame
     OIDC_CERTS_URL: ""
@@ -176,7 +192,7 @@ flame-node-result-service:
       volumeName: ""
       accessMode: ReadWriteOnce
       size: 10Gi
-  
+
 # keycloak values
 keycloak:
   auth:
@@ -210,7 +226,7 @@ flame-node-hub-adapter:
   idp:
     ## @param idp.debug If true, the clientId and clientSecret will use pre-defined values
     ## The clientSecret will be defined using the "static" k8s secret key
-    debug: false
+    debug: true  # TODO disable once everything working
     ## @param idp.clientId Keycloak client ID for this service
     clientId: hub-adapter
     ## @param idp.clientSecret Keycloak client secret. Ignored if `idp.existingSecret` is provided
@@ -246,8 +262,11 @@ flame-node-hub-adapter:
     realmId: ""
     ## Credentials used for retrieving a valid token from the hub using a robot account
     auth:
-      robotuser: ""  # Needs to be added
-      robotpwd: ""  # Needs to be added
+      robotUser: ""
+      robotSecret: ""
+      ## @param hub.auth.existingSecret Existing k8s secret containing secret for given hub robot ID
+      ## The secret must have a key named "robotSecret"
+      existingSecret: ""
 
 flame-node-pod-orchestration:
   api:
@@ -304,8 +323,8 @@ flame-node-message-broker:
     AUTH_JWKS_URL: http://flame-node-keycloak:80/realms/flame/protocol/openid-connect/certs
     HUB_BASE_URL: https://api.privateaim.net/
     HUB_AUTH_BASE_URL: https://auth.privateaim.net/
-    HUB_AUTH_ROBOT_ID: yourRobotId
-    HUB_AUTH_ROBOT_SECRET: yourRobotSecret
+    HUB_AUTH_ROBOT_ID: ""
+    HUB_AUTH_ROBOT_SECRET: ""
 
 flame-node-ui:
   env: development
@@ -347,4 +366,4 @@ blaze:
     env:
       SYNTHEA_N_PATIENTS: 10
       TIMEOUT: 1
-      FHIR_BASE_URL: http://flame-node-blaze:80/fhir
+      FHIR_BASE_URL: "http://flame-node-blaze:80/fhir"
