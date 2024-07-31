@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: results-service
-          image: ghcr.io/privateaim/node-result-service:sha-7740b53
+          image: ghcr.io/privateaim/node-result-service:sha-bbb7ac7
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
