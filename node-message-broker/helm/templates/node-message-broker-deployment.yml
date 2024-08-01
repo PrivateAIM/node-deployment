@@ -39,14 +39,18 @@ spec:
               value: "8080"
             - name: AUTH_JWKS_URL
               value: {{ required "A valid JWKS URL for Keycloak is required." (include "broker.keycloak.endpoint" .) }}
-            - name: MONGO_DB_URL
-              value: "mongodb://{{ .Release.Name}}-node-message-broker-db:27017"
-            - name: MONGO_DB_NAME
+            - name: PERSISTENCE_HOSTNAME
+              value: "{{ .Release.Name}}-node-message-broker-db"
+            - name: PERSISTENCE_PORT
+              value: "27017"
+            - name: PERSISTENCE_DATABASE_NAME
               value: "message-broker"
             - name: HUB_BASE_URL
               value: {{ required "A valid HUB API base URL is required." (include "broker.hub.coreApi" .) | default "https://api.privateaim.net/" | quote}}
             - name: HUB_AUTH_BASE_URL
               value: {{ required "A valid HUB Auth base URL is required." (include "broker.hub.authApi" .) | default "https://auth.privateaim.net/" | quote }}
+            - name: HUB_MESSENGER_BASE_URL
+              value: {{ required "A valid HUB Messenger base URL is required." (include "broker.hub.messengerApi" .) | default "https://messenger.privateaim.net/" | quote }}              
             - name: HUB_AUTH_ROBOT_ID
               value: {{ required "A robot ID for the Hub is required." (include "broker.hub.robotUser" .) | quote }}
             - name: HUB_AUTH_ROBOT_SECRET

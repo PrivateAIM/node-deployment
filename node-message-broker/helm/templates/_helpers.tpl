@@ -20,6 +20,17 @@ Return hub core API endpoint
 {{- end -}}
 {{- end -}}
 
+{{/*
+Return hub messenger API endpoint
+*/}}
+{{- define "broker.hub.messengerApi" -}}
+{{- if .Values.global.hub.endpoints.messenger -}}
+    {{- .Values.global.hub.endpoints.messenger -}}
+{{- else -}}
+    {{- .Values.broker.HUB_MESSENGER_BASE_URL -}}
+{{- end -}}
+{{- end -}}
+
 ## TODO: does message broker use realmId? If not, remove it from the template
 # {{/*
 # Return hub realmId
