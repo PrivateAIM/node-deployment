@@ -323,6 +323,7 @@ flame-node-message-broker:
     AUTH_JWKS_URL: ""
     HUB_BASE_URL: ""
     HUB_AUTH_BASE_URL: ""
+    HUB_MESSENGER_BASE_URL: ""
     HUB_AUTH_ROBOT_ID: ""
     HUB_AUTH_ROBOT_SECRET: ""
 
