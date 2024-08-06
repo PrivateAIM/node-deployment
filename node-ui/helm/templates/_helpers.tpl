@@ -55,6 +55,6 @@ Return the Keycloak endpoint
 {{- if .Values.idp.host -}}
     {{- .Values.idp.host -}}
 {{- else -}}
-    {{- printf "http://%s-keycloak-headless:8080" .Release.Name -}}
+    {{- printf "http://%s-keycloak" .Release.Name -}}
 {{- end -}}
 {{- end -}}
