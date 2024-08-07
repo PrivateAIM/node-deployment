@@ -1,9 +1,19 @@
+env: development
+
 ## For defining ingress specific metadata
 ingress:
-  domain: localhost
-
-env: development
-url: http://localhost:3000
+  ## @param ingress.enabled Enable ingress record generation for the Node UI
+  ##
+  enabled: false
+  ## @param ingress.pathType Ingress path type
+  ##
+  pathType: ImplementationSpecific
+  ## @param ingress.hostname Default host for the ingress record (evaluated as template)
+  ##
+  hostname: http://localhost
+  ## @param ingress.path Default file path for the ingress hostname
+  ##
+  path: "/"
 
 ## Keycloak related information
 idp:
