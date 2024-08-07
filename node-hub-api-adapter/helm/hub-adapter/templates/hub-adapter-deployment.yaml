@@ -24,6 +24,8 @@ spec:
             - containerPort: 5000
               name: healthcp
           env:
+            - name: API_ROOT_PATH
+              value: {{ (include "adapter.root.path" .) | default "" }}
             - name: API_CLIENT_ID
               value: {{ .Values.idp.clientId | default "hub-adapter" | quote }}
             - name: API_CLIENT_SECRET

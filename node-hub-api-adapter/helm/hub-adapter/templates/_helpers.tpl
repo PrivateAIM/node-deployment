@@ -1,4 +1,15 @@
 {{/*
+Set the API's root path. If ingress is enabled, defaults to "/api" else remains blank
+*/}}
+{{- define "adapter.root.path" -}}
+{{- if .Values.ingress.enabled -}}
+    {{- print "/api" -}}
+{{- else -}}
+    {{- print "" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the secret containing the hub robot secret
 */}}
 {{- define "adapter.hub.secretName" -}}
