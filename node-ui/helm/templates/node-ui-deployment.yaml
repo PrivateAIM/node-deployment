@@ -23,16 +23,11 @@ spec:
           ports:
             - containerPort: 3000
               name: ui
-{{/*          readinessProbe:*/}}
-{{/*            initialDelaySeconds: 45*/}}
-{{/*            httpGet:*/}}
-{{/*              path: /healthz*/}}
-{{/*              port: healthcp*/}}
           env:
             - name: NODE_ENV
               value: {{ .Values.env | default "development" | quote }}
             - name: NUXT_PUBLIC_BASE_URL
-              value: {{ .Values.url | default "http://localhost:3000" | quote }}
+              value: {{ printf "http://%s" .Values.ingress.hostname | default "http://localhost:3000" | quote }}
             - name: NUXT_PUBLIC_HUB_ADAPTER_URL
               value: {{ .Values.node.adapter | default "http://localhost:5000" | quote }}
             - name: NUXT_OIDC_PROVIDERS_KEYCLOAK_BASE_URL
@@ -40,20 +35,15 @@ spec:
             - name: NUXT_OIDC_PROVIDERS_KEYCLOAK_CLIENT_ID
               value: {{ .Values.idp.clientId | default "node-ui" | quote }}
             - name: NUXT_OIDC_PROVIDERS_KEYCLOAK_CLIENT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "ui.keycloak.secretName" . }}
-                  key: {{ include "ui.keycloak.secretKey" . }}
+              value: QN2HeO2LeXMY10VrP4cf2x5JHTFInm4f
+#               valueFrom:
+#                 secretKeyRef:
+#                   name: {{ include "ui.keycloak.secretName" . }}
+#                   key: {{ include "ui.keycloak.secretKey" . }}
             - name: NUXT_OIDC_TOKEN_KEY
-              value: {{ randAlphaNum 32 | b64enc }}
-            - name: NUXT_OIDC_SESSION_SECRET
-              value: {{ randAlphaNum 48 | quote }}
-            - name: NUXT_OIDC_AUTH_SESSION_SECRET
-              value: {{ randAlphaNum 48 | quote }}
-{{/*          livenessProbe:*/}}
-{{/*            httpGet:*/}}
-{{/*              path: /healthz*/}}
-{{/*              port: healthcp*/}}
-{{/*            failureThreshold: 3*/}}
-{{/*            periodSeconds: 60*/}}
-{{/*            initialDelaySeconds: 60*/}}
+              value: A2H9OFjRheZkXmigAAkNFdOuWg9JrsywN0EP6u+KneQ=
+#               value: {{ randAlphaNum 32 | b64enc }}
+#             - name: NUXT_OIDC_SESSION_SECRET
+#               value: {{ randAlphaNum 48 | quote }}
+#             - name: NUXT_OIDC_AUTH_SESSION_SECRET
+#               value: {{ randAlphaNum 48 | quote }}

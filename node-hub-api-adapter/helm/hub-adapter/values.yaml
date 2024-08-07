@@ -16,7 +16,15 @@ global:
 
 ## For defining ingress specific metadata
 ingress:
-  domain: localhost
+  ## @param ingress.enabled Enable ingress record generation for the Hub Adapter
+  ##
+  enabled: false
+  ## @param ingress.pathType Ingress path type
+  ##
+  pathType: ImplementationSpecific
+  ## @param ingress.hostname Default host for the ingress record (evaluated as template)
+  ##
+  hostname: ""
 
 ## Keycloak related information
 idp:

@@ -220,7 +220,15 @@ keycloak:
 flame-node-hub-adapter:
   ## For defining ingress specific metadata
   ingress:
-    domain: localhost
+    ## @param ingress.enabled Enable ingress record generation for the Hub Adapter
+    ##
+    enabled: false
+    ## @param ingress.pathType Ingress path type
+    ##
+    pathType: ImplementationSpecific
+    ## @param ingress.hostname Default host for the ingress record (evaluated as template)
+    ##
+    hostname: ""
 
   ## Keycloak related information
   idp:
@@ -329,7 +337,21 @@ flame-node-message-broker:
 
 flame-node-ui:
   env: development
-  url: http://localhost:3000
+
+  ## For defining ingress specific metadata
+  ingress:
+    ## @param ingress.enabled Enable ingress record generation for the Node UI
+    ##
+    enabled: false
+    ## @param ingress.pathType Ingress path type
+    ##
+    pathType: ImplementationSpecific
+    ## @param ingress.hostname Default host for the ingress record (evaluated as template)
+    ##
+    hostname: "http://localhost"
+    ## @param ingress.path Default file path for the ingress hostname
+    ##
+    path: "/"
 
   ## Keycloak related information
   idp:

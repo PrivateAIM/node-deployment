@@ -52,9 +52,10 @@ Generate a random clientSecret value for the node-ui client in keycloak if none 
 Return the Keycloak endpoint
 */}}
 {{- define "ui.keycloak.endpoint" -}}
+{{- $realmSuffix := printf "/realms/%s" .Values.idp.realm -}}
 {{- if .Values.idp.host -}}
-    {{- .Values.idp.host -}}
+    {{- printf "http://%s%s" .Values.idp.host $realmSuffix -}}
 {{- else -}}
-    {{- printf "http://%s-keycloak" .Release.Name -}}
+    {{- printf "http://%s-keycloak%s" .Release.Name $realmSuffix -}}
 {{- end -}}
 {{- end -}}
