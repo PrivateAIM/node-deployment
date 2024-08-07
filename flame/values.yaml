@@ -10,12 +10,6 @@ global:
       realmId: ""
       robotUser: ""
       robotSecret: ""
-  node:
-    ingress:
-      ## @param global.node.ingress.enabled Toggle whether ingress should be enabled
-      enabled: false
-      ## @param global.node.ingress.enabled Host name to be assigned to the Node UI (/) and Hub Adapter API (/api)
-      hostname: ""
 
 # kong values
 kong:
@@ -231,7 +225,7 @@ flame-node-hub-adapter:
     enabled: false
     ## @param ingress.pathType Ingress path type
     ##
-    pathType: Prefix
+    pathType: ImplementationSpecific
     ## @param ingress.hostname Default host for the ingress record (evaluated as template)
     ##
     hostname: ""
