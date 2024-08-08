@@ -1,4 +1,32 @@
 {{/*
+Set the hostname of the Node UI
+*/}}
+{{- define "ui.ingress.hostname" -}}
+{{- if .Values.global.node.ingress.enabled -}}
+    {{- if .Values.global.node.ingress.hostname -}}
+        {{- .Values.global.node.ingress.hostname -}}
+    {{- else -}}
+        {{- .Values.ingress.hostname -}}
+    {{- end -}}
+{{- else -}}
+    {{- printf "http://localhost:3000" .Release.Name -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the hub adapter endpoint
+*/}}
+{{- define "ui.adapter.endpoint" -}}
+{{- if .Values.node.adapter -}}
+    {{- .Values.node.adapter -}}
+{{- else if and .Values.global.node.ingress.enabled .Values.global.node.ingress.hostname -}}
+    {{- printf "%s/api" .Values.global.node.ingress.hostname -}}
+{{- else -}}
+    {{- printf "http://%s-hub-adapter-service:5000" .Release.Name -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the secret containing the Keycloak client secret
 */}}
 {{- define "ui.keycloak.secretName" -}}

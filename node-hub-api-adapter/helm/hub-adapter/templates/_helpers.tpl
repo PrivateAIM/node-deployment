@@ -2,10 +2,21 @@
 Set the API's root path. If ingress is enabled, defaults to "/api" else remains blank
 */}}
 {{- define "adapter.root.path" -}}
-{{- if .Values.ingress.enabled -}}
+{{- if or .Values.global.node.ingress.enabled .Values.ingress.enabled -}}
     {{- print "/api" -}}
 {{- else -}}
     {{- print "" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Set the API's root path. If ingress is enabled, defaults to "/api" else remains blank
+*/}}
+{{- define "adapter.ingress.hostname" -}}
+{{- if .Values.global.node.ingress.hostname -}}
+    {{- .Values.global.node.ingress.hostname -}}
+{{- else -}}
+    {{- .Values.ingress.hostname -}}
 {{- end -}}
 {{- end -}}
 
