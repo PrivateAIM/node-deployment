@@ -35,9 +35,8 @@ data:
       name: "Node UI"
       clientAuthenticatorType: "client-secret"
       secret: {{ include "ui.keycloak.clientSecret" (index .Subcharts "flame-node-ui") | b64dec }}
-      baseUrl: "http://localhost:3000"
-      redirectUris: [ "http://localhost:3000/auth/keycloak/callback" ]
-      webOrigins: [ "http://localhost:3000" ]
+      redirectUris: [ {{ printf "%s/*" (include "ui.ingress.hostname" (index .Subcharts "flame-node-ui")) }} ]
+      webOrigins: [ "+" ]
       standardFlowEnabled: true
       implicitFlowEnabled: false
       directAccessGrantsEnabled: true
