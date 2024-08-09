@@ -9,7 +9,7 @@ Set the hostname of the Node UI
         {{- .Values.ingress.hostname -}}
     {{- end -}}
 {{- else -}}
-    {{- printf "http://localhost:3000" .Release.Name -}}
+    {{- print "http://localhost:3000" -}}
 {{- end -}}
 {{- end -}}
 
@@ -22,7 +22,7 @@ Return the hub adapter endpoint
 {{- else if and .Values.global.node.ingress.enabled .Values.global.node.ingress.hostname -}}
     {{- printf "%s/api" .Values.global.node.ingress.hostname -}}
 {{- else -}}
-    {{- printf "http://%s-hub-adapter-service:5000" .Release.Name -}}
+    {{- print "http://localhost:5000" -}}
 {{- end -}}
 {{- end -}}
 
