@@ -1,4 +1,32 @@
 {{/*
+Set the hostname of the Node UI
+*/}}
+{{- define "ui.ingress.hostname" -}}
+{{- if .Values.global.node.ingress.enabled -}}
+    {{- if .Values.global.node.ingress.hostname -}}
+        {{- .Values.global.node.ingress.hostname -}}
+    {{- else -}}
+        {{- .Values.ingress.hostname -}}
+    {{- end -}}
+{{- else -}}
+    {{- print "http://localhost:3000" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the hub adapter endpoint
+*/}}
+{{- define "ui.adapter.endpoint" -}}
+{{- if .Values.node.adapter -}}
+    {{- .Values.node.adapter -}}
+{{- else if and .Values.global.node.ingress.enabled .Values.global.node.ingress.hostname -}}
+    {{- printf "%s/api" .Values.global.node.ingress.hostname -}}
+{{- else -}}
+    {{- print "http://localhost:5000" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the secret containing the Keycloak client secret
 */}}
 {{- define "ui.keycloak.secretName" -}}
@@ -52,9 +80,10 @@ Generate a random clientSecret value for the node-ui client in keycloak if none 
 Return the Keycloak endpoint
 */}}
 {{- define "ui.keycloak.endpoint" -}}
+{{- $realmSuffix := printf "/realms/%s" .Values.idp.realm -}}
 {{- if .Values.idp.host -}}
-    {{- .Values.idp.host -}}
+    {{- printf "http://%s%s" .Values.idp.host $realmSuffix -}}
 {{- else -}}
-    {{- printf "http://%s-keycloak" .Release.Name -}}
+    {{- printf "http://%s-keycloak%s" .Release.Name $realmSuffix -}}
 {{- end -}}
 {{- end -}}

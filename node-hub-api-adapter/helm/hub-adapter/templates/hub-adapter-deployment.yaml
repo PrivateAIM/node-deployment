@@ -19,11 +19,13 @@ spec:
       containers:
         - name: api-gateway
           image: ghcr.io/privateaim/node-hub-api-adapter:latest
-          imagePullPolicy: IfNotPresent  # Maybe "Always" during debug
+          imagePullPolicy: Always
           ports:
             - containerPort: 5000
               name: healthcp
           env:
+            - name: API_ROOT_PATH
+              value: {{ (include "adapter.root.path" .) | default "" }}
             - name: API_CLIENT_ID
               value: {{ .Values.idp.clientId | default "hub-adapter" | quote }}
             - name: API_CLIENT_SECRET
