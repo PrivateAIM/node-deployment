@@ -377,8 +377,8 @@ flame-node-ui:
     ## @param idp.realm Keycloak realm that the client exists in
     realm: flame
     ## @param idp.host URL to keycloak service
-    ## Will be inferred using the Release.Name if not defined
-    host: "http://localhost:8080"
+    ## Will be set to localhost:8080 if not defined
+    host: ""
 
   ## Downstream node services
   node:

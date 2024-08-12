@@ -84,6 +84,6 @@ Return the Keycloak endpoint
 {{- if .Values.idp.host -}}
     {{- printf "http://%s%s" .Values.idp.host $realmSuffix -}}
 {{- else -}}
-    {{- printf "http://%s-keycloak%s" .Release.Name $realmSuffix -}}
+    {{- printf "http://localhost:8080%s" $realmSuffix -}}
 {{- end -}}
 {{- end -}}

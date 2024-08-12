@@ -41,7 +41,7 @@ data:
       implicitFlowEnabled: false
       directAccessGrantsEnabled: true
       serviceAccountsEnabled: true
-      authorizationServicesEnabled: true
+      authorizationServicesEnabled: false
       publicClient: false
       enabled: true
     users:
