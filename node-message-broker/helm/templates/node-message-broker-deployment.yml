@@ -27,7 +27,7 @@ spec:
       containers:
         - name: {{ .Release.Name }}-node-message-broker
           image: ghcr.io/privateaim/node-message-broker:{{ .Chart.AppVersion }}
-          imagePullPolicy: "IfNotPresent"
+          imagePullPolicy: "Always"
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000
