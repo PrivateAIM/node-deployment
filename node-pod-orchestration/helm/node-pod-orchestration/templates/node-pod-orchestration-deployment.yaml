@@ -45,7 +45,10 @@ spec:
         - name: RESULT_CLIENT_ID
           value: {{ .Values.env.RESULT_CLIENT_ID}}
         - name: RESULT_CLIENT_SECRET
-          value: {{ .Values.env.RESULT_CLIENT_SECRET}}
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-po-keycloak-secret
+              key: podOrcClientSecret
         - name: KEYCLOAK_URL
           value: {{ include "po.keycloak.endpoint" . }}
         - name: KEYCLOAK_REALM

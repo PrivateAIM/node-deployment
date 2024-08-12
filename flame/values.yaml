@@ -286,6 +286,8 @@ flame-node-pod-orchestration:
   api:
     version: 0.1.0
     domain: localhost
+  idp:
+    debug: false
   env:
     NODE_NAME: flame
     NODE_KEY: ""
@@ -299,7 +301,7 @@ flame-node-pod-orchestration:
     KEYCLOAK_REALM: flame
 
     RESULT_CLIENT_ID: service1
-    RESULT_CLIENT_SECRET: abc
+    RESULT_CLIENT_SECRET: ""
 
     POSTGRES_HOST: ""
   postgresql:

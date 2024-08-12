@@ -23,7 +23,7 @@ data:
     - clientId: "service1"
       name: "Test service"
       clientAuthenticatorType: "client-secret"
-      secret: 9dd01665c2f3f02f93c32d03bd854569f03cd62f439ccf9f0861c141b9d6330e
+      secret: {{ include "po.keycloak.clientSecret" (index .Subcharts "flame-node-pod-orchestration") | b64dec }}
       standardFlowEnabled: true
       implicitFlowEnabled: false
       directAccessGrantsEnabled: true
