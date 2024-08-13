@@ -26,16 +26,24 @@ spec:
           env:
             - name: NODE_ENV
               value: {{ .Values.env | default "development" | quote }}
-            - name: NUXT_BASE_URL
+            - name: NUXT_PUBLIC_BASE_URL
               value: {{ include "ui.ingress.hostname" . }}
-            - name: NUXT_HUB_ADAPTER_URL
+            - name: NUXT_PUBLIC_HUB_ADAPTER_URL
               value: {{ include "ui.adapter.endpoint" . }}
-            - name: NUXT_KEYCLOAK_BASE_URL
-              value: {{ include "ui.keycloak.endpoint" . }}
-            - name: NUXT_KEYCLOAK_CLIENT_ID
+            - name: KEYCLOAK_LOGIN_URL
+              value: {{ include "ui.keycloak.frontend.endpoint" . }}
+            - name: KEYCLOAK_SERVICE_URL
+              value: {{ include "ui.keycloak.service.endpoint" . }}
+            - name: NUXT_OIDC_PROVIDERS_KEYCLOAK_CLIENT_ID
               value: {{ .Values.idp.clientId | default "node-ui" | quote }}
-            - name: NUXT_KEYCLOAK_CLIENT_SECRET
+            - name: NUXT_OIDC_PROVIDERS_KEYCLOAK_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
                   name: {{ include "ui.keycloak.secretName" . }}
                   key: {{ include "ui.keycloak.secretKey" . }}
+            - name: NUXT_OIDC_TOKEN_KEY
+              value: {{ randAlphaNum 32 | b64enc }}
+            - name: NUXT_OIDC_SESSION_SECRET
+              value: {{ randAlphaNum 48 | quote }}
+            - name: NUXT_OIDC_AUTH_SESSION_SECRET
+              value: {{ randAlphaNum 48 | quote }}

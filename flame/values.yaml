@@ -386,6 +386,9 @@ flame-node-ui:
     ## @param idp.host URL to keycloak service
     ## Will be set to localhost:8080 if not defined
     host: ""
+    ## @param idp.service Service name of keycloak
+    ## Will be inferred using the Release.Name if not defined
+    service: ""
 
   ## Downstream node services
   node:
