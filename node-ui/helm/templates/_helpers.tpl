@@ -1,12 +1,21 @@
 {{/*
 Set the hostname of the Node UI
+TODO: Add TLS/HTTPS check/support
 */}}
 {{- define "ui.ingress.hostname" -}}
 {{- if .Values.global.node.ingress.enabled -}}
     {{- if .Values.global.node.ingress.hostname -}}
-        {{- .Values.global.node.ingress.hostname -}}
+        {{- if hasPrefix "http" .Values.global.node.ingress.hostname -}}
+            {{- .Values.global.node.ingress.hostname -}}
+        {{- else -}}
+            {{- printf "http://%s" .Values.global.node.ingress.hostname -}}
+        {{- end -}}
     {{- else -}}
-        {{- .Values.ingress.hostname -}}
+        {{- if hasPrefix "http" .Values.ingress.hostname -}}
+            {{- .Values.ingress.hostname -}}
+        {{- else -}}
+            {{- printf "http://%s" .Values.ingress.hostname -}}
+        {{- end -}}
     {{- end -}}
 {{- else -}}
     {{- print "http://localhost:3000" -}}
@@ -20,7 +29,11 @@ Return the hub adapter endpoint
 {{- if .Values.node.adapter -}}
     {{- .Values.node.adapter -}}
 {{- else if and .Values.global.node.ingress.enabled .Values.global.node.ingress.hostname -}}
-    {{- printf "%s/api" .Values.global.node.ingress.hostname -}}
+    {{- if hasPrefix "http" .Values.global.node.ingress.hostname -}}
+        {{- printf "%s/api" .Values.global.node.ingress.hostname -}}
+    {{- else -}}
+        {{- printf "http://%s/api" .Values.global.node.ingress.hostname -}}
+    {{- end -}}
 {{- else -}}
     {{- print "http://localhost:5000" -}}
 {{- end -}}

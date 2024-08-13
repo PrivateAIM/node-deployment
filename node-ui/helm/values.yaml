@@ -19,7 +19,7 @@ ingress:
   pathType: ImplementationSpecific
   ## @param ingress.hostname Default host for the ingress record (evaluated as template)
   ##
-  hostname: http://localhost
+  hostname: ""
   ## @param ingress.path Default file path for the ingress hostname
   ##
   path: "/"

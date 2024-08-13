@@ -204,6 +204,11 @@ keycloak:
   auth:
     adminUser: admin
     adminPassword: admin
+
+  ingress:
+    enabled: false
+    hostname: ""
+
   postgresql:
     enabled: true
     nameOverride: keycloak-postgresql
@@ -356,7 +361,7 @@ flame-node-ui:
     pathType: ImplementationSpecific
     ## @param ingress.hostname Default host for the ingress record (evaluated as template)
     ##
-    hostname: "http://localhost"
+    hostname: ""
     ## @param ingress.path Default file path for the ingress hostname
     ##
     path: "/"
