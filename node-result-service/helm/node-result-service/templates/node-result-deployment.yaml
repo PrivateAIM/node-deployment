@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: results-service
-          image: ghcr.io/privateaim/node-result-service:sha-bbb7ac7
+          image: ghcr.io/privateaim/node-result-service:sha-63534e1
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
@@ -31,12 +31,14 @@ spec:
               value: {{ .Values.env.MINIO_USE_SSL | default false | quote }}
             - name: MINIO__BUCKET
               value: {{ required "MinIO bucket must be set." .Values.env.MINIO_BUCKET | quote }}
-            - name: HUB__AUTH_USERNAME
-              value: {{ required "Hub username must be set." (include "results.hub.robotUser" .)  | quote }}
-            - name: HUB__AUTH_PASSWORD
+            - name: HUB__AUTH_METHOD
+              value: "robot"
+            - name: HUB__ROBOT_AUTH__ID
+              value: {{ required "Hub robot must be set." (include "results.hub.robotUser" .)  | quote }}
+            - name: HUB__ROBOT_AUTH__SECRET
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Release.Name }}-node-result-service-hub-auth
+                  name: {{ include "results.hub.robotSecret" . }}
                   key: robotSecret
             - name: HUB__AUTH_BASE_URL
               value: {{ (include "results.hub.authApi" .) | default "https://auth.privateaim.dev" | quote }}
