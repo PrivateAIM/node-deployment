@@ -34,12 +34,9 @@ spec:
             - name: HUB__AUTH_METHOD
               value: "robot"
             - name: HUB__ROBOT_AUTH__ID
-              value: {{ required "Hub robot must be set." (include "results.hub.robotUser" .)  | quote }}
+              value: {{ required "Hub robot id must be set." (include "results.hub.robotUser" .)  | quote }}
             - name: HUB__ROBOT_AUTH__SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "results.hub.robotSecret" . }}
-                  key: robotSecret
+              value: {{ required "Hub robot secret must be set." (include "results.hub.robotSecret" .)  | quote }}
             - name: HUB__AUTH_BASE_URL
               value: {{ (include "results.hub.authApi" .) | default "https://auth.privateaim.dev" | quote }}
             - name: HUB__CORE_BASE_URL
