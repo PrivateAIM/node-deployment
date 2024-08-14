@@ -14,12 +14,21 @@ global:
       ## @param global.hub.auth.robotSecret Robot secret. Overrides env.HUB_PASSWORD if provided
       robotSecret: ""
 
+## Hub services and data
+hub:
+  ## @param hub.coreApi Hub core API endpoint
+  coreURL: https://core.privateaim.dev
+  ## @param hub.authURL Hub auth API endpoint
+  authURL: https://auth.privateaim.dev
+  ## @param hub.storageURL Hub storage API endpoint
+  storageURL: https://storage.privateaim.dev
+  ## Credentials used for retrieving a valid robot token from the hub
+  auth:
+    existingSecret: ""
+    robotUser: ""
+    robotSecret: ""
+
 env:
-  HUB_USERNAME: foobar
-  HUB_PASSWORD: sup3r_s3cr3t
-  HUB__AUTH_BASE_URL: https://auth.privateaim.dev
-  HUB__CORE_BASE_URL: https://core.privateaim.dev
-  HUB__STORAGE_BASE_URL: https://storage.privateaim.dev
   MINIO_USE_SSL: false
   MINIO_BUCKET: flame
   OIDC_CERTS_URL: http://flame-node-keycloak-service:8080/realms/flame/protocol/openid-connect/certs
