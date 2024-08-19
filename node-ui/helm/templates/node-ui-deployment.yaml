@@ -18,22 +18,30 @@ spec:
     spec:
       containers:
         - name: node-ui
+          {{ if eq .Values.env "production" }}
+          image: ghcr.io/privateaim/node-ui:prod
+          {{ else }}
           image: ghcr.io/privateaim/node-ui:latest
+          {{ end }}
           imagePullPolicy: Always  # Maybe "Always" during debug
           ports:
             - containerPort: 3000
               name: ui
           env:
             - name: NODE_ENV
-              value: {{ .Values.env | default "development" | quote }}
+              value: {{ .Values.env | default "production" | quote }}
             - name: NUXT_PUBLIC_BASE_URL
               value: {{ include "ui.ingress.hostname" . }}
             - name: NUXT_PUBLIC_HUB_ADAPTER_URL
               value: {{ include "ui.adapter.endpoint" . }}
-            - name: KEYCLOAK_LOGIN_URL
-              value: {{ include "ui.keycloak.frontend.endpoint" . }}
-            - name: KEYCLOAK_SERVICE_URL
-              value: {{ include "ui.keycloak.service.endpoint" . }}
+            - name: NUXT_OIDC_PROVIDERS_KEYCLOAK_REDIRECT_URI
+              value: {{ printf "%s/auth/keycloak/callback" (include "ui.ingress.hostname" .) }}
+            - name: NUXT_OIDC_PROVIDERS_KEYCLOAK_AUTHORIZATION_URL
+              value: {{ printf "%s/protocol/openid-connect/auth" (include "ui.keycloak.frontend.endpoint" .) }}
+            - name: NUXT_OIDC_PROVIDERS_KEYCLOAK_TOKEN_URL
+              value: {{ printf "%s/protocol/openid-connect/token" (include "ui.keycloak.service.endpoint" .) }}
+            - name: NUXT_OIDC_PROVIDERS_KEYCLOAK_USERINFO_URL
+              value: {{ printf "%s/protocol/openid-connect/userinfo" (include "ui.keycloak.service.endpoint" .) }}
             - name: NUXT_OIDC_PROVIDERS_KEYCLOAK_CLIENT_ID
               value: {{ .Values.idp.clientId | default "node-ui" | quote }}
             - name: NUXT_OIDC_PROVIDERS_KEYCLOAK_CLIENT_SECRET

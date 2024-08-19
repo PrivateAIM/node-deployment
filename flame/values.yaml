@@ -349,7 +349,7 @@ flame-node-message-broker:
     HUB_AUTH_ROBOT_SECRET: ""
 
 flame-node-ui:
-  env: development
+  env: production
 
   ## For defining ingress specific metadata
   ingress:

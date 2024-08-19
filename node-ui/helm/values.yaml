@@ -7,7 +7,7 @@ global:
       ## @param global.node.ingress.enabled Host name to be assigned to the Node UI (/) and Hub Adapter API (/api)
       hostname: ""
 
-env: development
+env: production
 
 ## For defining ingress specific metadata
 ingress:
