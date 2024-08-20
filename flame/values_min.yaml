@@ -13,7 +13,7 @@ global:
   node:
     ingress:
       enabled: true
-      hostname: https://localhost
+      hostname: http://localhost
 
 # keycloak values
 keycloak:
@@ -31,9 +31,9 @@ keycloak:
 
   extraEnvVars:
     - name: KC_HOSTNAME_URL
-      value: https://localhost/keycloak/
+      value: http://localhost/keycloak/
     - name: KC_HOSTNAME_ADMIN_URL
-      value: https://localhost/keycloak/  
+      value: http://localhost/keycloak/  
 
 flame-node-ui:
   ## Keycloak related information

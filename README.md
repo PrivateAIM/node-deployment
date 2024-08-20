@@ -63,7 +63,7 @@ bash 0_setup.sh
 ```
 
 ### Access the FLAME Node
-To access the FLAME Node, you need to port-forward the minikube ingress (minikube ip) to your local machine:
+To access the FLAME Node, you need to port-forward the minikube ingress service (or minikube ip) to your local machine:
 ```bash
 kubectl port-forward -n ingress-nginx service/ingress-nginx-controller 80:80
 ```
