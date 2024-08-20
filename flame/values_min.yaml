@@ -1,0 +1,41 @@
+# Global values
+global:
+  hub:
+    endpoints:
+      auth: https://auth.privateaim.dev
+      core: https://core.privateaim.dev
+      messenger: https://messenger.privateaim.dev
+      storage: https://storage.privateaim.dev
+    auth:
+      nodeId: ""
+      robotUser: ""
+      robotSecret: ""
+  node:
+    ingress:
+      enabled: true
+      hostname: https://localhost
+
+# keycloak values
+keycloak:
+  auth:
+    adminUser: admin
+    adminPassword: admin
+
+  ingress:
+    enabled: true
+    hostname: localhost
+    path: /keycloak(/|$)(.*)
+    pathType: ImplementationSpecific
+    annotations:
+      nginx.ingress.kubernetes.io/rewrite-target: /$2
+
+  extraEnvVars:
+    - name: KC_HOSTNAME_URL
+      value: https://localhost/keycloak/
+    - name: KC_HOSTNAME_ADMIN_URL
+      value: https://localhost/keycloak/  
+
+flame-node-ui:
+  ## Keycloak related information
+  idp:
+    host: "localhost/keycloak"
