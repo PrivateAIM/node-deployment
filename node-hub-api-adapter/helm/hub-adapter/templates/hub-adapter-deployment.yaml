@@ -43,12 +43,12 @@ spec:
               value: {{ include "adapter.po.endpoint" . }}
             - name: KONG_ADMIN_SERVICE_URL
               value: {{ include "adapter.kong.endpoint" . }}
-            - name: HUB_REALM_UUID
-              value: {{ (include "adapter.hub.realmId" .) | quote }}  # To be properly filled in
+            - name: HUB_NODE_UUID
+              value: {{ ( include "adapter.hub.nodeId" .) | quote }}  # To be properly filled in
             - name: HUB_SERVICE_URL
-              value: {{ (include "adapter.hub.coreApi" .) | default "https://privateaim.net/core" | quote }}
+              value: {{ ( include "adapter.hub.coreApi" .) | default "https://privateaim.net/core" | quote }}
             - name: HUB_AUTH_SERVICE_URL
-              value: {{ (include "adapter.hub.authApi" .) | default "https://privateaim.net/auth" | quote }}
+              value: {{ ( include "adapter.hub.authApi" .) | default "https://privateaim.net/auth" | quote }}
             - name: HUB_ROBOT_USER
               value: {{ required "A robot ID for the Hub is required." (include "adapter.hub.robotUser" .) | quote }}  # To be properly filled in
             - name: HUB_ROBOT_SECRET

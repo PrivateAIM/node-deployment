@@ -7,8 +7,8 @@ global:
       ## @param global.hub.endpoints.core Hub Core API endpoint. Overrides hub.coreApi if provided
       core: https://core.privateaim.dev
     auth:
-      ## @param global.hub.auth.realmId Realm ID. Overrides hub.realmId if provided
-      realmId: ""
+      ## @param global.hub.auth.nodeId Node UUID. Overrides hub.nodeId if provided
+      nodeId: ""
       ## @param global.hub.auth.robotUser Robot user ID. Overrides hub.auth.robotUser if provided
       robotUser: ""
       ## @param global.hub.auth.robotSecret Robot secret. Overrides hub.auth.robotSecret if provided
@@ -68,10 +68,10 @@ hub:
   coreApi: https://privateaim.net/core
   ## @param hub.authApi Hub auth API endpoint
   authApi: https://privateaim.net/auth
-  ## @param hub.realmId Limit queries to the UUID assigned to the institution realm
-  realmId: ""
   ## Credentials used for retrieving a valid robot token from the hub
   auth:
+    ## @param hub.nodeId Limit queries to the Node UUID assigned to the node
+    nodeId: ""
     existingSecret: ""
     robotUser: ""
     robotSecret: ""

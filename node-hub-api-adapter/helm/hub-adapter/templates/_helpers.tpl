@@ -55,13 +55,13 @@ Return hub core API endpoint
 {{- end -}}
 
 {{/*
-Return hub realmId
+Return hub nodeId
 */}}
-{{- define "adapter.hub.realmId" -}}
-{{- if .Values.global.hub.realmId -}}
-    {{- .Values.global.hub.realmId -}}
+{{- define "adapter.hub.nodeId" -}}
+{{- if .Values.global.hub.auth.nodeId -}}
+    {{- .Values.global.hub.auth.nodeId -}}
 {{- else -}}
-    {{- .Values.hub.realmId -}}
+    {{- .Values.hub.auth.nodeId -}}
 {{- end -}}
 {{- end -}}
 

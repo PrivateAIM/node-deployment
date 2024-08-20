@@ -7,6 +7,7 @@ global:
       messenger: https://messenger.privateaim.dev
       storage: https://storage.privateaim.dev
     auth:
+      nodeId: ""
       realmId: ""
       robotUser: ""
       robotSecret: ""
@@ -277,8 +278,8 @@ flame-node-hub-adapter:
     coreApi: https://privateaim.net/core
     ## @param hub.authApi Hub auth API endpoint
     authApi: https://privateaim.net/auth
-    ## @param hub.realmId Limit queries to the UUID assigned to the institution realm
-    realmId: ""
+    ## @param hub.nodeId Limit queries to the Node UUID assigned to the node
+    nodeId: ""
     ## Credentials used for retrieving a valid token from the hub using a robot account
     auth:
       robotUser: ""
