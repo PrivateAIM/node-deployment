@@ -112,6 +112,8 @@ dataPopulatorJob:
   enabled: true
   env:
     SYNTHEA_N_PATIENTS: 10
+    SYNTHEA_SEED: 3256262546
+    SYNTHEA_CLINICIAN_SEED: 3726451
     TIMEOUT: 1
     # FHIR_BASE_URL: http://blaze:80/fhir
 
