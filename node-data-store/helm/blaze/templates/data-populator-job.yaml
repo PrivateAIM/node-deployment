@@ -9,7 +9,8 @@ spec:
       initContainers:
         - name: {{ include "blaze.fullname" . }}-node-fhir-test-data-populator-init-wait
           image: busybox
-          command: ["/bin/sh", "-c", "for i in $(seq 1 5); do curl -f {{ .Values.dataPopulatorJob.env.FHIR_BASE_URL }} && break || sleep 60; done"]
+          command: ["/bin/sh", "-c", "for i in $(seq 1 5); do wget --spider -q {{ .Values.dataPopulatorJob.env.FHIR_BASE_URL }} && break || sleep 60; done"]
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
       containers:
         - name: {{ include "blaze.fullname" . }}-node-fhir-test-data-populator
           image: ghcr.io/privateaim/node-fhir-test-data-populator:latest
@@ -20,7 +21,11 @@ spec:
             - name: ENABLE_GENERATE_SYNTHEA_DATA
               value: "true"
             - name: N_PATIENTS
-              value: "{{ .Values.dataPopulatorJob.env.SYNTHEA_N_PATIENTS | default "10" }}"
+              value: {{ printf "%.0f" .Values.dataPopulatorJob.env.SYNTHEA_N_PATIENTS | default 10 | quote }}
+            - name: SEED
+              value: {{ printf "%.0f" .Values.dataPopulatorJob.env.SYNTHEA_SEED | default 3256262546 | quote }}
+            - name: CLINICIAN_SEED
+              value: {{ printf "%.0f" .Values.dataPopulatorJob.env.SYNTHEA_CLINICIAN_SEED | default 3726451 | quote }}
             - name: TIMEOUT
               value: "{{ .Values.dataPopulatorJob.env.TIMEOUT | default "1" }}"
             - name: ENABLE_PROCESS_TESTDATA
