@@ -1,0 +1,9 @@
+global:
+  hub:
+    auth:
+#       nodeId: e64a1551-4007-4754-a7b9-57c9cb56a7c5
+      robotUser: hubAdapter
+      robotSecret: DAF95.CCJlV788h8afvSNh5PU6T9k_3_Nu0L162NDbehmOILLDv-y.1TDtSnQtRF
+
+flame-node-ui:
+  env: production

@@ -55,17 +55,6 @@ Return hub core API endpoint
 {{- end -}}
 
 {{/*
-Return hub nodeId
-*/}}
-{{- define "adapter.hub.nodeId" -}}
-{{- if .Values.global.hub.auth.nodeId -}}
-    {{- .Values.global.hub.auth.nodeId -}}
-{{- else -}}
-    {{- .Values.hub.auth.nodeId -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Return hub robot user ID
 */}}
 {{- define "adapter.hub.robotUser" -}}

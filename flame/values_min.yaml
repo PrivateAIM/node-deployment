@@ -7,7 +7,6 @@ global:
       messenger: https://messenger.privateaim.dev
       storage: https://storage.privateaim.dev
     auth:
-      nodeId: ""
       robotUser: ""
       robotSecret: ""
   node:

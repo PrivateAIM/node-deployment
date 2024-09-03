@@ -43,8 +43,6 @@ spec:
               value: {{ include "adapter.po.endpoint" . }}
             - name: KONG_ADMIN_SERVICE_URL
               value: {{ include "adapter.kong.endpoint" . }}
-            - name: HUB_NODE_UUID
-              value: {{ ( include "adapter.hub.nodeId" .) | quote }}  # To be properly filled in
             - name: HUB_SERVICE_URL
               value: {{ ( include "adapter.hub.coreApi" .) | default "https://privateaim.net/core" | quote }}
             - name: HUB_AUTH_SERVICE_URL

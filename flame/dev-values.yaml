@@ -1,0 +1,27 @@
+global:
+  hub:
+    auth:
+      nodeId: ""
+      robotUser: hubAdapter
+      robotSecret: DAF95.CCJlV788h8afvSNh5PU6T9k_3_Nu0L162NDbehmOILLDv-y.1TDtSnQtRF
+  node:
+    ingress:
+      ## @param global.node.ingress.enabled Toggle whether ingress should be enabled
+      enabled: true
+      ## @param global.node.ingress.enabled Host name to be assigned to the Node UI (/) and Hub Adapter API (/api)
+      hostname: test.k8s.home
+
+flame-node-hub-adapter:
+  idp:
+    debug: false
+
+flame-node-ui:
+  env: development
+  idp:
+    debug: false
+    host: keycloak.k8s.home
+
+keycloak:
+  ingress:
+    enabled: true
+    hostname: keycloak.k8s.home
