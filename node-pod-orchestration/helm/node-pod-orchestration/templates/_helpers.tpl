@@ -48,3 +48,47 @@ Generate a random clientSecret value for the PO client in keycloak if none provi
         {{- print (index .Release.po_secret $key | b64enc) -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return hub auth API endpoint
+*/}}
+{{- define "po.hub.authApi" -}}
+{{- if .Values.global.hub.endpoints.auth -}}
+    {{- .Values.global.hub.endpoints.auth -}}
+{{- else -}}
+    {{- .Values.hub.authAPI -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return hub core API endpoint
+*/}}
+{{- define "po.hub.coreApi" -}}
+{{- if .Values.global.hub.endpoints.core -}}
+    {{- .Values.global.hub.endpoints.core -}}
+{{- else -}}
+    {{- .Values.hub.coreAPI -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return hub robot user ID
+*/}}
+{{- define "po.hub.robotUser" -}}
+{{- if .Values.global.hub.auth.robotUser -}}
+    {{- .Values.global.hub.auth.robotUser -}}
+{{- else -}}
+    {{- .Values.hub.auth.robotUser -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return hub robot user secret
+*/}}
+{{- define "po.hub.robotSecret" -}}
+{{- if .Values.global.hub.auth.robotSecret -}}
+    {{- .Values.global.hub.auth.robotSecret -}}
+{{- else -}}
+    {{- .Values.hub.auth.robotSecret -}}
+{{- end -}}
+{{- end -}}

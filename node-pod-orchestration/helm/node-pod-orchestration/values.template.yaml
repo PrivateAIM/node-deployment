@@ -19,6 +19,18 @@ env:
     RESULT_CLIENT_SECRET: ""
 
     POSTGRES_HOST: ""
+
+hub:
+  ## @param hub.coreApi Hub core API endpoint
+  coreApi: https://auth.privateaim.dev
+  ## @param hub.authApi Hub auth API endpoint
+  authApi: https://core.privateaim.dev
+
+  ## Credentials used for retrieving a valid token from the hub using a robot account
+  auth:
+    robotUser: ""
+    robotSecret: ""
+
 postgresql:
   nameOverride: ""
   fullnameOverride: ""
