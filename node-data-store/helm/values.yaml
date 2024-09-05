@@ -1,0 +1,24 @@
+blaze:
+  nameOverride: node-datastore-blaze
+  fullnameOverride: node-datastore-blaze
+
+minio:
+  nameOverride: node-datastore-minio
+  fullnameOverride: node-datastore-minio
+
+  serviceAccount:
+    create: true
+    name: node-datastore-minio-sa
+  
+  rootUser: "admin"
+  rootPassword: "admin123"
+
+  mode: standalone
+  replicas: 1
+  resources:
+    requests:
+      memory: 1Gi
+
+  persistence:
+    enabled: true
+    size: 5Gi
