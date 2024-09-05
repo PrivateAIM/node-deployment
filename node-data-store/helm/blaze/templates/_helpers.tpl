@@ -60,3 +60,18 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Create the FHIR base URL.
+If .Values.dataPopulatorJob.env.FHIR_BASE_URL is provided, use that.
+Otherwise, create the default URL using blaze service.
+*/}}
+{{- define "blaze.fhirBaseURL" -}}
+{{- if .Values.dataPopulatorJob.env.FHIR_BASE_URL -}}
+{{- .Values.dataPopulatorJob.env.FHIR_BASE_URL -}}
+{{- else -}}
+{{- $fullname := include "blaze.fullname" . -}}
+{{- $port := int .Values.service.port -}}
+{{- printf "http://%s:%d/fhir" $fullname $port -}}
+{{- end -}}
+{{- end }}

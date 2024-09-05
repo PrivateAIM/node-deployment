@@ -27,9 +27,6 @@ dependencies:
   - name: kong
     repository: https://charts.konghq.com
     version: 2.38.0
-  - name: blaze
-    repository: file://../node-data-store/helm/blaze
-    version: 0.1.0
   - name: flame-node-hub-adapter
     repository: file://../node-hub-api-adapter/helm/hub-adapter
     version: 0.1.0
@@ -48,3 +45,7 @@ dependencies:
   - name: keycloak
     repository: https://charts.bitnami.com/bitnami
     version: 21.0.2
+  - name: node-data-store
+    repository: file://../node-data-store/helm
+    version: 0.1.0
+    condition: node-data-store.enabled
