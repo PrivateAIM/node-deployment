@@ -1,20 +1,15 @@
 # Global values
+# TODO: use flat variables instead of nested ones!!! (for easier checks)
 global:
-  hub:
-    endpoints:
-      auth: https://auth.privateaim.dev
-      core: https://core.privateaim.dev
-      messenger: https://messenger.privateaim.dev
-      storage: https://storage.privateaim.dev
-    auth:
-      robotUser: ""
-      robotSecret: ""
-  node:
-    ingress:
-      ## @param global.node.ingress.enabled Toggle whether ingress should be enabled
-      enabled: false
-      ## @param global.node.ingress.enabled Host name to be assigned to the Node UI (/) and Hub Adapter API (/api)
-      hostname: ""
+  hubAuthBaseUrl: https://auth.privateaim.dev
+  hubAuthRobotId: ""
+  hubAuthRobotSecret: ""
+  hubCoreBaseUrl: https://core.privateaim.dev
+  hubMessengerBaseUrl: https://messenger.privateaim.dev
+  hubStorageBaseUrl: https://storage.privateaim.dev
+
+  nodeIngressEnabled: false
+  nodeIngressHostname: ""
 
 # kong values
 kong:

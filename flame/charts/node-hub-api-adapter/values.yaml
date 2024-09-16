@@ -1,0 +1,53 @@
+## For defining ingress specific metadata
+ingress:
+  ## @param ingress.enabled Enable ingress record generation for the Hub Adapter
+  ##
+  enabled: false
+  ## @param ingress.pathType Ingress path type
+  ##
+  pathType: Prefix
+  ## @param ingress.hostname Default host for the ingress record (evaluated as template)
+  ##
+  hostname: ""
+
+## Keycloak related information
+idp:
+  ## @param idp.debug If true, the clientId and clientSecret will use pre-defined values
+  ## The clientSecret will be defined using the "static" k8s secret key
+  debug: false
+  ## @param idp.clientId Keycloak client ID for this service
+  clientId: hub-adapter
+  ## @param idp.clientSecret Keycloak client secret. Ignored if `idp.existingSecret` is provided
+  ## If not defined and no existingSecret provided, a random string is generated
+  clientSecret: ""
+  ## @param idp.existingSecret Existing k8s secret containing Keycloak secret for this client
+  ## idp.existingSecretKey should also be defined for custom k8s secret. Defaults to hub-adapter-kc-secret
+  existingSecret: ""
+  ## @param idp.existingSecretKey Key where the Keycloak secret is being stored inside the existing k8s secret
+  existingSecretKey: ""
+  ## @param idp.realm Keycloak realm that the client exists in
+  realm: flame
+  ## @param idp.host URL to keycloak service
+  ## Will be inferred using the Release.Name if not defined
+  host: ""
+
+## Downstream node services
+node:
+  ## @param node.results Node results service endpoint
+  ## @param node.kong Node Kong admin service endpoint
+  ## @param node.po Node pod orchestrator service endpoint
+  results: ""
+  kong: ""
+  po: ""
+
+## Hub services and data
+hub:
+  ## @param hub.coreApi Hub core API endpoint
+  coreApi: https://privateaim.net/core
+  ## @param hub.authApi Hub auth API endpoint
+  authApi: https://privateaim.net/auth
+  ## Credentials used for retrieving a valid robot token from the hub
+  auth:
+    existingSecret: ""
+    robotUser: ""
+    robotSecret: ""

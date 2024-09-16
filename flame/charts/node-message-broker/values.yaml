@@ -1,0 +1,11 @@
+common:
+  timezone: Europe/Berlin
+  storageClassName: ""
+broker:
+  AUTH_JWKS_URL: ""
+  HUB_BASE_URL: https://api.privateaim.net/
+  HUB_AUTH_BASE_URL: https://auth.privateaim.net/
+  HUB_AUTH_ROBOT_ID: ""
+  HUB_AUTH_ROBOT_SECRET: ""
+broker_db:
+  storageSizeMi:
