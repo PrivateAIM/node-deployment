@@ -266,6 +266,6 @@ cython_debug/
 .idea/
 
 # .tgz files in the "./flame/charts" directory
-flame/charts/*.tgz
+flame/charts/**/*.tgz
 flame/Chart.lock
 .monokle
