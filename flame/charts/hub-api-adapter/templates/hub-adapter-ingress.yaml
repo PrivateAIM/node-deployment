@@ -2,14 +2,15 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ .Release.Name }}-hub-adapter-ingress
+  name: {{ include "components.fullname" "hub-api-adapter"}}
   annotations:
     # TODO: this does not work for everyone as it requires an NGINX ingress controller!!!
     nginx.ingress.kubernetes.io/rewrite-target: /$2
   labels:
-    component: hub-adapter-service
-    version: {{ .Chart.AppVersion }}
-    deployment-id:  {{ .Release.Name }}
+    app.kubernetes.io/name: flame
+    app.kubernetes.io/component: {{ include "components.fullname" "hub-api-adapter"}}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
 spec:
   rules:
     - host: {{ regexReplaceAll "^https?://(.*)" (include "adapter.ingress.hostname" .) "${1}" }}
@@ -19,7 +20,7 @@ spec:
             pathType: {{ .Values.ingress.pathType }}
             backend:
               service:
-                name: {{ .Release.Name }}-hub-adapter-service
+                name: {{ include "components.fullname" "hub-api-adapter"}}
                 port:
                   number: 5000
 {{- end }}

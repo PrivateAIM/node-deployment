@@ -4,10 +4,10 @@ metadata:
   name: {{ include "components.fullname" "message-broker"}}
 spec:
   selector:
-    app.kubernetes.io/name: {{ include "components.fullname" "message-broker"}}
-    app.kubernetes.io/component: server
-    app.kubernetes.io/part-of: flame
+    app.kubernetes.io/name: flame
+    app.kubernetes.io/component: {{ include "components.fullname" "message-broker"}}
     app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
   ports:
     - port: 80
       targetPort: 8080

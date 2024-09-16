@@ -1,20 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-po
+  name: {{ include "components.fullname" "pod-orchestration"}}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      component: po
-      version: {{ .Chart.AppVersion }}
-      deployment-id:  {{ .Release.Name }}
+      app.kubernetes.io/name: flame
+      app.kubernetes.io/component: {{ include "components.fullname" "pod-orchestration"}}
+      app.kubernetes.io/version: {{ .Chart.AppVersion }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        component: po
-        version: {{ .Chart.AppVersion }}
-        deployment-id: {{ .Release.Name }}
+        app.kubernetes.io/name: flame
+        app.kubernetes.io/component: {{ include "components.fullname" "pod-orchestration"}}
+        app.kubernetes.io/version: {{ .Chart.AppVersion }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       #volumes:
       #  - name: keys

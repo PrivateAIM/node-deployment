@@ -3,25 +3,25 @@ kind: Deployment
 metadata:
   name: {{ include "components.fullname" "message-broker"}}
   labels:
-    app.kubernetes.io/name: {{ include "components.fullname" "message-broker"}}
-    app.kubernetes.io/component: server
-    app.kubernetes.io/part-of: flame
+    app.kubernetes.io/name: flame
+    app.kubernetes.io/component: {{ include "components.fullname" "message-broker"}}
     app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
 spec:
   revisionHistoryLimit: 3
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "components.fullname" "message-broker"}}
-      app.kubernetes.io/component: server
-      app.kubernetes.io/part-of: flame
+      app.kubernetes.io/name: flame
+      app.kubernetes.io/component: {{ include "components.fullname" "message-broker"}}
       app.kubernetes.io/version: {{ .Chart.AppVersion }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "components.fullname" "message-broker"}}
-        app.kubernetes.io/component: server
-        app.kubernetes.io/part-of: flame
+        app.kubernetes.io/name: flame
+        app.kubernetes.io/component: {{ include "components.fullname" "message-broker"}}
         app.kubernetes.io/version: {{ .Chart.AppVersion }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       restartPolicy: "Always"
       containers:

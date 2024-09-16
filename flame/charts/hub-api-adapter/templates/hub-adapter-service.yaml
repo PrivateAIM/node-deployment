@@ -1,16 +1,18 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Release.Name }}-hub-adapter-service
+  name: {{ include "components.fullname" "hub-api-adapter"}}
   labels:
-    component: hub-adapter-service
-    version: {{ .Chart.AppVersion }}
-    deployment-id:  {{ .Release.Name }}
+    app.kubernetes.io/name: flame
+    app.kubernetes.io/component: {{ include "components.fullname" "hub-api-adapter"}}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
 spec:
   ports:
-  - name: api
-    port: 5000
+    - name: api
+      port: 5000
   selector:
-    component: hub-adapter-service
-    version: {{ .Chart.AppVersion }}
-    deployment-id:  {{ .Release.Name }}
+    app.kubernetes.io/name: flame
+    app.kubernetes.io/component: {{ include "components.fullname" "hub-api-adapter"}}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/instance: {{ .Release.Name }}

@@ -2,11 +2,12 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ .Release.Name }}-node-ui-ingress
+  name: {{ include "components.fullname" "ui"}}
   labels:
-    component: node-ui-service
-    version: {{ .Chart.AppVersion }}
-    deployment-id:  {{ .Release.Name }}
+    app.kubernetes.io/name: flame
+    app.kubernetes.io/component: {{ include "components.fullname" "ui"}}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
 spec:
   rules:
     - host: {{ regexReplaceAll "^https?://(.*)" (include "ui.ingress.hostname" .) "${1}" }}
@@ -16,7 +17,7 @@ spec:
             pathType: {{ .Values.ingress.pathType }}
             backend:
               service:
-                name: {{ .Release.Name }}-node-ui-service
+                name: {{ include "components.fullname" "ui"}}
                 port:
                   number: 3000
 {{- end }}

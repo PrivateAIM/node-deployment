@@ -3,10 +3,11 @@ kind: StatefulSet
 metadata:
   name: {{ include "components.fullname" "message-broker-db"}}
   labels:
-    app.kubernetes.io/name: {{ include "components.fullname" "message-broker"}}
-    app.kubernetes.io/component: database
-    app.kubernetes.io/part-of: flame
+    app.kubernetes.io/name: flame
+    app.kubernetes.io/component: {{ include "components.fullname" "message-broker-db"}}
     app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/part-of: {{ include "components.fullname" "message-broker"}}
 spec:
   serviceName: {{ include "components.fullname" "message-broker-db"}}
   updateStrategy:
@@ -14,18 +15,18 @@ spec:
       maxUnavailable: 0
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "components.fullname" "message-broker"}}
-      app.kubernetes.io/component: database
-      app.kubernetes.io/part-of: flame
+      app.kubernetes.io/name: flame
+      app.kubernetes.io/component: {{ include "components.fullname" "message-broker"}}
       app.kubernetes.io/version: {{ .Chart.AppVersion }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
   replicas: 1
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "components.fullname" "message-broker"}}
-        app.kubernetes.io/component: database
-        app.kubernetes.io/part-of: flame
+        app.kubernetes.io/name: flame
+        app.kubernetes.io/component: {{ include "components.fullname" "message-broker"}}
         app.kubernetes.io/version: {{ .Chart.AppVersion }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       restartPolicy: "Always"
       containers:

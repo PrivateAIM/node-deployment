@@ -1,16 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-node-result-deployment
+  name: {{ include "components.fullname" "result-service"}}
+  labels:
+    app.kubernetes.io/name: flame
+    app.kubernetes.io/component: {{ include "components.fullname" "result-service"}}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-node-result
+      app.kubernetes.io/name: flame
+      app.kubernetes.io/component: {{ include "components.fullname" "result-service"}}
+      app.kubernetes.io/version: {{ .Chart.AppVersion }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-node-result
+        app.kubernetes.io/name: flame
+        app.kubernetes.io/component: {{ include "components.fullname" "result-service"}}
+        app.kubernetes.io/version: {{ .Chart.AppVersion }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       containers:
         - name: results-service

@@ -1,20 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-node-ui-deployment
+  name: {{ include "components.fullname" "ui"}}
+  labels:
+    app.kubernetes.io/name: flame
+    app.kubernetes.io/component: {{ include "components.fullname" "ui"}}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
 spec:
   selector:
     matchLabels:
-      component: node-ui-service
-      version: {{ .Chart.AppVersion }}
-      deployment-id:  {{ .Release.Name }}
+      app.kubernetes.io/name: flame
+      app.kubernetes.io/component: {{ include "components.fullname" "ui"}}
+      app.kubernetes.io/version: {{ .Chart.AppVersion }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
   replicas: 1
   template:
     metadata:
       labels:
-        component: node-ui-service
-        version: {{ .Chart.AppVersion }}
-        deployment-id:  {{ .Release.Name }}
+        app.kubernetes.io/name: flame
+        app.kubernetes.io/component: {{ include "components.fullname" "ui"}}
+        app.kubernetes.io/version: {{ .Chart.AppVersion }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       containers:
         - name: node-ui
