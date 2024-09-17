@@ -19,7 +19,6 @@ spec:
       app.kubernetes.io/component: {{ include "components.fullname" "message-broker"}}
       app.kubernetes.io/version: {{ .Chart.AppVersion }}
       app.kubernetes.io/instance: {{ .Release.Name }}
-  replicas: 1
   template:
     metadata:
       labels:
