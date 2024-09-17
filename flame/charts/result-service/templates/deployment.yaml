@@ -48,7 +48,7 @@ spec:
             - name: HUB__ROBOT_AUTH__SECRET
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "results.hub.secretName" . }}
+                  name: {{ include "components.fullname" "hub-auth" }}
                   key: "robotSecret"
             - name: HUB__AUTH_BASE_URL
               value: {{ (include "results.hub.authApi" .) | default "https://auth.privateaim.dev" | quote }}
