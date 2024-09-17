@@ -57,7 +57,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "components.fullname" "hub-auth"}}
-                  key: robot-secret
+                  key: robotSecret
             # DO NOT USE THIS IN PRODUCTION!!! This is just for internal testing purposes.
             - name: NODE_TLS_REJECT_UNAUTHORIZED
               value: "0"

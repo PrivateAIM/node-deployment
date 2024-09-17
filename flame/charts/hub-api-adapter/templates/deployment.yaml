@@ -54,7 +54,7 @@ spec:
             - name: HUB_ROBOT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "adapter.hub.secretName" . }}
+                  name: {{ include "components.fullname" "hub-auth" }}
                   key: "robotSecret"
           livenessProbe:
             httpGet:
