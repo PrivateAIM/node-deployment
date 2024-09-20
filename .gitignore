@@ -272,3 +272,4 @@ flame/Chart.lock
 
 # custom values files
 *-values.yaml
+values_*
