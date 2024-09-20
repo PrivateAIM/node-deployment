@@ -13,26 +13,21 @@ For the deployment of a FLAME Node, you need to have the following software:
 
 Make sure you have the following installed and setup:
 - [Docker](https://docs.docker.com/get-docker/)
-- [Minikube](https://minikube.sigs.k8s.io/docs/start/) (or a different kubernetes distribution)  
+- [Minikube](https://minikube.sigs.k8s.io/docs/start/) (or a different kubernetes distribution such as microk8s)  
     - For extra security a Network Policy Controller like [Calico](https://docs.projectcalico.org/getting-started/kubernetes/quickstart)
 - [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 - [Helm](https://helm.sh/docs/intro/install/)
 
-
 ## FLAME Node Setup Overview
 
-To deploy a FLAME Node, you need to follow these steps (details below):
-1. Clone the repository, if you haven't already
-   - Change into the directory of the repository and navigate to the `flame/` folder
+To deploy a FLAME Node, you need to follow these steps ([details below](#deploy-the-flame-node)):
+1. Clone the repository and navigate to the `flame/` directory
 2. Adjust the values in the `values_min.yaml` file to your needs
    - (Optional) Create a copy of the `values_min.yaml` for your own custom values.
    - **NOTE**: The `values.yaml` contains _all_ the available helm chart options and is used for advanced configuration
-3. Deploy the Flame Node
-   - Using `helm install`
-   - Using the provided `0_setup.sh` script  
-        - Make the `0_setup.sh` script executable if needed 
-        - Select the namespace you want to deploy the node in
-        - Select 1 to install the node
+3. Deploy the FLAME Node
+   - Using `helm` or the provided `0_setup.sh` script
+4. Access the FLAME Node using your browser
 
 ## Prerequisites
 
