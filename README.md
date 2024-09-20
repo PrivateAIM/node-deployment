@@ -87,6 +87,7 @@ Initial deployment will take some time (minutes) to pull of the images, execute 
 Once you have your configured values YAML file, you can perform installation using helm:
 
 ```bash
+helm dependency build
 helm install flame-node . -f values_min_node1.yaml
 ```
 
