@@ -14,12 +14,12 @@ ingress:
   ## @param ingress.enabled Enable ingress record generation for the Node UI
   ##
   enabled: false
-  ## @param ingress.pathType Ingress path type
-  ##
-  pathType: ImplementationSpecific
   ## @param ingress.hostname Default host for the ingress record (evaluated as template)
   ##
   hostname: ""
+  ## @param ingress.pathType Ingress path type
+  ##
+  pathType: ImplementationSpecific
   ## @param ingress.path Default file path for the ingress hostname
   ##
   path: "/"

@@ -1,21 +1,26 @@
 {{/*
-Set the hostname of the Node UI
-TODO: Add TLS/HTTPS check/support
+Set the hostname of the Node UI. Assumes if global ingress enabled then global hostname is supplied
 */}}
 {{- define "ui.ingress.hostname" -}}
-{{- if .Values.global.node.ingress.enabled -}}
+{{- if .Values.global.node.ingress.enabled  -}}
     {{- if .Values.global.node.ingress.hostname -}}
-        {{- if hasPrefix "http" .Values.global.node.ingress.hostname -}}
-            {{- .Values.global.node.ingress.hostname -}}
+        {{- if not (hasPrefix "http" .Values.global.node.ingress.hostname) -}}
+            {{- printf "https://%s" .Values.global.node.ingress.hostname -}}
         {{- else -}}
-            {{- printf "http://%s" .Values.global.node.ingress.hostname -}}
+            {{- print .Values.global.node.ingress.hostname -}}
         {{- end -}}
     {{- else -}}
-        {{- if hasPrefix "http" .Values.ingress.hostname -}}
-            {{- .Values.ingress.hostname -}}
+        {{- print "http://localhost:3000" -}}
+    {{- end -}}
+{{- else if .Values.ingress.enabled  -}}
+    {{- if .Values.ingress.hostname -}}
+        {{- if not (hasPrefix "http" .Values.ingress.hostname) -}}
+            {{- printf "https://%s" .Values.ingress.hostname -}}
         {{- else -}}
-            {{- printf "http://%s" .Values.ingress.hostname -}}
+            {{- print .Values.ingress.hostname -}}
         {{- end -}}
+    {{- else -}}
+        {{- print "http://localhost:3000" -}}
     {{- end -}}
 {{- else -}}
     {{- print "http://localhost:3000" -}}
