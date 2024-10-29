@@ -42,16 +42,21 @@ spec:
               value: {{ printf "%s/protocol/openid-connect/token" (include "ui.keycloak.service.endpoint" .) }}
             - name: NUXT_OIDC_PROVIDERS_KEYCLOAK_USERINFO_URL
               value: {{ printf "%s/protocol/openid-connect/userinfo" (include "ui.keycloak.service.endpoint" .) }}
-            - name: NUXT_OIDC_PROVIDERS_KEYCLOAK_OPEN_ID_CONFIGURATION
-              value: {{ printf "%s/.well-known/openid-configuration" (include "ui.keycloak.service.endpoint" .) }}
             - name: NUXT_OIDC_PROVIDERS_KEYCLOAK_LOGOUT_URL
               value: {{ printf "%s/protocol/openid-connect/logout" (include "ui.keycloak.frontend.endpoint" .) }}
             - name: NUXT_OIDC_PROVIDERS_KEYCLOAK_LOGOUT_REDIRECT_URI
               value: {{ include "ui.ingress.hostname" . }}
+            {{ if hasPrefix "http://localhost" (include "ui.ingress.hostname" .) }}
             - name: NUXT_OIDC_PROVIDERS_KEYCLOAK_VALIDATE_ACCESS_TOKEN
-              {{ if hasPrefix "http://localhost" (include "ui.ingress.hostname" .) }}value: "false"
-              {{ else }}value: "true"
-              {{ end }}
+              value: "false"
+            - name: NUXT_OIDC_PROVIDERS_KEYCLOAK_OPEN_ID_CONFIGURATION
+              value: {{ printf "%s/.well-known/openid-configuration" (include "ui.keycloak.frontend.endpoint" .) }}
+            {{ else }}
+            - name: NUXT_OIDC_PROVIDERS_KEYCLOAK_VALIDATE_ACCESS_TOKEN
+              value: "true"
+            - name: NUXT_OIDC_PROVIDERS_KEYCLOAK_OPEN_ID_CONFIGURATION
+              value: {{ printf "%s/.well-known/openid-configuration" (include "ui.keycloak.service.endpoint" .) }}
+            {{ end }}
             - name: NUXT_OIDC_PROVIDERS_KEYCLOAK_CLIENT_ID
               value: {{ .Values.idp.clientId | default "node-ui" | quote }}
             - name: NUXT_OIDC_PROVIDERS_KEYCLOAK_CLIENT_SECRET
