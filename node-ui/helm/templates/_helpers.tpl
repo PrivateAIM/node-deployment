@@ -112,7 +112,11 @@ Return the Keycloak frontend endpoint
 {{- define "ui.keycloak.frontend.endpoint" -}}
 {{- $realmSuffix := printf "/realms/%s" .Values.idp.realm -}}
 {{- if .Values.idp.host -}}
-    {{- printf "http://%s%s" .Values.idp.host $realmSuffix -}}
+    {{- if hasPrefix "http" .Values.idp.host -}}
+        {{- printf "%s%s" .Values.idp.host $realmSuffix -}}
+    {{- else -}}
+        {{- printf "http://%s%s" .Values.idp.host $realmSuffix -}}
+    {{- end -}}
 {{- else -}}
     {{- printf "http://localhost:8080%s" $realmSuffix -}}
 {{- end -}}
