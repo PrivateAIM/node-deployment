@@ -43,7 +43,7 @@ spec:
             - name: NUXT_OIDC_PROVIDERS_KEYCLOAK_USERINFO_URL
               value: {{ printf "%s/protocol/openid-connect/userinfo" (include "ui.keycloak.service.endpoint" .) }}
             - name: NUXT_OIDC_PROVIDERS_KEYCLOAK_OPEN_ID_CONFIGURATION
-              value: {{ printf "%s/.well-known/openid-configuration" (include "ui.keycloak.frontend.endpoint" .) }}
+              value: {{ printf "%s/.well-known/openid-configuration" (include "ui.keycloak.service.endpoint" .) }}
             - name: NUXT_OIDC_PROVIDERS_KEYCLOAK_LOGOUT_URL
               value: {{ printf "%s/protocol/openid-connect/logout" (include "ui.keycloak.frontend.endpoint" .) }}
             - name: NUXT_OIDC_PROVIDERS_KEYCLOAK_LOGOUT_REDIRECT_URI
