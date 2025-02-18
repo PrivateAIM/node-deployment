@@ -3,7 +3,8 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.ingress.enabled }}
+{{- $explicitKeycloakHost := or .Values.ingress.hostname .Values.global.keycloak.hostname}}
+{{- if (or .Values.global.node.ingress.enabled .Values.ingress.enabled) }}
 apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
@@ -12,23 +13,31 @@ metadata:
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.ingress.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: keycloak
+  annotations:
   {{- if or .Values.ingress.annotations .Values.commonAnnotations }}
   {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if not $explicitKeycloakHost}}
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
   {{- end }}
 spec:
   {{- if and .Values.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
   ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
-    {{- if .Values.ingress.hostname }}
-    - host: {{ (tpl .Values.ingress.hostname .) | quote }}
+    {{- if (or $explicitKeycloakHost .Values.global.node.ingress.hostname) }}
+    - host: {{ (tpl (splitList "://" (or .Values.ingress.hostname .Values.global.keycloak.hostname .Values.global.node.ingress.hostname) | last) .) | quote }}
       http:
         paths:
           {{- if .Values.ingress.extraPaths }}
           {{- toYaml .Values.ingress.extraPaths | nindent 10 }}
           {{- end }}
+          {{- if $explicitKeycloakHost }}
           - path: {{ include "common.tplvalues.render" ( dict "value" .Values.ingress.path "context" $) }}
+          {{- else }}
+          - path: /keycloak(/|$)(.*)
+          {{- end }}
             {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.ingress.pathType }}
             {{- end }}
@@ -51,7 +60,7 @@ spec:
   tls:
   {{- if and .Values.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.ingress.annotations )) .Values.ingress.secrets .Values.ingress.selfSigned) }}
     - hosts:
-        - {{ (tpl .Values.ingress.hostname .) | quote }}
+        - {{ (tpl (or .Values.ingress.hostname .Values.global.keycloak.hostname .Values.global.node.ingress.hostname) .) | quote }}
       secretName: {{ printf "%s-tls" (tpl .Values.ingress.hostname .) }}
     {{- end }}
     {{- if .Values.ingress.extraTls }}

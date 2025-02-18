@@ -13,6 +13,8 @@ global:
     ingress:
       enabled: true
       hostname: http://localhost
+  keycloak:
+    hostname: ""
 
 # keycloak values
 keycloak:
@@ -22,19 +24,14 @@ keycloak:
 
   ingress:
     enabled: true
-    hostname: localhost
-    path: /keycloak(/|$)(.*)
-    pathType: ImplementationSpecific
-    annotations:
-      nginx.ingress.kubernetes.io/rewrite-target: /$2
+#    hostname: localhost
+#    path: /keycloak(/|$)(.*)
+#    annotations:
+#      nginx.ingress.kubernetes.io/rewrite-target: /$2
 
-  extraEnvVars:
-    - name: KC_HOSTNAME_URL
-      value: http://localhost/keycloak/
-    - name: KC_HOSTNAME_ADMIN_URL
-      value: http://localhost/keycloak/  
+#  extraEnvVars:
+#    - name: KC_HOSTNAME_URL
+#      value: http://localhost/keycloak/
+#    - name: KC_HOSTNAME_ADMIN_URL
+#      value: http://localhost/keycloak/
 
-flame-node-ui:
-  ## Keycloak related information
-  idp:
-    host: "localhost/keycloak"

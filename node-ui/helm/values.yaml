@@ -6,6 +6,8 @@ global:
       enabled: false
       ## @param global.node.ingress.enabled Host name to be assigned to the Node UI (/) and Hub Adapter API (/api)
       hostname: ""
+  keycloak:
+    hostname: ""
 
 env: production
 

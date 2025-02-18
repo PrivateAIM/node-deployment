@@ -95,6 +95,19 @@ Generate a random clientSecret value for the node-ui client in keycloak if none 
 {{- end -}}
 
 {{/*
+Return the Keycloak hostname
+*/}}
+{{- define "ui.keycloak.hostname" -}}
+{{- if .Values.global.keycloak.hostname -}}
+    {{- print .Values.global.keycloak.hostname -}}
+{{- else if .Values.idp.host -}}
+    {{- print .Values.idp.host -}}
+{{- else -}}
+    {{- printf "%s/keycloak" (include "ui.ingress.hostname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the Keycloak service endpoint
 */}}
 {{- define "ui.keycloak.service.endpoint" -}}
@@ -111,11 +124,11 @@ Return the Keycloak frontend endpoint
 */}}
 {{- define "ui.keycloak.frontend.endpoint" -}}
 {{- $realmSuffix := printf "/realms/%s" .Values.idp.realm -}}
-{{- if .Values.idp.host -}}
-    {{- if hasPrefix "http" .Values.idp.host -}}
-        {{- printf "%s%s" .Values.idp.host $realmSuffix -}}
+{{- if (include "ui.keycloak.hostname" .) -}}
+    {{- if hasPrefix "http" (include "ui.keycloak.hostname" .) -}}
+        {{- printf "%s%s" (include "ui.keycloak.hostname" .) $realmSuffix -}}
     {{- else -}}
-        {{- printf "http://%s%s" .Values.idp.host $realmSuffix -}}
+        {{- printf "http://%s%s" (include "ui.keycloak.hostname" .) $realmSuffix -}}
     {{- end -}}
 {{- else -}}
     {{- printf "http://localhost:8080%s" $realmSuffix -}}
