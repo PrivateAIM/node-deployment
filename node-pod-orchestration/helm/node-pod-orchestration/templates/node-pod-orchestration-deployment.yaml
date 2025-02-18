@@ -21,6 +21,10 @@ spec:
       #    hostPath:
       #      path: {{ .Values.env.NODE_KEY}}
       #      type: File
+      initContainers:
+      - name: init-postgres
+        image: busybox:1.37
+        command: ['sh', '-c', "until nslookup {{ include "po.postgres.endpoint" . }}.{{ .Release.Namespace }}.svc.cluster.local; do echo waiting for postgres; sleep 2; done"]
       containers:
       - name: po
         image: ghcr.io/privateaim/node-pod-orchestration:latest
