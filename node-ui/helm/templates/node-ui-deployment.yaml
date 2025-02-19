@@ -19,7 +19,7 @@ spec:
       containers:
         - name: node-ui
           {{ if eq .Values.env "production" }}
-          image: ghcr.io/privateaim/node-ui:canary
+          image: ghcr.io/privateaim/node-ui:sidebase
           {{ else }}
           image: ghcr.io/privateaim/node-ui:latest
           {{ end }}
