@@ -16,6 +16,7 @@ global:
       ## @param global.node.ingress.enabled Host name to be assigned to the Node UI (/) and Hub Adapter API (/api)
       hostname: ""
   keycloak:
+    ## @param global.keycloak.hostname Hostname for a separate instance of keycloak. Overrides the /keycloak subpath
     hostname: ""
 
 # kong values
@@ -218,8 +219,16 @@ keycloak:
     adminPassword: admin
 
   ingress:
+    ## @param ingress.enabled Enable ingress record generation for Keycloak
+    ##
     enabled: false
+    ## @param ingress.hostname Default host for the ingress record
+    ##
     hostname: ""
+
+  ## @param keycloak.proxyHeaders Set Keycloak proxy headers to "forwarded" or "xforwarded"
+  ## This needs to be set if SSL/TLS is handled by this machine or a proxy, else leave blank
+  proxyHeaders: "forwarded"
 
   postgresql:
     enabled: true

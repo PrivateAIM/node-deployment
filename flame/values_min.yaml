@@ -1,19 +1,15 @@
 # Global values
 global:
   hub:
-    endpoints:
-      auth: https://auth.privateaim.dev
-      core: https://core.privateaim.dev
-      messenger: https://messenger.privateaim.dev
-      storage: https://storage.privateaim.dev
     auth:
-      robotUser: ""
-      robotSecret: ""
+      robotUser: "c82d7fda-d69f-4fda-bb4c-1b2b9d910972"
+      robotSecret: "start123"
   node:
     ingress:
       enabled: true
-      hostname: http://localhost
+      hostname: "https://frontend.semplitude.com"
   keycloak:
+    ## @param global.keycloak.hostname Hostname for a separate instance of keycloak. Overrides the /keycloak subpath
     hostname: ""
 
 # keycloak values
@@ -24,14 +20,7 @@ keycloak:
 
   ingress:
     enabled: true
-#    hostname: localhost
-#    path: /keycloak(/|$)(.*)
-#    annotations:
-#      nginx.ingress.kubernetes.io/rewrite-target: /$2
 
-#  extraEnvVars:
-#    - name: KC_HOSTNAME_URL
-#      value: http://localhost/keycloak/
-#    - name: KC_HOSTNAME_ADMIN_URL
-#      value: http://localhost/keycloak/
-
+  ## @param keycloak.proxyHeaders Set Keycloak proxy headers to "forwarded" or "xforwarded"
+  ## This needs to be set if SSL/TLS is handled by this machine or a proxy, else leave blank
+  proxyHeaders: "forwarded"
