@@ -2,12 +2,12 @@
 global:
   hub:
     auth:
-      robotUser: "c82d7fda-d69f-4fda-bb4c-1b2b9d910972"
-      robotSecret: "start123"
+      robotUser: ""
+      robotSecret: ""
   node:
     ingress:
-      enabled: true
-      hostname: "https://frontend.semplitude.com"
+      enabled: false
+      hostname: ""
   keycloak:
     ## @param global.keycloak.hostname Hostname for a separate instance of keycloak. Overrides the /keycloak subpath
     hostname: ""
@@ -19,8 +19,8 @@ keycloak:
     adminPassword: admin
 
   ingress:
-    enabled: true
+    enabled: false
 
   ## @param keycloak.proxyHeaders Set Keycloak proxy headers to "forwarded" or "xforwarded"
   ## This needs to be set if SSL/TLS is handled by this machine or a proxy, else leave blank
-  proxyHeaders: "forwarded"
+  proxyHeaders: ""
