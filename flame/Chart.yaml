@@ -40,7 +40,7 @@ dependencies:
     repository: file://../node-message-broker/helm
     version: 0.1.0
   - name: flame-node-ui
-    repository: file://../node-ui/helm
+    repository: file://../node-ui
     version: 0.1.0
   - name: keycloak
     repository: file://../keycloak

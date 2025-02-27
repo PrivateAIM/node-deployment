@@ -2,8 +2,8 @@
 global:
   hub:
     auth:
-      robotUser: ""
-      robotSecret: ""
+      robotUser: "c82d7fda-d69f-4fda-bb4c-1b2b9d910972"
+      robotSecret: "start123"
   node:
     ingress:
       enabled: false
