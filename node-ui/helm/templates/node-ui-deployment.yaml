@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: node-ui
-          image: ghcr.io/privateaim/node-ui:edge
+          image: ghcr.io/privateaim/node-ui:latest
           imagePullPolicy: Always  # Maybe "Always" during debug
           ports:
             - containerPort: 3000
