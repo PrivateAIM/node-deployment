@@ -18,11 +18,7 @@ spec:
     spec:
       containers:
         - name: node-ui
-          {{ if eq .Values.env "production" }}
-          image: ghcr.io/privateaim/node-ui:sidebase
-          {{ else }}
-          image: ghcr.io/privateaim/node-ui:latest
-          {{ end }}
+          image: ghcr.io/privateaim/node-ui:edge
           imagePullPolicy: Always  # Maybe "Always" during debug
           ports:
             - containerPort: 3000
@@ -40,6 +36,10 @@ spec:
               value: {{ include "ui.keycloak.endpoint" . }}
             - name: NUXT_KEYCLOAK_CLIENT_ID
               value: {{ .Values.idp.clientId | default "node-ui" | quote }}
+            {{ if contains "localhost" (include "ui.keycloak.endpoint" .) }}
+            - name: NUXT_K8S_KEYCLOAK_ENDPOINT
+              value: {{ include "ui.keycloak.service.endpoint" . }}
+            {{ end }}
             - name: NUXT_KEYCLOAK_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
