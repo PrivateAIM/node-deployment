@@ -107,9 +107,9 @@ Return the Keycloak service endpoint
 {{- end -}}
 
 {{/*
-Return the Keycloak frontend endpoint
+Return the Keycloak endpoint
 */}}
-{{- define "ui.keycloak.frontend.endpoint" -}}
+{{- define "ui.keycloak.endpoint" -}}
 {{- $realmSuffix := printf "/realms/%s" .Values.idp.realm -}}
 {{- if .Values.idp.host -}}
     {{- if hasPrefix "http" .Values.idp.host -}}
