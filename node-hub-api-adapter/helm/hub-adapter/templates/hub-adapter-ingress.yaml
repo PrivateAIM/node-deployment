@@ -14,7 +14,7 @@ spec:
     - host: {{ regexReplaceAll "^https?://(.*)" (include "adapter.ingress.hostname" .) "${1}" }}
       http:
         paths:
-          - path: /api(/|$)(.*)
+          - path: {{ (include "adapter.root.path" .) }}(/|$)(.*)
             pathType: {{ .Values.ingress.pathType }}
             backend:
               service:
