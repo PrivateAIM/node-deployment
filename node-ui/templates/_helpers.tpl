@@ -102,7 +102,7 @@ Return the Keycloak hostname
     {{- print .Values.global.keycloak.hostname -}}
 {{- else if .Values.idp.host -}}
     {{- print .Values.idp.host -}}
-{{- else -}}
+{{- else if or .Values.global.node.ingress.enabled .Values.ingress.enabled -}}
     {{- printf "%s/keycloak" (include "ui.ingress.hostname" .) -}}
 {{- end -}}
 {{- end -}}
