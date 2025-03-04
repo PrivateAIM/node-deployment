@@ -19,6 +19,10 @@ env:
     RESULT_CLIENT_SECRET: ""
 
     POSTGRES_HOST: ""
+minio:
+  endpoint: ""
+  accessKey: ""
+  secretKey: ""
 
 hub:
   ## @param hub.coreApi Hub core API endpoint

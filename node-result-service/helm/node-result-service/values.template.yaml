@@ -10,9 +10,9 @@ global:
       storage: https://storage.privateaim.dev
     auth:
       ## @param global.hub.auth.robotUser Robot user ID. Overrides env.HUB_USERNAME if provided
-      robotUser: ""
+      robotUser:
       ## @param global.hub.auth.robotSecret Robot secret. Overrides env.HUB_PASSWORD if provided
-      robotSecret: ""
+      robotSecret:
 
 ## Hub services and data
 hub:
@@ -24,9 +24,9 @@ hub:
   storageURL: https://storage.privateaim.dev
   ## Credentials used for retrieving a valid robot token from the hub
   auth:
-    existingSecret: ""
-    robotUser: ""
-    robotSecret: ""
+    existingSecret:
+    robotUser:
+    robotSecret:
 
 env:
   MINIO_USE_SSL: false
@@ -38,10 +38,10 @@ minio:
   # All possible values can be found at https://github.com/minio/minio/blob/master/helm/minio/values.yaml
 
   ## Provide a name in place of minio for `app:` labels
-  nameOverride: ""
+  nameOverride:
 
   ## Provide a name to substitute for the full names of resources
-  fullnameOverride: ""
+  fullnameOverride:
 
   ## set kubernetes cluster domain where minio is running
   clusterDomain: cluster.local
@@ -63,7 +63,7 @@ minio:
   ## All mentioned variables will be ignored in values file.
   ## .data.rootUser and .data.rootPassword are mandatory,
   ## others depend on enabled status of corresponding sections.
-  existingSecret: ""
+  existingSecret:
 
   ## Path where PV would be mounted on the MinIO Pod
   mountPath: "/mnt/data"
@@ -137,7 +137,7 @@ minio:
     ## A manually managed Persistent Volume and Claim
     ## Requires persistence.enabled: true
     ## If defined, PVC must be created manually before volume will be bound
-    existingClaim: ""
+    existingClaim:
 
     ## minio data Persistent Volume Storage Class
     ## If defined, storageClassName: <storageClass>
@@ -148,7 +148,32 @@ minio:
     ##
     ## Storage class of PV to bind. By default it looks for standard storage class.
     ## If the PV uses a different storage class, specify that here.
-    storageClass: ""
-    volumeName: ""
+    storageClass:
+    volumeName:
     accessMode: ReadWriteOnce
     size: 10Gi
+result-service-postgresql:
+  nameOverride:
+  fullnameOverride:
+  auth:
+    ## @param auth.enablePostgresUser Assign a password to the "postgres" admin user. Otherwise, remote access will be blocked for this user
+    ##
+    enablePostgresUser: true
+    ## @param auth.postgresPassword Password for the "postgres" admin user. Ignored if `auth.existingSecret` is provided
+    ##
+    postgresPassword:
+    username: admin
+    password: admin
+    database:
+    existingSecret:
+    ## @param auth.secretKeys.adminPasswordKey Name of key in existing secret to use for PostgreSQL credentials. Only used when `auth.existingSecret` is set.
+    ## @param auth.secretKeys.userPasswordKey Name of key in existing secret to use for PostgreSQL credentials. Only used when `auth.existingSecret` is set.
+    ## @param auth.secretKeys.replicationPasswordKey Name of key in existing secret to use for PostgreSQL credentials. Only used when `auth.existingSecret` is set.
+    ##
+    secretKeys:
+      adminPasswordKey: postgres-password
+      userPasswordKey: password
+      replicationPasswordKey: replication-password
+    ## @param auth.usePasswordFiles Mount credentials as a files instead of using an environment variable
+    ##
+    usePasswordFiles: false

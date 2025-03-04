@@ -14,12 +14,24 @@ spec:
     spec:
       containers:
         - name: results-service
-          image: ghcr.io/privateaim/node-result-service:sha-e9f248b
+          image: ghcr.io/privateaim/node-result-service:sha-68e442f
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
               name: http-result-srv
           env:
+            ## TODO: make dynamic forom env
+            - name: UVICORN_LOG_LEVEL
+              value: debug
+            - name: POSTGRES__HOST
+              value: flame-node-result-service-postgresql
+            - name: POSTGRES__DB
+              value: postgres_db
+              ## TODO: add _helpers.tpl in case we want to use secret instead for postgres user/pwd
+            - name: POSTGRES__USER
+              value: postgres
+            - name: POSTGRES__PASSWORD
+              value: postgres
             - name: MINIO__ENDPOINT
               value: {{ .Release.Name }}-minio:9000
               ## TODO: add _helpers.tpl in case we want to use secret instead for minio user/pwd

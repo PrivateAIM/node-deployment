@@ -2,17 +2,17 @@
 global:
   hub:
     endpoints:
-      auth: https://auth.privateaim.dev
-      core: https://core.privateaim.dev
-      messenger: https://messenger.privateaim.dev
-      storage: https://storage.privateaim.dev
+      auth: http://auth.privateaim.dev
+      core: http://core.privateaim.dev
+      messenger: http://messenger.privateaim.dev
+      storage: http://storage.privateaim.dev
     auth:
-      robotUser: ""
-      robotSecret: ""
+      robotUser:
+      robotSecret:
   node:
     ingress:
       enabled: true
-      hostname: http://localhost
+      hostname: https://localhost
 
 # keycloak values
 keycloak:
@@ -30,11 +30,11 @@ keycloak:
 
   extraEnvVars:
     - name: KC_HOSTNAME_URL
-      value: http://localhost/keycloak/
+      value: https://localhost/keycloak/
     - name: KC_HOSTNAME_ADMIN_URL
-      value: http://localhost/keycloak/  
+      value: https://localhost/keycloak/
 
 flame-node-ui:
   ## Keycloak related information
   idp:
-    host: "localhost/keycloak"
+    host: localhost/keycloak
