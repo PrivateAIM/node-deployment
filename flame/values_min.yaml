@@ -10,6 +10,7 @@ global:
       hostname: "https://my.domain.de"
   keycloak:
     ## @param global.keycloak.hostname Hostname for a separate instance of keycloak. Overrides the /keycloak subpath
+    ## Leave this blank unless you want to use your own IDP
     hostname: ""
 
 # keycloak values
@@ -22,5 +23,5 @@ keycloak:
     enabled: true
 
   ## @param keycloak.proxyHeaders Set Keycloak proxy headers to "forwarded" or "xforwarded"
-  ## This needs to be set if SSL/TLS is being used, else leave blank
+  ## This needs to be set if SSL/TLS (i.e. HTTPS) is being used, else leave blank
   proxyHeaders: "forwarded"
