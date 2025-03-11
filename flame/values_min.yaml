@@ -2,10 +2,10 @@
 global:
   hub:
     endpoints:
-      auth: http://auth.privateaim.dev
-      core: http://core.privateaim.dev
-      messenger: http://messenger.privateaim.dev
-      storage: http://storage.privateaim.dev
+      auth: https://auth.privateaim.dev
+      core: https://core.privateaim.dev
+      messenger: https://messenger.privateaim.dev
+      storage: https://storage.privateaim.dev
     auth:
       robotUser:
       robotSecret:
