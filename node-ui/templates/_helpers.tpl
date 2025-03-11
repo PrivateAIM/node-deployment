@@ -75,9 +75,10 @@ Generate a random clientSecret value for the node-ui client in keycloak if none 
 */}}
 {{- define "ui.keycloak.clientSecret" -}}
 {{- if .Values.idp.debug -}}
-    {{- print "UU4ySGVPMkxlWE1ZMTBWclA0Y2YyeDVKSFRGSW5tNGY=" -}}
+    {{- print "UU4ySGVPMkxlWE1ZMTBWclA0Y2YyeDVKSFRGSW5tNGY="  | b64enc -}}
+{{- else if .Values.idp.clientSecret -}}
+    {{- print .Values.idp.clientSecret  | b64enc -}}
 {{- else -}}
-{{/*    {{- print ( randAlphaNum 22 | b64enc | quote ) -}}*/}}
     {{- /* Create "node_ui_secret" dict inside ".Release" to store various stuff. */ -}}
     {{- if not (index .Release "node_ui_secret") -}}
         {{-   $_ := set .Release "node_ui_secret" dict -}}

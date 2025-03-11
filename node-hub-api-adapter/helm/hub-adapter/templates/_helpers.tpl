@@ -107,7 +107,9 @@ Generate a random clientSecret value for the hub-adapter client in keycloak if n
 */}}
 {{- define "adapter.keycloak.clientSecret" -}}
 {{- if .Values.idp.debug -}}
-    {{- print "cFR2THJCS3V5MHZ4cnV2VXByd3NYcEV0dzg0ZEROOUM=" -}}
+    {{- print "cFR2THJCS3V5MHZ4cnV2VXByd3NYcEV0dzg0ZEROOUM=" | b64enc -}}
+{{- else if .Values.idp.clientSecret -}}
+    {{- print .Values.idp.clientSecret | b64enc -}}
 {{- else -}}
 {{/*    {{- print ( randAlphaNum 22 | b64enc | quote ) -}}*/}}
     {{- /* Create "hub_secret" dict inside ".Release" to store various stuff. */ -}}
@@ -130,7 +132,9 @@ Generate a random clientSecret value for the hub-adapter client in keycloak if n
 Return the Keycloak endpoint
 */}}
 {{- define "adapter.keycloak.endpoint" -}}
-{{- if .Values.idp.host -}}
+{{- if .Values.global.keycloak.hostname -}}
+    {{- print .Values.global.keycloak.hostname -}}
+{{- else if .Values.idp.host -}}
     {{- .Values.idp.host -}}
 {{- else -}}
     {{- printf "http://%s-keycloak:80" .Release.Name -}}

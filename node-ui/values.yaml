@@ -7,6 +7,8 @@ global:
       ## @param global.node.ingress.enabled Host name to be assigned to the Node UI (/) and Hub Adapter API (/api)
       hostname: ""
   keycloak:
+    ## @param global.keycloak.hostname Hostname for a separate instance of keycloak. Overrides the /keycloak subpath
+    ## Leave this blank unless you want to use your own IDP
     hostname: ""
 
 env: production
