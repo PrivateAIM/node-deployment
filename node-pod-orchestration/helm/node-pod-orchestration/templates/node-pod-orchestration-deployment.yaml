@@ -37,6 +37,12 @@ spec:
         ports:
         - containerPort: 8080
         env:
+        - name: MINIO_ENDPOINT
+          value: {{ .Values.env.MINIO_ENDPOINT}}
+        - name: MINIO_ACCESS_KEY
+          value: {{ .Values.env.MINIO_ACCESS_KEY}}
+        - name: MINIO_SECRET_KEY
+          value: {{ .Values.env.MINIO_SECRET_KEY}}
         - name: POSTGRES_HOST
           value: {{ include "po.postgres.endpoint" . }}
         - name: POSTGRES_DB

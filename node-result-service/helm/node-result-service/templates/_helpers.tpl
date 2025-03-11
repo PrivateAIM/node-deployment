@@ -1,4 +1,19 @@
 {{/*
+Return the postgres service endpoint
+*/}}
+{{- define "results.postgresql.endpoint" -}}
+{{- if .Values.env.POSTGRES_HOST -}}
+    {{- .Values.env.POSTGRES_HOST -}}
+{{- else if .Values.postgresql.fullnameOverride -}}
+    {{- print .Values.postgresql.fullnameOverride -}}
+{{- else if .Values.postgresql.nameOverride -}}
+    {{- printf "%s-%s" .Release.Name .Values.postgresql.nameOverride -}}
+{{- else -}}
+    {{- printf "%s-result-service-postgresql" .Release.Name -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return hub auth API endpoint
 */}}
 {{- define "results.hub.authApi" -}}
