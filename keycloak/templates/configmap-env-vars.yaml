@@ -39,7 +39,7 @@ data:
       {{- include "common.tplvalues.render" (dict "value" $path "context" $) }}
     {{- end }}
   {{- end }}
-  {{- if and .Values.ingress.enabled (or .Values.ingress.hostname .Values.global.keycloak.hostname .Values.global.node.ingress.hostname) }}
+  {{- if and (or .Values.global.node.ingress.enabled .Values.ingress.enabled) (or .Values.ingress.hostname .Values.global.keycloak.hostname .Values.global.node.ingress.hostname) }}
   KEYCLOAK_HOSTNAME: |-
     {{ ternary "https://" "http://" ( or .Values.ingress.tls (eq .Values.proxy "edge") (not (empty .Values.proxyHeaders)) (not (empty $predictedProxyHeader)) ) -}}    {{- include "common.tplvalues.render" (dict "value" $parsedHostname "context" $) -}}
     {{- if eq .Values.ingress.controller "default" }}
@@ -52,7 +52,7 @@ data:
       {{- include "common.tplvalues.render" (dict "value" $path "context" $) }}
     {{- end }}
   {{- end }}
-  {{- if .Values.ingress.enabled }}
+  {{- if (or .Values.global.node.ingress.enabled .Values.ingress.enabled) }}
   KEYCLOAK_HOSTNAME_STRICT: {{ ternary "true" "false" .Values.ingress.hostnameStrict | quote }}
   {{- end }}
   KEYCLOAK_ENABLE_STATISTICS: {{ ternary "true" "false" .Values.metrics.enabled | quote }}
