@@ -252,8 +252,8 @@ keycloak:
     hostname: ""
 
   ## @param keycloak.proxyHeaders Set Keycloak proxy headers to "forwarded" or "xforwarded"
-  ## This needs to be set if SSL/TLS (i.e. HTTPS) is being used, else leave blank
-  proxyHeaders: "forwarded"
+  ## If you are using a reverse proxy for anything other than https passthrough, then this needs to be set else 403
+  proxyHeaders: ""
 
   postgresql:
     enabled: true
