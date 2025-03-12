@@ -2,10 +2,10 @@
 global:
   hub:
     endpoints:
-      auth: http://auth.privateaim.dev
-      core: http://core.privateaim.dev
-      messenger: http://messenger.privateaim.dev
-      storage: http://storage.privateaim.dev
+      auth: https://auth.privateaim.dev
+      core: https://core.privateaim.dev
+      messenger: https://messenger.privateaim.dev
+      storage: https://storage.privateaim.dev
     auth:
       robotUser:
       robotSecret:
@@ -15,6 +15,10 @@ global:
       enabled: false
       ## @param global.node.ingress.enabled Host name to be assigned to the Node UI (/) and Hub Adapter API (/api)
       hostname:
+  keycloak:
+    ## @param global.keycloak.hostname Hostname for a separate instance of keycloak. Overrides the /keycloak subpath
+    ## Leave this blank unless you want to use your own IDP
+    hostname:
 
 # kong values
 kong:
@@ -240,8 +244,16 @@ keycloak:
     adminPassword: admin
 
   ingress:
+    ## @param ingress.enabled Enable ingress record generation for Keycloak
+    ##
     enabled: false
-    hostname:
+    ## @param ingress.hostname Default host for the ingress record
+    ##
+    hostname: ""
+
+  ## @param keycloak.proxyHeaders Set Keycloak proxy headers to "forwarded" or "xforwarded"
+  ## If you are using a reverse proxy for anything other than https passthrough, then this needs to be set else 403
+  proxyHeaders: ""
 
   postgresql:
     enabled: true
@@ -279,7 +291,7 @@ flame-node-hub-adapter:
   idp:
     ## @param idp.debug If true, the clientId and clientSecret will use pre-defined values
     ## The clientSecret will be defined using the "static" k8s secret key
-    debug: true  # TODO disable once everything working
+    debug: false
     ## @param idp.clientId Keycloak client ID for this service
     clientId: hub-adapter
     ## @param idp.clientSecret Keycloak client secret. Ignored if `idp.existingSecret` is provided
@@ -454,7 +466,6 @@ node-data-store:
       resources:
         requests:
           memory: 1Gi
-
 
       persistence:
         enabled: true

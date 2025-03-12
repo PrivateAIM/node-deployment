@@ -75,9 +75,10 @@ Generate a random clientSecret value for the node-ui client in keycloak if none 
 */}}
 {{- define "ui.keycloak.clientSecret" -}}
 {{- if .Values.idp.debug -}}
-    {{- print "UU4ySGVPMkxlWE1ZMTBWclA0Y2YyeDVKSFRGSW5tNGY=" -}}
+    {{- print "UU4ySGVPMkxlWE1ZMTBWclA0Y2YyeDVKSFRGSW5tNGY="  | b64enc -}}
+{{- else if .Values.idp.clientSecret -}}
+    {{- print .Values.idp.clientSecret  | b64enc -}}
 {{- else -}}
-{{/*    {{- print ( randAlphaNum 22 | b64enc | quote ) -}}*/}}
     {{- /* Create "node_ui_secret" dict inside ".Release" to store various stuff. */ -}}
     {{- if not (index .Release "node_ui_secret") -}}
         {{-   $_ := set .Release "node_ui_secret" dict -}}
@@ -91,6 +92,19 @@ Generate a random clientSecret value for the node-ui client in keycloak if none 
     {{- end -}}
         {{- /* Retrieve previously generated value. */ -}}
         {{- print (index .Release.node_ui_secret $key | b64enc) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Keycloak hostname
+*/}}
+{{- define "ui.keycloak.hostname" -}}
+{{- if .Values.global.keycloak.hostname -}}
+    {{- print .Values.global.keycloak.hostname -}}
+{{- else if .Values.idp.host -}}
+    {{- print .Values.idp.host -}}
+{{- else if or .Values.global.node.ingress.enabled .Values.ingress.enabled -}}
+    {{- printf "%s/keycloak" (include "ui.ingress.hostname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -111,11 +125,11 @@ Return the Keycloak endpoint
 */}}
 {{- define "ui.keycloak.endpoint" -}}
 {{- $realmSuffix := printf "/realms/%s" .Values.idp.realm -}}
-{{- if .Values.idp.host -}}
-    {{- if hasPrefix "http" .Values.idp.host -}}
-        {{- printf "%s%s" .Values.idp.host $realmSuffix -}}
+{{- if (include "ui.keycloak.hostname" .) -}}
+    {{- if hasPrefix "http" (include "ui.keycloak.hostname" .) -}}
+        {{- printf "%s%s" (include "ui.keycloak.hostname" .) $realmSuffix -}}
     {{- else -}}
-        {{- printf "http://%s%s" .Values.idp.host $realmSuffix -}}
+        {{- printf "http://%s%s" (include "ui.keycloak.hostname" .) $realmSuffix -}}
     {{- end -}}
 {{- else -}}
     {{- printf "http://localhost:8080%s" $realmSuffix -}}

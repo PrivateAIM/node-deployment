@@ -2,39 +2,24 @@
 global:
   hub:
     endpoints:
-      auth: http://auth.privateaim.dev
-      core: http://core.privateaim.dev
-      messenger: http://messenger.privateaim.dev
-      storage: http://storage.privateaim.dev
+      auth: https://auth.privateaim.dev
+      core: https://core.privateaim.dev
+      messenger: https://messenger.privateaim.dev
+      storage: https://storage.privateaim.dev
     auth:
       robotUser:
       robotSecret:
   node:
     ingress:
       enabled: true
-      hostname: https://localhost
+      hostname: "https://my.domain.de"
+  keycloak:
+    ## @param global.keycloak.hostname Hostname for a separate instance of keycloak. Overrides the /keycloak subpath
+    ## Leave this blank unless you want to use your own IDP
+    hostname:
 
 # keycloak values
 keycloak:
   auth:
     adminUser: admin
     adminPassword: admin
-
-  ingress:
-    enabled: true
-    hostname: localhost
-    path: /keycloak(/|$)(.*)
-    pathType: ImplementationSpecific
-    annotations:
-      nginx.ingress.kubernetes.io/rewrite-target: /$2
-
-  extraEnvVars:
-    - name: KC_HOSTNAME_URL
-      value: https://localhost/keycloak/
-    - name: KC_HOSTNAME_ADMIN_URL
-      value: https://localhost/keycloak/
-
-flame-node-ui:
-  ## Keycloak related information
-  idp:
-    host: localhost/keycloak

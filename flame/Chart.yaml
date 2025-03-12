@@ -40,11 +40,11 @@ dependencies:
     repository: file://../node-message-broker/helm
     version: 0.1.0
   - name: flame-node-ui
-    repository: file://../node-ui/helm
+    repository: file://../node-ui
     version: 0.1.0
   - name: keycloak
-    repository: https://charts.bitnami.com/bitnami
-    version: 21.0.3
+    repository: file://../keycloak
+    version: 24.4.10
   - name: node-data-store
     repository: file://../node-data-store/helm
     version: 0.1.0
