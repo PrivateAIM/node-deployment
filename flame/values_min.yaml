@@ -23,6 +23,3 @@ keycloak:
   auth:
     adminUser: admin
     adminPassword: admin
-
-  ingress:
-    enabled: true
