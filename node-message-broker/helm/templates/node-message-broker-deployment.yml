@@ -26,7 +26,7 @@ spec:
       restartPolicy: "Always"
       containers:
         - name: {{ .Release.Name }}-node-message-broker
-          image: ghcr.io/privateaim/node-message-broker:{{ .Chart.AppVersion }}
+          image: "ghcr.io/privateaim/node-message-broker:{{ .Chart.AppVersion }}"
           imagePullPolicy: "Always"
           securityContext:
             runAsNonRoot: true
@@ -50,7 +50,7 @@ spec:
             - name: HUB_AUTH_BASE_URL
               value: {{ required "A valid HUB Auth base URL is required." (include "broker.hub.authApi" .) | default "https://auth.privateaim.net/" | quote }}
             - name: HUB_MESSENGER_BASE_URL
-              value: {{ required "A valid HUB Messenger base URL is required." (include "broker.hub.messengerApi" .) | default "https://messenger.privateaim.net/" | quote }}              
+              value: {{ required "A valid HUB Messenger base URL is required." (include "broker.hub.messengerApi" .) | default "https://messenger.privateaim.net/" | quote }}
             - name: HUB_AUTH_ROBOT_ID
               value: {{ required "A robot ID for the Hub is required." (include "broker.hub.robotUser" .) | quote }}
             - name: HUB_AUTH_ROBOT_SECRET
@@ -58,9 +58,15 @@ spec:
                 secretKeyRef:
                   name: {{ .Release.Name }}-node-message-broker-hub-auth
                   key: robot-secret
+            - name: NODE_EXTRA_CA_CERTS
+              value: "/mnt/certs/certs.pem"
             # DO NOT USE THIS IN PRODUCTION!!! This is just for internal testing purposes.
             - name: NODE_TLS_REJECT_UNAUTHORIZED
               value: "0"
+          volumeMounts:
+            - mountPath: "/mnt/certs/certs.pem"
+              name: additional-certs
+              subPath: "certs.pem"
           resources:
             requests:
               memory: "256Mi"
@@ -81,3 +87,7 @@ spec:
             initialDelaySeconds: 90
             periodSeconds: 10
             timeoutSeconds: 10
+      volumes:
+        - name: additional-certs
+          configMap:
+            name: flame-additional-certs
