@@ -76,7 +76,18 @@ If you have a hostname that you'd like to use for your instance, change all inst
 file to your hostname. Be sure to leave the text (e.g. "https://") before and after "localhost" the same. Be sure this 
 hostname is properly configured in your DNS settings and your reverse proxy to point to your kubernetes cluster.
 
-### 3. Deploy the Flame Node
+### 3. Add Custom Certificates (optional)
+
+If the `node` is going to be deployed to an environment where outbound requests are intercepted for inspection by
+leveraging custom certificates then these certificates have to be provisioned for `node` components to pick them up for
+use.
+
+To do so, add any related certificate in `PEM` format to `flame/certs/` using `.pem` as the file extension.
+
+> [!IMPORTANT]  
+> Make sure that all certificates together are not larger than 1MB (due to k8s constraints)!
+
+### 4. Deploy the Flame Node
 Initial deployment will take some time (minutes) to pull of the images, execute the jobs, and to populate the containers. Please be patient during the installation process.
 
 Once you have your configured values YAML file, you can perform installation using helm:
