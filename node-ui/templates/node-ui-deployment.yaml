@@ -47,3 +47,13 @@ spec:
                   key: {{ include "ui.keycloak.secretKey" . }}
             - name: NUXT_AUTH_SECRET
               value: {{ randAlphaNum 32 | b64enc }}
+            - name: NODE_EXTRA_CA_CERTS
+              value: "/mnt/certs/certs.pem"
+          volumeMounts:
+            - mountPath: "/mnt/certs/certs.pem"
+              name: additional-certs
+              subPath: "certs.pem"
+      volumes:
+        - name: additional-certs
+          configMap:
+            name: flame-additional-certs
