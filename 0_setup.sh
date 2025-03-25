@@ -127,11 +127,11 @@ if [[ " ${available_actions[*]} " == *" $action "* ]]; then
     case $action in
         install)
             update_dependencies
-            helm install flame-node helm/flame-node --namespace "$namespace" --create-namespace -f "$values_file"
+            helm install flame-node flame/flame-node --namespace "$namespace" --create-namespace -f "$values_file"
             ;;
         upgrade)
             update_dependencies
-            helm upgrade flame-node helm/flame-node --namespace "$namespace" --create-namespace -f "$values_file"
+            helm upgrade flame-node flame/flame-node --namespace "$namespace" --create-namespace -f "$values_file"
             ;;
         uninstall)
             helm uninstall flame-node --namespace "$namespace"
