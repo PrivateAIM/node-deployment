@@ -21,12 +21,12 @@ Make sure you have the following installed and setup:
 ## FLAME Node Setup Overview
 
 To deploy a FLAME Node, you need to follow these steps ([details below](#deploy-the-flame-node)):
-1. Clone the repository and navigate to the `flame/` directory
+1. Clone the repository.
 2. Adjust the values in the `values_min.yaml` file to your needs
    - (Optional) Create a copy of the `values_min.yaml` for your own custom values.
    - **NOTE**: The `values.yaml` contains _all_ the available helm chart options and is used for advanced configuration
 3. Deploy the FLAME Node
-   - Using `helm` or the provided `0_setup.sh` script
+   - Using `helm` or the provided `setup.sh` script
 4. Access the FLAME Node using your browser
 
 ## Prerequisites
@@ -41,11 +41,11 @@ minikube start --driver=docker --nodes 1 --memory=8192 --cpus=2 --network-plugin
 
 ## Deploy the FLAME Node
 
-### 1. Clone the Repo and Navigate to the `flame/` Directory
+### 1. Clone the Repo
 Clone the repository and change into the directory:
 ```bash
 git clone https://github.com/PrivateAIM/node-deployment.git
-cd node-deployment/flame
+cd node-deployment
 ```
 
 ### 2. Copy (optional) and Modify `values_min.yaml`
@@ -89,8 +89,8 @@ helm install flame-node . -f values_min_node1.yaml
 **OR** using the setup script:
 
 ```bash
-chmod +x 0_setup.sh
-bash 0_setup.sh
+chmod +x setup.sh
+bash setup.sh
 ```
 See the [setup script instructions](https://github.com/PrivateAIM/node-deployment/wiki/Setup-Script-Instructions) 
 for details on how to use this script.
