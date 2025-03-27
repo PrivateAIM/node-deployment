@@ -116,16 +116,22 @@ if [ "$action" != "uninstall" ]; then
     select_values_file
 fi
 
+# Add flame/private-aim repo
+helm repo add flame https://PrivateAIM.github.io/helm
+
+# update all repos
+helm repo update
+
 # Validate and perform the selected action
 if [[ " ${available_actions[*]} " == *" $action "* ]]; then
     case $action in
         install)
             update_dependencies
-            helm install flame-node . --namespace "$namespace" --create-namespace -f "$values_file"
+            helm install flame-node flame/flame-node --namespace "$namespace" --create-namespace -f "$values_file"
             ;;
         upgrade)
             update_dependencies
-            helm upgrade flame-node . --namespace "$namespace" --create-namespace -f "$values_file"
+            helm upgrade flame-node flame/flame-node --namespace "$namespace" --create-namespace -f "$values_file"
             ;;
         uninstall)
             helm uninstall flame-node --namespace "$namespace"

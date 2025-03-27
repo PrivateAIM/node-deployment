@@ -12,7 +12,7 @@ global:
   node:
     ingress:
       enabled: true
-      hostname: "https://my.domain.de"
+      hostname: localhost
   keycloak:
     ## @param global.keycloak.hostname Hostname for a separate instance of keycloak. Overrides the /keycloak subpath
     ## Leave this blank unless you want to use your own IDP
