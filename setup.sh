@@ -6,12 +6,6 @@ check_release_status() {
     echo $?
 }
 
-# Function to update Helm dependencies only if required
-update_dependencies() {
-    echo "Updating dependencies..."
-    helm dependency update
-}
-
 # Function to select a Kubernetes context
 select_k8s_context() {
     contexts=($(kubectl config get-contexts -o name))
@@ -126,15 +120,13 @@ helm repo update
 if [[ " ${available_actions[*]} " == *" $action "* ]]; then
     case $action in
         install)
-            update_dependencies
-            helm install --namespace "$namespace" --create-namespace -f "$values_file" flame-node flame/flame-node
+            helm install flame-node --namespace "$namespace" --create-namespace -f "$values_file" flame/flame-node
             ;;
         upgrade)
-            update_dependencies
-            helm upgrade --namespace "$namespace" --create-namespace -f "$values_file" flame-node flame/flame-node
+            helm upgrade flame-node --namespace "$namespace" --create-namespace -f "$values_file" flame/flame-node
             ;;
         uninstall)
-            helm uninstall --namespace "$namespace" flame-node
+            helm uninstall flame-node --namespace "$namespace"
             delete_volumes
             ;;
         *)
