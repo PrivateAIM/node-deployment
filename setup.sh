@@ -15,7 +15,7 @@ update_dependencies() {
 # Function to select a Kubernetes context
 select_k8s_context() {
     contexts=($(kubectl config get-contexts -o name))
-    
+
     if [ ${#contexts[@]} -eq 1 ]; then
         k8s_context="${contexts[0]}"
         echo "Only one context available, automatically selecting: $k8s_context"
@@ -46,7 +46,7 @@ select_k8s_context() {
 # Function to select a values file
 select_values_file() {
     values_files=($(ls values*.yaml))
-    
+
     if [ ${#values_files[@]} -eq 1 ]; then
         values_file="${values_files[0]}"
         echo "Only one values file found, automatically selecting: $values_file"
@@ -127,14 +127,14 @@ if [[ " ${available_actions[*]} " == *" $action "* ]]; then
     case $action in
         install)
             update_dependencies
-            helm install flame-node flame/flame-node --namespace "$namespace" --create-namespace -f "$values_file"
+            helm install --namespace "$namespace" --create-namespace -f "$values_file" flame-node flame/flame-node
             ;;
         upgrade)
             update_dependencies
-            helm upgrade flame-node flame/flame-node --namespace "$namespace" --create-namespace -f "$values_file"
+            helm upgrade --namespace "$namespace" --create-namespace -f "$values_file" flame-node flame/flame-node
             ;;
         uninstall)
-            helm uninstall flame-node --namespace "$namespace"
+            helm uninstall --namespace "$namespace" flame-node
             delete_volumes
             ;;
         *)
